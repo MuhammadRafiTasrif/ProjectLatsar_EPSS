@@ -22,6 +22,8 @@ laporan-perkembangan/
 | No | Tanggal | Versi / Rilis | Nama Modul / Fitur | Berkas Laporan | Penulis / Pengembang |
 |:---:|:---:|:---:|:---|:---|:---|
 | 1 | 05 Sep 2026 | v1.0.0 | **Rilis Awal & Modul Inti SIMPONITAS** (Dashboard, Permohonan, Riwayat, Kompromin, Data Sektoral, Data Lineage, Knowledge Base, Role Matrix, API) | [`2026-09-05_inisialisasi-awal.md`](./2026-09-05_inisialisasi-awal.md) | Muhammad Rafi Tasrif |
+| 2 | 06 Sep 2026 | v1.1.0 | **Laporan I: Identifikasi Kebutuhan & Fitur Aplikasi** (16 Kebutuhan Fungsional, 8 Non-Fungsional, Persona, MoSCoW) | [`Laporan_1_Identifikasi_Fitur_SIMPONITAS.docx`](../laporan/Laporan_1_Identifikasi_Fitur_SIMPONITAS.docx) | Muhammad Rafi Tasrif |
+| 3 | 06 Sep 2026 | v1.1.0 | **Laporan II: Perancangan Arsitektur & Desain Sistem** (3-Tier, Komponen React, Model Data, Data Lineage, RBAC, UI/UX 80%) | [`Laporan_2_Arsitektur_dan_Desain_Sistem_SIMPONITAS.docx`](../laporan/Laporan_2_Arsitektur_dan_Desain_Sistem_SIMPONITAS.docx) | Muhammad Rafi Tasrif |
 
 ---
 
