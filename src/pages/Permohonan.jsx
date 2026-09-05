@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from '../components/Modal';
-import { FilePlus, Calendar, MapPin, Users, CheckCircle, Clock, Send, ShieldAlert } from 'lucide-react';
+import { FilePlus, Calendar, MapPin, Users, Clock, Send, ShieldAlert, CheckCircle2, Inbox } from 'lucide-react';
 import { formatDateIndo } from '../utils/helpers';
 
 export default function Permohonan({ pembinaanList, setPembinaanList, opdList, currentRole, currentPermissions }) {
@@ -59,96 +59,109 @@ export default function Permohonan({ pembinaanList, setPembinaanList, opdList, c
     }));
   };
 
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Selesai': return { cls: 'badge-success', icon: <CheckCircle2 size={11} /> };
+      case 'Dalam Proses': return { cls: 'badge-warning', icon: <Clock size={11} /> };
+      case 'Dijadwalkan': return { cls: 'badge-info', icon: <Calendar size={11} /> };
+      default: return { cls: 'badge-primary', icon: <FilePlus size={11} /> };
+    }
+  };
+
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      {/* Header Bar */}
-      <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+      <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)' }}>
-            Permohonan & Layanan Pembinaan Statistik Sektoral
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            Permohonan & Layanan Pembinaan
           </h2>
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Form pengajuan layanan pendampingan Kompromin, metadata statistik, rekomendasi kegiatan (Romantik), dan konsultasi teknis BPS Pasaman.
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '3px' }}>
+            Pengajuan pendampingan Kompromin, metadata statistik, rekomendasi kegiatan, dan konsultasi teknis.
           </p>
         </div>
 
         {currentPermissions.submitPembinaan ? (
           <button onClick={() => setIsModalOpen(true)} className="btn btn-primary">
-            <FilePlus size={18} />
+            <FilePlus size={16} />
             <span>Ajukan Pembinaan Baru</span>
           </button>
         ) : (
-          <div className="badge badge-warning" style={{ gap: '6px' }}>
-            <ShieldAlert size={14} />
-            <span>Pengajuan Dibatasi (Mode Baca)</span>
+          <div className="badge badge-warning" style={{ gap: '4px' }}>
+            <ShieldAlert size={13} />
+            <span>Pengajuan Dibatasi</span>
           </div>
         )}
       </div>
 
-      {/* Status Tracker Grid / Kanban Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
-        {pembinaanList.map(item => (
-          <div key={item.id} className="glass-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-              <span className={`badge ${
-                item.status === 'Selesai' ? 'badge-success' :
-                item.status === 'Dalam Proses' ? 'badge-warning' :
-                item.status === 'Dijadwalkan' ? 'badge-info' : 'badge-purple'
-              }`}>
-                {item.status}
-              </span>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>{item.id}</span>
-            </div>
+      {pembinaanList.length === 0 ? (
+        <div className="glass-card empty-state">
+          <div className="empty-state-icon"><Inbox size={24} /></div>
+          <span className="empty-state-title">Belum ada permohonan</span>
+          <span className="empty-state-desc">Belum ada pengajuan pembinaan yang tercatat. Klik tombol di atas untuk mengajukan pembinaan baru.</span>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+          {pembinaanList.map(item => {
+            const badge = getStatusBadge(item.status);
+            return (
+              <div key={item.id} className="glass-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                  <span className={`badge ${badge.cls}`}>
+                    {badge.icon}
+                    {item.status}
+                  </span>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>{item.id}</span>
+                </div>
 
-            <div>
-              <h4 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: '1.3' }}>
-                {item.topik}
-              </h4>
-              <span style={{ fontSize: '0.82rem', color: 'var(--primary-hover)', fontWeight: 700, display: 'block', marginTop: '4px' }}>
-                {item.opdNama}
-              </span>
-            </div>
+                <div>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: '1.3' }}>
+                    {item.topik}
+                  </h4>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--primary-hover)', fontWeight: 700, display: 'block', marginTop: '3px' }}>
+                    {item.opdNama}
+                  </span>
+                </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.8rem', color: 'var(--text-secondary)', background: 'var(--bg-main)', padding: '10px', borderRadius: 'var(--radius-md)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Calendar size={14} color="var(--primary)" />
-                <span>Usulan: {formatDateIndo(item.tanggalUsulan)}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <MapPin size={14} color="var(--primary)" />
-                <span>Lokasi: {item.lokasi}</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Users size={14} color="var(--primary)" />
-                <span>Jenis: {item.jenis}</span>
-              </div>
-            </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.78rem', color: 'var(--text-secondary)', background: 'var(--bg-surface)', padding: '8px 10px', borderRadius: 'var(--radius-sm)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Calendar size={13} color="var(--primary)" />
+                    <span>Usulan: {formatDateIndo(item.tanggalUsulan)}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <MapPin size={13} color="var(--primary)" />
+                    <span>Lokasi: {item.lokasi}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Users size={13} color="var(--primary)" />
+                    <span>Jenis: {item.jenis}</span>
+                  </div>
+                </div>
 
-            {/* Admin Approval Actions */}
-            {currentPermissions.approvePembinaan && (
-              <div style={{ display: 'flex', gap: '8px', marginTop: 'auto', paddingTop: '8px', borderTop: '1px solid var(--border-color)' }}>
-                {item.status === 'Permohonan Masuk' && (
-                  <button onClick={() => handleUpdateStatus(item.id, 'Dijadwalkan')} className="btn btn-outline-primary" style={{ flex: 1, padding: '6px', fontSize: '0.78rem' }}>
-                    Setujui & Jadwalkan
-                  </button>
+                {currentPermissions.approvePembinaan && (
+                  <div style={{ display: 'flex', gap: '6px', marginTop: 'auto', paddingTop: '8px', borderTop: '1px solid var(--border-color)' }}>
+                    {item.status === 'Permohonan Masuk' && (
+                      <button onClick={() => handleUpdateStatus(item.id, 'Dijadwalkan')} className="btn btn-outline-primary" style={{ flex: 1, padding: '6px', fontSize: '0.78rem' }}>
+                        Setujui & Jadwalkan
+                      </button>
+                    )}
+                    {item.status === 'Dijadwalkan' && (
+                      <button onClick={() => handleUpdateStatus(item.id, 'Dalam Proses')} className="btn btn-primary" style={{ flex: 1, padding: '6px', fontSize: '0.78rem' }}>
+                        Mulai Pembinaan
+                      </button>
+                    )}
+                    {item.status === 'Dalam Proses' && (
+                      <button onClick={() => handleUpdateStatus(item.id, 'Selesai')} className="btn btn-secondary" style={{ flex: 1, padding: '6px', fontSize: '0.78rem', color: 'var(--accent-green)' }}>
+                        Tandai Selesai
+                      </button>
+                    )}
+                  </div>
                 )}
-                {item.status === 'Dijadwalkan' && (
-                  <button onClick={() => handleUpdateStatus(item.id, 'Dalam Proses')} className="btn btn-primary" style={{ flex: 1, padding: '6px', fontSize: '0.78rem' }}>
-                    Mulai Pembinaan
-                  </button>
-                )}
-                {item.status === 'Dalam Proses' && (
-                  <button onClick={() => handleUpdateStatus(item.id, 'Selesai')} className="btn btn-secondary" style={{ flex: 1, padding: '6px', fontSize: '0.78rem', color: 'var(--accent-green)' }}>
-                    Tandai Selesai
-                  </button>
-                )}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
-      {/* Modal Form Pengajuan */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Form Permohonan Pembinaan Statistik Sektoral">
         <form onSubmit={handleCreatePermohonan}>
           <div className="form-group">
@@ -227,12 +240,12 @@ export default function Permohonan({ pembinaanList, setPembinaanList, opdList, c
             />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '1.25rem' }}>
             <button type="button" onClick={() => setIsModalOpen(false)} className="btn btn-secondary">
               Batal
             </button>
             <button type="submit" className="btn btn-primary">
-              <Send size={16} />
+              <Send size={15} />
               <span>Kirim Permohonan</span>
             </button>
           </div>

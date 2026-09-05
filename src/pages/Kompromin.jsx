@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from '../components/Modal';
-import { FileText, Download, CheckCircle, Clock, Upload, ShieldCheck, Filter } from 'lucide-react';
+import { FileText, Download, Upload, ShieldCheck, Filter, CheckCircle2, Clock, Inbox } from 'lucide-react';
 import { formatDateIndo } from '../utils/helpers';
 
 export default function Kompromin({ komprominList, setKomprominList, opdList, currentPermissions }) {
@@ -58,126 +58,122 @@ export default function Kompromin({ komprominList, setKomprominList, opdList, cu
     alert('Draft Kompromin berhasil diunggah ke BPS Kabupaten Pasaman untuk di-review!');
   };
 
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Terverifikasi': return { cls: 'badge-success', icon: <CheckCircle2 size={11} /> };
+      case 'Dalam Review': return { cls: 'badge-warning', icon: <Clock size={11} /> };
+      default: return { cls: 'badge-info', icon: <FileText size={11} /> };
+    }
+  };
+
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+      <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)' }}>
-            Repository Kompromin (Kompilasi Produk Administrasi)
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            Repository Kompromin
           </h2>
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Katalog terpusat dokumen Kompromin OPD Kabupaten Pasaman terverifikasi BPS.
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '3px' }}>
+            Katalog terpusat dokumen Kompromin OPD Kabupaten Pasaman.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
-          {currentPermissions.submitPembinaan && (
-            <button onClick={() => setIsUploadModalOpen(true)} className="btn btn-primary">
-              <Upload size={16} />
-              <span>Unggah Draft Kompromin</span>
-            </button>
-          )}
-        </div>
+        {currentPermissions.submitPembinaan && (
+          <button onClick={() => setIsUploadModalOpen(true)} className="btn btn-primary">
+            <Upload size={15} />
+            <span>Unggah Draft Kompromin</span>
+          </button>
+        )}
       </div>
 
-      <div className="glass-card" style={{ padding: '1rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)' }}>
-          <Filter size={16} />
-          <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Filter:</span>
+      <div className="glass-card" style={{ padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
+          <Filter size={15} />
+          <span style={{ fontSize: '0.82rem', fontWeight: 700 }}>Filter:</span>
         </div>
 
-        <select
-          className="form-select"
-          style={{ width: 'auto', padding: '6px 12px' }}
-          value={filterOpd}
-          onChange={(e) => setFilterOpd(e.target.value)}
-        >
-          <option value="ALL">Semua OPD Pasaman</option>
+        <select className="form-select" style={{ width: 'auto', padding: '6px 12px' }} value={filterOpd} onChange={(e) => setFilterOpd(e.target.value)}>
+          <option value="ALL">Semua OPD</option>
           {opdList.map(opd => (
             <option key={opd.id} value={opd.id}>{opd.kode} - {opd.nama}</option>
           ))}
         </select>
 
-        <select
-          className="form-select"
-          style={{ width: 'auto', padding: '6px 12px' }}
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-        >
-          <option value="ALL">Semua Status Verifikasi</option>
-          <option value="Terverifikasi">Terverifikasi (Diterbitkan)</option>
-          <option value="Dalam Review">Dalam Review BPS</option>
-          <option value="Draft OPD">Draft Internal OPD</option>
+        <select className="form-select" style={{ width: 'auto', padding: '6px 12px' }} value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+          <option value="ALL">Semua Status</option>
+          <option value="Terverifikasi">Terverifikasi</option>
+          <option value="Dalam Review">Dalam Review</option>
+          <option value="Draft OPD">Draft OPD</option>
         </select>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.25rem' }}>
-        {filtered.map(item => (
-          <div key={item.id} className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-              <span className={`badge ${
-                item.statusVerifikasi === 'Terverifikasi' ? 'badge-success' :
-                item.statusVerifikasi === 'Dalam Review' ? 'badge-warning' : 'badge-purple'
-              }`}>
-                {item.statusVerifikasi}
-              </span>
-              <span className="badge badge-primary">{item.tahun}</span>
-            </div>
+      {filtered.length === 0 ? (
+        <div className="glass-card empty-state">
+          <div className="empty-state-icon"><Inbox size={24} /></div>
+          <span className="empty-state-title">Tidak ada dokumen</span>
+          <span className="empty-state-desc">Tidak ada dokumen Kompromin yang sesuai filter. Coba ubah filter atau unggah draft baru.</span>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+          {filtered.map(item => {
+            const badge = getStatusBadge(item.statusVerifikasi);
+            return (
+              <div key={item.id} className="glass-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+                  <span className={`badge ${badge.cls}`}>
+                    {badge.icon}
+                    {item.statusVerifikasi}
+                  </span>
+                  <span className="badge badge-primary">{item.tahun}</span>
+                </div>
 
-            <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)', lineHeight: '1.3' }}>
-                {item.judul}
-              </h3>
-              <span style={{ fontSize: '0.82rem', color: 'var(--primary-hover)', fontWeight: 700, display: 'block', marginTop: '4px' }}>
-                {item.opdNama}
-              </span>
-            </div>
+                <div>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: '1.3' }}>
+                    {item.judul}
+                  </h3>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--primary-hover)', fontWeight: 700, display: 'block', marginTop: '3px' }}>
+                    {item.opdNama}
+                  </span>
+                </div>
 
-            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-              {item.ringkasan}
-            </p>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                  {item.ringkasan}
+                </p>
 
-            <div style={{ background: 'var(--bg-main)', padding: '10px 12px', borderRadius: 'var(--radius-md)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              <div>Nomor SK: <strong style={{ color: 'var(--text-main)' }}>{item.nomorSk}</strong></div>
-              <div>Tanggal Terbit: <strong style={{ color: 'var(--text-main)' }}>{formatDateIndo(item.tanggalTerbit)}</strong></div>
-            </div>
+                <div style={{ background: 'var(--bg-surface)', padding: '8px 10px', borderRadius: 'var(--radius-sm)', fontSize: '0.76rem', color: 'var(--text-muted)' }}>
+                  <div>SK: <strong style={{ color: 'var(--text-main)' }}>{item.nomorSk}</strong></div>
+                  <div>Terbit: <strong style={{ color: 'var(--text-main)' }}>{formatDateIndo(item.tanggalTerbit)}</strong></div>
+                </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '10px', borderTop: '1px solid var(--border-color)' }}>
-              <a
-                href={item.fileUrl}
-                className="btn btn-secondary"
-                style={{ padding: '6px 12px', fontSize: '0.78rem', textDecoration: 'none' }}
-                onClick={(e) => { e.preventDefault(); alert(`Simulasi mengunduh berkas Kompromin: ${item.judul}`); }}
-              >
-                <Download size={14} />
-                <span>Unduh Dokumen PDF</span>
-              </a>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '8px', borderTop: '1px solid var(--border-color)' }}>
+                  <a
+                    href={item.fileUrl}
+                    className="btn btn-secondary"
+                    style={{ padding: '6px 12px', fontSize: '0.76rem', textDecoration: 'none' }}
+                    onClick={(e) => { e.preventDefault(); alert(`Simulasi mengunduh: ${item.judul}`); }}
+                  >
+                    <Download size={13} />
+                    <span>Unduh PDF</span>
+                  </a>
 
-              {currentPermissions.verifyKompromin && item.statusVerifikasi !== 'Terverifikasi' && (
-                <button
-                  onClick={() => handleVerify(item.id)}
-                  className="btn btn-primary"
-                  style={{ padding: '6px 12px', fontSize: '0.78rem' }}
-                >
-                  <ShieldCheck size={14} />
-                  <span>Verifikasi & Terbitkan SK</span>
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+                  {currentPermissions.verifyKompromin && item.statusVerifikasi !== 'Terverifikasi' && (
+                    <button onClick={() => handleVerify(item.id)} className="btn btn-primary" style={{ padding: '6px 12px', fontSize: '0.76rem' }}>
+                      <ShieldCheck size={13} />
+                      <span>Verifikasi</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <Modal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} title="Unggah Draft Kompromin OPD">
         <form onSubmit={handleUploadDraft}>
           <div className="form-group">
             <label className="form-label">Instansi / OPD Penyusun</label>
-            <select
-              className="form-select"
-              value={newDraft.opdId}
-              onChange={(e) => setNewDraft({ ...newDraft, opdId: e.target.value })}
-              required
-            >
+            <select className="form-select" value={newDraft.opdId} onChange={(e) => setNewDraft({ ...newDraft, opdId: e.target.value })} required>
               {opdList.map(opd => (
                 <option key={opd.id} value={opd.id}>{opd.nama}</option>
               ))}
@@ -186,45 +182,23 @@ export default function Kompromin({ komprominList, setKomprominList, opdList, cu
 
           <div className="form-group">
             <label className="form-label">Judul Dokumen Kompromin</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="Contoh: Kompilasi Produk Administrasi Kesehatan 2026"
-              value={newDraft.judul}
-              onChange={(e) => setNewDraft({ ...newDraft, judul: e.target.value })}
-              required
-            />
+            <input type="text" className="form-input" placeholder="Contoh: Kompilasi Produk Administrasi Kesehatan 2026" value={newDraft.judul} onChange={(e) => setNewDraft({ ...newDraft, judul: e.target.value })} required />
           </div>
 
           <div className="form-group">
             <label className="form-label">Tahun Pelaporan</label>
-            <input
-              type="number"
-              className="form-input"
-              value={newDraft.tahun}
-              onChange={(e) => setNewDraft({ ...newDraft, tahun: e.target.value })}
-              required
-            />
+            <input type="number" className="form-input" value={newDraft.tahun} onChange={(e) => setNewDraft({ ...newDraft, tahun: e.target.value })} required />
           </div>
 
           <div className="form-group">
             <label className="form-label">Ringkasan Isi & Cakupan Variabel</label>
-            <textarea
-              className="form-textarea"
-              rows={3}
-              placeholder="Penjelasan ringkas cakupan data sektoral..."
-              value={newDraft.ringkasan}
-              onChange={(e) => setNewDraft({ ...newDraft, ringkasan: e.target.value })}
-              required
-            ></textarea>
+            <textarea className="form-textarea" rows={3} placeholder="Penjelasan ringkas cakupan data sektoral..." value={newDraft.ringkasan} onChange={(e) => setNewDraft({ ...newDraft, ringkasan: e.target.value })} required></textarea>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '1.5rem' }}>
-            <button type="button" onClick={() => setIsUploadModalOpen(false)} className="btn btn-secondary">
-              Batal
-            </button>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '1.25rem' }}>
+            <button type="button" onClick={() => setIsUploadModalOpen(false)} className="btn btn-secondary">Batal</button>
             <button type="submit" className="btn btn-primary">
-              <Upload size={16} />
+              <Upload size={15} />
               <span>Unggah Draft</span>
             </button>
           </div>

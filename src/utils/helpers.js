@@ -1,7 +1,3 @@
-// ==========================================================================
-// SIMPONITAS BPS KABUPATEN PASAMAN - HELPER UTILITIES
-// ==========================================================================
-
 export function formatDateIndo(dateString) {
   if (!dateString || dateString === '-') return '-';
   try {

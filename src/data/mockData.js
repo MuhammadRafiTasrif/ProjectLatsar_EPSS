@@ -1,7 +1,3 @@
-// ==========================================================================
-// SIMPONITAS BPS KABUPATEN PASAMAN - SEED MOCK DATA & INITIAL STATE
-// ==========================================================================
-
 export const INITIAL_OPD_LIST = [
   { id: 'opd-1', nama: 'Dinas Kesehatan Kabupaten Pasaman', kode: 'DINKES', penanggungJawab: 'Dr. Hj. Rahmawati', email: 'dinkes@pasamankab.go.id', statusKompromin: 'Terverifikasi', totalPembinaan: 5, komprominCount: 2 },
   { id: 'opd-2', nama: 'Dinas Pendidikan & Kebudayaan Pasaman', kode: 'DISDIK', penanggungJawab: 'Drs. H. Sukardi, M.Pd', email: 'disdik@pasamankab.go.id', statusKompromin: 'Terverifikasi', totalPembinaan: 4, komprominCount: 2 },

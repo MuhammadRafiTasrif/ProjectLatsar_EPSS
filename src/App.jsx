@@ -26,6 +26,7 @@ export default function App() {
   });
 
   const [activeTab, setActiveTab] = useState('home');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [opdList, setOpdList] = useState(() => {
     const saved = localStorage.getItem('simponitas_opd');
@@ -56,7 +57,6 @@ export default function App() {
 
   const [currentRole, setCurrentRole] = useState(() => roleData.roles[0]);
 
-  // Sync dark mode class
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
@@ -67,7 +67,6 @@ export default function App() {
     }
   }, [isDark]);
 
-  // Save state to LocalStorage
   useEffect(() => {
     localStorage.setItem('simponitas_opd', JSON.stringify(opdList));
   }, [opdList]);
@@ -86,7 +85,6 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('simponitas_roles', JSON.stringify(roleData));
-    // Keep current role permissions updated
     const updated = roleData.roles.find(r => r.id === currentRole.id);
     if (updated) setCurrentRole(updated);
   }, [roleData]);
@@ -101,6 +99,11 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         currentPermissions={currentPermissions}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+        currentRole={currentRole}
+        setRole={setCurrentRole}
+        roles={roleData.roles}
       />
 
       <div className="main-content">
@@ -110,6 +113,7 @@ export default function App() {
           currentRole={currentRole}
           setRole={setCurrentRole}
           roles={roleData.roles}
+          onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)}
         />
 
         <main className="page-wrapper">
