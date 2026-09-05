@@ -27,6 +27,21 @@ export default function App() {
 
   const [activeTab, setActiveTab] = useState('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  const handleToggleSidebar = () => {
+    if (window.innerWidth <= 1024) {
+      setIsSidebarOpen(prev => !prev);
+    } else {
+      setIsSidebarCollapsed(prev => !prev);
+    }
+  };
+
+  const handleNav = (tabId) => {
+    setActiveTab(tabId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsSidebarOpen(false);
+  };
 
   const [opdList, setOpdList] = useState(() => {
     const saved = localStorage.getItem('simponitas_opd');
@@ -94,13 +109,15 @@ export default function App() {
   const currentPermissions = currentRole.permissions || {};
 
   return (
-    <div className="app-container">
+    <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <Sidebar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleNav}
         currentPermissions={currentPermissions}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         currentRole={currentRole}
         setRole={setCurrentRole}
         roles={roleData.roles}
@@ -113,12 +130,12 @@ export default function App() {
           currentRole={currentRole}
           setRole={setCurrentRole}
           roles={roleData.roles}
-          onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+          onMenuToggle={handleToggleSidebar}
         />
 
         <main className="page-wrapper">
           {activeTab === 'home' && (
-            <HomeInfo onNavigate={setActiveTab} />
+            <HomeInfo onNavigate={handleNav} />
           )}
 
           {activeTab === 'dashboard' && (
@@ -126,7 +143,7 @@ export default function App() {
               opdList={opdList}
               pembinaanList={pembinaanList}
               komprominList={komprominList}
-              onNavigate={setActiveTab}
+              onNavigate={handleNav}
             />
           )}
 
