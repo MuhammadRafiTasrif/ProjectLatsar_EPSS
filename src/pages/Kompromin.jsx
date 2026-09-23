@@ -209,6 +209,12 @@ export default function Kompromin({
     return { cls: 'badge-info', icon: <FileText size={11} />, label: status || 'Draft OPD' };
   };
 
+  const isItemVerified = (item) => {
+    if (!item) return false;
+    const st = (item.statusVerifikasi || (item.publikasiData === 'Telah Terverifikasi' ? 'Terverifikasi' : 'Dalam Review')).toLowerCase();
+    return st.includes('terverifikasi');
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
       {/* Header Banner */}
@@ -330,21 +336,28 @@ export default function Kompromin({
 
                 {/* Card Action Footer */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', paddingTop: '8px', borderTop: '1px dashed var(--border-color)' }}>
-                  <a
-                    href={item.fileUrl || '#'}
-                    download={item.fileName || 'dokumen_kompromin.pdf'}
-                    className="btn btn-primary"
-                    style={{ padding: '6px 14px', fontSize: '0.78rem', textDecoration: 'none' }}
-                    onClick={(e) => {
-                      if (!item.fileUrl || item.fileUrl.startsWith('/docs')) {
-                        e.preventDefault();
-                        alert(`Simulasi mengunduh berkas Kompromin: ${item.fileName || item.judul}`);
-                      }
-                    }}
-                  >
-                    <Download size={14} />
-                    <span>Unduh PDF</span>
-                  </a>
+                  {isItemVerified(item) ? (
+                    <a
+                      href={item.fileUrl || '#'}
+                      download={item.fileName || 'dokumen_kompromin.pdf'}
+                      className="btn btn-primary"
+                      style={{ padding: '6px 14px', fontSize: '0.78rem', textDecoration: 'none' }}
+                      onClick={(e) => {
+                        if (!item.fileUrl || item.fileUrl.startsWith('/docs')) {
+                          e.preventDefault();
+                          alert(`Simulasi mengunduh berkas Kompromin: ${item.fileName || item.judul || item.namaKompromin}`);
+                        }
+                      }}
+                    >
+                      <Download size={14} />
+                      <span>Unduh PDF</span>
+                    </a>
+                  ) : (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      <Clock size={13} color="#f59e0b" />
+                      <span>Dalam Review BPS</span>
+                    </div>
+                  )}
 
                   <div style={{ display: 'flex', gap: '6px' }}>
                     <button
@@ -575,27 +588,43 @@ export default function Kompromin({
               {detailItem.ringkasan || 'Dokumen publikasi Kompilasi Produk Administrasi data sektoral.'}
             </p>
             
-            <div style={{ width: '100%', background: 'var(--bg-surface)', padding: '10px 14px', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              <div>Status Verifikasi: <strong style={{ color: 'var(--accent-green)' }}>{detailItem.statusVerifikasi || 'Terverifikasi'}</strong></div>
+            <div style={{ width: '100%', background: 'var(--bg-surface)', padding: '10px 14px', borderRadius: 'var(--radius-sm)', fontSize: '0.82rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                Status Verifikasi: <strong style={{ color: isItemVerified(detailItem) ? 'var(--accent-green)' : '#f59e0b' }}>
+                  {detailItem.statusVerifikasi || (detailItem.publikasiData === 'Telah Terverifikasi' ? 'Terverifikasi' : 'Dalam Review')}
+                </strong>
+              </div>
+              {!isItemVerified(detailItem) && (
+                <span className="badge badge-warning" style={{ fontSize: '0.72rem' }}>
+                  <Clock size={11} />
+                  Belum Dapat Diunduh
+                </span>
+              )}
             </div>
 
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '6px' }}>
-              <a
-                href={detailItem.fileUrl || '#'}
-                download={detailItem.fileName || 'dokumen_kompromin.pdf'}
-                className="btn btn-primary"
-                style={{ padding: '8px 16px', fontSize: '0.84rem', textDecoration: 'none' }}
-                onClick={(e) => {
-                  if (!detailItem.fileUrl || detailItem.fileUrl.startsWith('/docs')) {
-                    e.preventDefault();
-                    alert(`Simulasi mengunduh berkas Kompromin: ${detailItem.fileName || detailItem.judul}`);
-                  }
-                }}
-              >
-                <Download size={15} />
-                <span>Unduh Berkas PDF</span>
-              </a>
-            </div>
+            {isItemVerified(detailItem) ? (
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '6px' }}>
+                <a
+                  href={detailItem.fileUrl || '#'}
+                  download={detailItem.fileName || 'dokumen_kompromin.pdf'}
+                  className="btn btn-primary"
+                  style={{ padding: '8px 16px', fontSize: '0.84rem', textDecoration: 'none' }}
+                  onClick={(e) => {
+                    if (!detailItem.fileUrl || detailItem.fileUrl.startsWith('/docs')) {
+                      e.preventDefault();
+                      alert(`Simulasi mengunduh berkas Kompromin: ${detailItem.fileName || detailItem.judul || detailItem.namaKompromin}`);
+                    }
+                  }}
+                >
+                  <Download size={15} />
+                  <span>Unduh Berkas PDF</span>
+                </a>
+              </div>
+            ) : (
+              <div style={{ width: '100%', padding: '10px 14px', background: 'rgba(245, 158, 11, 0.08)', border: '1px solid rgba(245, 158, 11, 0.25)', borderRadius: 'var(--radius-sm)', fontSize: '0.78rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '6px' }}>
+                Berkas Kompromin ini masih dalam tahap review oleh Tim BPS dan belum dapat diunduh.
+              </div>
+            )}
           </div>
         )}
       </Modal>
