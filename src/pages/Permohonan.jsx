@@ -20,6 +20,7 @@ import {
   Eye
 } from 'lucide-react';
 import { formatDateIndo } from '../utils/helpers';
+import { upsertPembinaanToSupabase, deletePembinaanFromSupabase } from '../services/supabaseService';
 
 export default function Permohonan({
   pembinaanList,
@@ -111,6 +112,7 @@ export default function Permohonan({
 
     if (editingItem) {
       // Edit existing submission
+      let updatedEntry = null;
       const updatedList = pembinaanList.map(item => {
         if (item.id === editingItem.id) {
           const logEntry = {
@@ -121,7 +123,7 @@ export default function Permohonan({
             catatanPerubahan: 'OPD memperbarui data usulan pembinaan.'
           };
 
-          return {
+          updatedEntry = {
             ...item,
             opdId: formData.opdId,
             opdNama: targetOpd.nama,
@@ -136,11 +138,13 @@ export default function Permohonan({
             lokasi: formData.lokasi,
             riwayatPerubahan: [logEntry, ...(item.riwayatPerubahan || [])]
           };
+          return updatedEntry;
         }
         return item;
       });
 
       setPembinaanList(updatedList);
+      if (updatedEntry) upsertPembinaanToSupabase(updatedEntry);
       alert('Pengajuan pembinaan berhasil diperbarui!');
     } else {
       // Create new submission
@@ -176,6 +180,7 @@ export default function Permohonan({
       };
 
       setPembinaanList([newEntry, ...pembinaanList]);
+      upsertPembinaanToSupabase(newEntry);
       alert('Permohonan pembinaan statistik sektoral berhasil dikirim ke BPS Kabupaten Pasaman!');
     }
 
@@ -186,6 +191,7 @@ export default function Permohonan({
   const handleDeletePermohonan = (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus permohonan pembinaan ini?')) {
       setPembinaanList(pembinaanList.filter(item => item.id !== id));
+      deletePembinaanFromSupabase(id);
     }
   };
 
@@ -200,20 +206,23 @@ export default function Permohonan({
       catatanPerubahan: `BPS menyetujui permohonan sesuai tanggal yang diusulkan OPD (${formatDateIndo(item.tanggalUsulan)}).`
     };
 
+    let approvedEntry = null;
     const updated = pembinaanList.map(it => {
       if (it.id === item.id) {
-        return {
+        approvedEntry = {
           ...it,
           status: 'Disetujui',
           tanggalPelaksanaan: item.tanggalUsulan,
           catatanBps: 'Jadwal pembinaan disetujui sesuai usulan OPD.',
           riwayatPerubahan: [logEntry, ...(it.riwayatPerubahan || [])]
         };
+        return approvedEntry;
       }
       return it;
     });
 
     setPembinaanList(updated);
+    if (approvedEntry) upsertPembinaanToSupabase(approvedEntry);
     alert(`Permohonan ${item.id} berhasil disetujui oleh BPS!`);
   };
 
@@ -243,9 +252,10 @@ export default function Permohonan({
       catatanPerubahan: `BPS menetapkan ulang tanggal pembinaan menjadi ${formatDateIndo(rescheduleData.tanggalPelaksanaan)}. Catatan BPS: "${rescheduleData.catatanBps}".`
     };
 
+    let rescheduledEntry = null;
     const updated = pembinaanList.map(it => {
       if (it.id === rescheduleItem.id) {
-        return {
+        rescheduledEntry = {
           ...it,
           status: 'Disetujui',
           tanggalPelaksanaan: rescheduleData.tanggalPelaksanaan,
@@ -254,11 +264,13 @@ export default function Permohonan({
           lokasi: rescheduleData.lokasi,
           riwayatPerubahan: [logEntry, ...(it.riwayatPerubahan || [])]
         };
+        return rescheduledEntry;
       }
       return it;
     });
 
     setPembinaanList(updated);
+    if (rescheduledEntry) upsertPembinaanToSupabase(rescheduledEntry);
     setIsRescheduleModalOpen(false);
     setRescheduleItem(null);
     alert('Penetapan ulang tanggal pembinaan berhasil disimpan dan berstatus Disetujui!');
@@ -267,6 +279,7 @@ export default function Permohonan({
   // BPS Update next status (Mulai Pembinaan / Selesai)
   const handleBpsNextStatus = (id, newStatus) => {
     const nowStamp = new Date().toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+    let nextStatusEntry = null;
     setPembinaanList(pembinaanList.map(it => {
       if (it.id === id) {
         const logEntry = {
@@ -277,14 +290,16 @@ export default function Permohonan({
           catatanPerubahan: `Status pembinaan diperbarui menjadi "${newStatus}".`
         };
 
-        return {
+        nextStatusEntry = {
           ...it,
           status: newStatus,
           riwayatPerubahan: [logEntry, ...(it.riwayatPerubahan || [])]
         };
+        return nextStatusEntry;
       }
       return it;
     }));
+    if (nextStatusEntry) upsertPembinaanToSupabase(nextStatusEntry);
   };
 
   // Display list filtering

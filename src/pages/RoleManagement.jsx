@@ -21,6 +21,7 @@ import {
   X,
   Filter
 } from 'lucide-react';
+import { upsertUserToSupabase, deleteUserFromSupabase, upsertRoleToSupabase } from '../services/supabaseService';
 
 export default function RoleManagement({
   roleData,
@@ -156,9 +157,10 @@ export default function RoleManagement({
 
     if (editingUser) {
       // Update existing user
+      let updatedUserObj = null;
       const updatedList = userList.map(u => {
         if (u.id === editingUser.id) {
-          return {
+          updatedUserObj = {
             ...u,
             nip: userFormData.nip.trim(),
             nama: userFormData.nama.trim(),
@@ -169,10 +171,12 @@ export default function RoleManagement({
             password: userFormData.password,
             status: userFormData.status
           };
+          return updatedUserObj;
         }
         return u;
       });
       if (setUserList) setUserList(updatedList);
+      if (updatedUserObj) upsertUserToSupabase(updatedUserObj);
       triggerNotification(`Pengguna "${userFormData.nama}" berhasil diperbarui.`);
     } else {
       // Check duplicate NIP
@@ -195,6 +199,7 @@ export default function RoleManagement({
         status: userFormData.status
       };
       if (setUserList) setUserList([newUser, ...userList]);
+      upsertUserToSupabase(newUser);
       triggerNotification(`Pengguna baru "${newUser.nama}" berhasil ditambahkan.`);
     }
 
@@ -206,6 +211,7 @@ export default function RoleManagement({
       if (setUserList) {
         setUserList(userList.filter(u => u.id !== usr.id));
       }
+      deleteUserFromSupabase(usr.id);
       triggerNotification(`Akun pengguna "${usr.nama}" berhasil dihapus.`);
     }
   };
@@ -230,36 +236,42 @@ export default function RoleManagement({
   // ROLE & PERMISSION CRUD HANDLERS
   // =========================================================================
   const handleTogglePermission = (roleId, permKey) => {
+    let targetUpdatedRole = null;
     const updatedRoles = roleData.roles.map(r => {
       if (r.id === roleId) {
-        return {
+        targetUpdatedRole = {
           ...r,
           permissions: {
             ...r.permissions,
             [permKey]: !r.permissions[permKey]
           }
         };
+        return targetUpdatedRole;
       }
       return r;
     });
 
     setRoleData({ ...roleData, roles: updatedRoles });
+    if (targetUpdatedRole) upsertRoleToSupabase(targetUpdatedRole);
     triggerNotification('Hak akses role berhasil diperbarui.');
   };
 
   const handleToggleAllForRole = (roleId, enable) => {
+    let targetUpdatedRole = null;
     const updatedRoles = roleData.roles.map(r => {
       if (r.id === roleId) {
         const newPerms = {};
         Object.keys(r.permissions).forEach(k => {
           newPerms[k] = enable;
         });
-        return { ...r, permissions: newPerms };
+        targetUpdatedRole = { ...r, permissions: newPerms };
+        return targetUpdatedRole;
       }
       return r;
     });
 
     setRoleData({ ...roleData, roles: updatedRoles });
+    if (targetUpdatedRole) upsertRoleToSupabase(targetUpdatedRole);
     triggerNotification(`Seluruh hak akses untuk role telah ${enable ? 'diaktifkan' : 'dimatikan'}.`);
   };
 

@@ -349,3 +349,59 @@ export async function upsertUserToSupabase(u) {
     console.warn('Supabase upsert user:', err);
   }
 }
+
+// ── DELETE HELPERS ──
+export async function deleteOpdFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('opd').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete opd:', err);
+  }
+}
+
+export async function deletePembinaanFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('pembinaan').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete pembinaan:', err);
+  }
+}
+
+export async function deleteKomprominFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('kompromin').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete kompromin:', err);
+  }
+}
+
+export async function deleteAliranDataFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('aliran_data').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete aliran_data:', err);
+  }
+}
+
+export async function deleteKnowledgeBaseFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('knowledge_base').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete knowledge_base:', err);
+  }
+}
+
+export async function deleteUserFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('users').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete user:', err);
+  }
+}
+

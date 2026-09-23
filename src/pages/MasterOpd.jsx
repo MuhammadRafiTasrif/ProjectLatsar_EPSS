@@ -12,6 +12,7 @@ import {
   Phone,
   ShieldCheck
 } from 'lucide-react';
+import { upsertOpdToSupabase, deleteOpdFromSupabase } from '../services/supabaseService';
 
 export default function MasterOpd({
   opdList = [],
@@ -91,6 +92,7 @@ export default function MasterOpd({
     };
 
     setOpdList((prev) => [newOpd, ...prev]);
+    upsertOpdToSupabase(newOpd);
     setIsCreateModalOpen(false);
     alert(`Instansi OPD "${newOpd.nama}" berhasil ditambahkan.`);
   };
@@ -102,9 +104,11 @@ export default function MasterOpd({
       return;
     }
 
+    const updatedItem = { ...editingOpd, ...formData };
     setOpdList((prev) =>
-      prev.map((item) => (item.id === editingOpd.id ? { ...item, ...formData } : item))
+      prev.map((item) => (item.id === editingOpd.id ? updatedItem : item))
     );
+    upsertOpdToSupabase(updatedItem);
     setIsEditModalOpen(false);
     alert(`Data Master OPD "${formData.nama}" berhasil diperbarui.`);
   };
@@ -112,6 +116,7 @@ export default function MasterOpd({
   const handleDeleteOpd = (opd) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus "${opd.nama}" dari Master OPD?`)) {
       setOpdList((prev) => prev.filter((item) => item.id !== opd.id));
+      deleteOpdFromSupabase(opd.id);
       alert(`Master OPD "${opd.nama}" berhasil dihapus.`);
     }
   };

@@ -6,6 +6,7 @@ import {
   Send, Download, X, Database, LayoutGrid, Table2, Filter, RotateCcw, Eye, FileText
 } from 'lucide-react';
 import { formatDateIndo, formatBytes, compressImageFile } from '../utils/helpers';
+import { upsertAliranDataToSupabase, deleteAliranDataFromSupabase } from '../services/supabaseService';
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -186,11 +187,11 @@ export default function DataSektoral({
     e.preventDefault();
     const opdObj = opdList.find(o => o.id === requestForm.opdId);
     if (editingItem) {
+      const updatedItem = { ...editingItem, ...requestForm, opdNama: opdObj?.nama || editingItem.opdNama };
       setAliranDataList(aliranDataList.map(it =>
-        it.id === editingItem.id
-          ? { ...it, ...requestForm, opdNama: opdObj?.nama || it.opdNama }
-          : it
+        it.id === editingItem.id ? updatedItem : it
       ));
+      upsertAliranDataToSupabase(updatedItem);
     } else {
       const newItem = {
         id: `ad-${Date.now()}`,
@@ -200,6 +201,7 @@ export default function DataSektoral({
         periodes: emptyPeriodes(requestForm.jenisPeriode),
       };
       setAliranDataList([newItem, ...aliranDataList]);
+      upsertAliranDataToSupabase(newItem);
     }
     setRequestModal(false);
     setEditingItem(null);
@@ -208,6 +210,7 @@ export default function DataSektoral({
   const handleDelete = (id) => {
     if (window.confirm('Hapus permintaan data ini?')) {
       setAliranDataList(aliranDataList.filter(it => it.id !== id));
+      deleteAliranDataFromSupabase(id);
     }
   };
 
@@ -224,9 +227,10 @@ export default function DataSektoral({
   const handleSaveUpload = (e) => {
     e.preventDefault();
     const { itemId, periode } = uploadModal;
+    let updatedParentItem = null;
     setAliranDataList(aliranDataList.map(item => {
       if (item.id !== itemId) return item;
-      return {
+      updatedParentItem = {
         ...item,
         periodes: item.periodes.map(p => {
           if (p.periodeId !== periode.periodeId) return p;
@@ -242,7 +246,9 @@ export default function DataSektoral({
           };
         }),
       };
+      return updatedParentItem;
     }));
+    if (updatedParentItem) upsertAliranDataToSupabase(updatedParentItem);
     setUploadModal(null);
   };
 

@@ -17,6 +17,7 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { formatDateIndo, formatBytes, compressImageFile } from '../utils/helpers';
+import { upsertKnowledgeBaseToSupabase, deleteKnowledgeBaseFromSupabase } from '../services/supabaseService';
 
 export default function KnowledgeBase({
   knowledgeBase = [],
@@ -102,9 +103,10 @@ export default function KnowledgeBase({
 
     if (editingItem) {
       // Update existing Knowledge item
+      let updatedEntry = null;
       const updatedList = knowledgeBase.map(item => {
         if (item.id === editingItem.id) {
-          return {
+          updatedEntry = {
             ...item,
             judul: formData.judul,
             tipe: formData.tipe,
@@ -114,11 +116,13 @@ export default function KnowledgeBase({
             fileUrl: formData.fileUrl,
             fileName: formData.fileName
           };
+          return updatedEntry;
         }
         return item;
       });
 
       setKnowledgeBase(updatedList);
+      if (updatedEntry) upsertKnowledgeBaseToSupabase(updatedEntry);
       alert('Dokumen knowledgebase berhasil diperbarui!');
     } else {
       // Create new Knowledge item
@@ -134,6 +138,7 @@ export default function KnowledgeBase({
       };
 
       setKnowledgeBase([newEntry, ...knowledgeBase]);
+      upsertKnowledgeBaseToSupabase(newEntry);
       alert('Dokumen knowledgebase baru berhasil diterbitkan!');
     }
 
@@ -144,6 +149,7 @@ export default function KnowledgeBase({
   const handleDeleteKnowledge = (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) {
       setKnowledgeBase(knowledgeBase.filter(item => item.id !== id));
+      deleteKnowledgeBaseFromSupabase(id);
     }
   };
 

@@ -26,6 +26,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { formatDateIndo, printElement, compressImageFile, formatBytes } from '../utils/helpers';
+import { upsertPembinaanToSupabase, deletePembinaanFromSupabase } from '../services/supabaseService';
 
 export default function Riwayat({
   pembinaanList = [],
@@ -252,9 +253,10 @@ export default function Riwayat({
     const firstPhotoUrl = completionData.fotoList[0]?.url || targetItem.dokumentasiUrl || '';
     const firstPhotoFileName = completionData.fotoList[0]?.fileName || targetItem.dokumentasiFileName || '';
 
+    let completedEntry = null;
     const updatedList = pembinaanList.map(it => {
       if (it.id === targetItem.id) {
-        return {
+        completedEntry = {
           ...it,
           notulen: completionData.notulen,
           catatanBps: completionData.catatanBps,
@@ -266,11 +268,13 @@ export default function Riwayat({
           status: 'Selesai',
           riwayatPerubahan: [logEntry, ...(it.riwayatPerubahan || [])]
         };
+        return completedEntry;
       }
       return it;
     });
 
     if (setPembinaanList) setPembinaanList(updatedList);
+    if (completedEntry) upsertPembinaanToSupabase(completedEntry);
 
     // Also push uploaded photos to Galeri
     if (completionData.fotoList.length > 0 && setGalleryList) {

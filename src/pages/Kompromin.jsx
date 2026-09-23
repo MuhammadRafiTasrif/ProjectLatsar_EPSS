@@ -20,6 +20,7 @@ import {
   Search
 } from 'lucide-react';
 import { formatDateIndo, compressImageFile, formatBytes } from '../utils/helpers';
+import { upsertKomprominToSupabase, deleteKomprominFromSupabase } from '../services/supabaseService';
 
 export default function Kompromin({
   komprominList = [],
@@ -129,9 +130,10 @@ export default function Kompromin({
 
     if (editingItem) {
       // Update publication
+      let updatedEntry = null;
       const updated = komprominList.map(it => {
         if (it.id === editingItem.id) {
-          return {
+          updatedEntry = {
             ...it,
             judul: formData.judul,
             opdId: formData.opdId,
@@ -144,11 +146,13 @@ export default function Kompromin({
             fileUrl: formData.fileUrl,
             fileName: formData.fileName
           };
+          return updatedEntry;
         }
         return it;
       });
 
       if (setKomprominList) setKomprominList(updated);
+      if (updatedEntry) upsertKomprominToSupabase(updatedEntry);
       alert('Publikasi Kompromin berhasil diperbarui!');
     } else {
       // Create new publication
@@ -169,6 +173,7 @@ export default function Kompromin({
       };
 
       if (setKomprominList) setKomprominList([newEntry, ...komprominList]);
+      upsertKomprominToSupabase(newEntry);
       alert('Publikasi Kompromin resmi berhasil diunggah dan diterbitkan oleh BPS Pasaman!');
     }
 
@@ -179,6 +184,7 @@ export default function Kompromin({
   const handleDeletePublication = (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus publikasi Kompromin ini?')) {
       if (setKomprominList) setKomprominList(komprominList.filter(item => item.id !== id));
+      deleteKomprominFromSupabase(id);
     }
   };
 
