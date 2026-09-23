@@ -11,10 +11,10 @@ const THEMES = [
   },
   {
     id: 'ocean',
-    name: 'Mode Biru Samudra',
-    shortName: 'Biru Adem',
-    icon: Waves,
-    color: '#0284c7'
+    name: 'Light Mode (Clean)',
+    shortName: 'Light Clean',
+    icon: Sparkles,
+    color: '#0284C7'
   },
   {
     id: 'dark',
@@ -122,7 +122,7 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
           </div>
         )}
 
-        {/* ── Theme Switcher Menu (3 Modes: Oranye, Biru Samudra, Gelap) ── */}
+        {/* ── Theme Switcher Menu (3 Modes: Oranye, Light Clean, Gelap) ── */}
         <div style={{ position: 'relative' }} ref={themeMenuRef}>
           <button
             type="button"
@@ -138,7 +138,7 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
               border: isThemeMenuOpen ? '1px solid var(--primary)' : '1px solid var(--border-color)'
             }}
             aria-label="Pilih Mode Tema"
-            title="Pilih Mode Tema (Oranye, Biru Samudra, Gelap)"
+            title="Pilih Mode Tema (Oranye, Light Mode Clean, Gelap)"
           >
             <ActiveIcon size={16} color={activeThemeObj.color} />
             <span className="theme-toggle-label" style={{ fontSize: '0.78rem', fontWeight: 700 }}>
