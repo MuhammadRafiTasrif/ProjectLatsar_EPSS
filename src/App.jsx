@@ -34,6 +34,7 @@ import {
   fetchKomprominFromSupabase,
   fetchAliranDataFromSupabase,
   fetchKnowledgeBaseFromSupabase,
+  fetchRolesFromSupabase,
   fetchUsersFromSupabase
 } from './services/supabaseService';
 
@@ -321,6 +322,7 @@ export default function App() {
       fetchKomprominFromSupabase().then(data => { if (data && data.length) setKomprominList(data); });
       fetchAliranDataFromSupabase().then(data => { if (data && data.length) setAliranDataList(data); });
       fetchKnowledgeBaseFromSupabase().then(data => { if (data && data.length) setKnowledgeBaseList(data); });
+      fetchRolesFromSupabase().then(data => { if (data && data.roles?.length) setRoleData(data); });
       fetchUsersFromSupabase().then(data => { if (data && data.length) setUserList(data); });
     }
   }, []);
