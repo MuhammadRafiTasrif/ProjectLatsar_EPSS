@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Buku Pedoman Penggunaan Sistem SIMPONITAS - BPS Pasaman</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+  @page {
+    size: A4 portrait;
+    margin: 20mm 15mm 20mm 15mm;
+    @bottom-right {
+      content: counter(page);
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.6;
+    font-size: 10.5pt;
+  }
+
+  /* Cover Page */
+  .cover-page {
+    padding: 40px 20px 20px 20px;
+    text-align: center;
+    page-break-after: always;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover-header {
+    border-bottom: 3px double #f79039;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+  }
+
+  .cover-instansi {
+    font-size: 14pt;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .cover-subinstansi {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    background-color: #fff7ed;
+    color: #c2410c;
+    border: 1.5px solid #fed7aa;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 11pt;
+    font-weight: 700;
+    margin: 30px auto;
+  }
+
+  .cover-title {
+    font-size: 24pt;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.25;
+    margin: 15px 0;
+  }
+
+  .cover-subtitle {
+    font-size: 13pt;
+    font-weight: 600;
+    color: #f79039;
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+  }
+
+  .cover-footer {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 25px;
+    margin-top: auto;
+  }
+
+  .cover-author {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .cover-author-desc {
+    font-size: 9.5pt;
+    color: #64748b;
+    margin-top: 3px;
+  }
+
+  /* Content Styling */
+  .content {
+    padding: 0 10px;
+  }
+
+  h1 {
+    font-size: 16pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #f79039;
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  /* Major chapter break */
+  h1:not(:first-of-type) {
+    page-break-before: always;
+    break-before: always;
+  }
+
+  h2 {
+    font-size: 13pt;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    page-break-after: avoid;
+  }
+
+  h3 {
+    font-size: 11.5pt;
+    font-weight: 700;
+    color: #334155;
+    margin-top: 16px;
+    margin-bottom: 6px;
+    page-break-after: avoid;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #475569;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin-bottom: 10px;
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin-left: 22px;
+    margin-bottom: 12px;
+  }
+
+  li {
+    margin-bottom: 4px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 18px 0;
+    font-size: 9pt;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e1;
+    padding: 7px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-weight: 700;
+    border-bottom: 2px solid #94a3b8;
+  }
+
+  tr:nth-child(even) td {
+    background-color: #fdfdfd;
+  }
+
+  /* Code & Pre */
+  code {
+    font-family: Consolas, 'Courier New', Courier, monospace;
+    background-color: #f1f5f9;
+    color: #b45309;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 9pt;
+  }
+
+  pre {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #f79039;
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin: 12px 0;
+    overflow-x: auto;
+    font-size: 8.5pt;
+    line-height: 1.45;
+  }
+
+  pre code {
+    background: transparent;
+    padding: 0;
+    color: #0f172a;
+  }
+
+  /* Flow Diagram Box */
+  .diagram-box {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 18px 0;
+    page-break-inside: avoid;
+  }
+
+  .diagram-title {
+    font-weight: 800;
+    font-size: 10.5pt;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .diagram-flow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .diagram-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #f79039;
+    color: #fff;
+    font-size: 8.5pt;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+
+  .step-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-top: 3px solid #2563eb;
+    border-radius: 6px;
+    padding: 8px;
+    width: 100%;
+    min-height: 65px;
+    font-size: 8pt;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .step-card strong {
+    display: block;
+    color: #0f172a;
+    margin-bottom: 3px;
+    font-size: 8.5pt;
+  }
+
+  .step-card span {
+    color: #64748b;
+    font-size: 7.5pt;
+    line-height: 1.25;
+    display: block;
+  }
+
+  .diagram-arrow {
+    font-size: 14pt;
+    color: #f79039;
+    font-weight: bold;
+  }
+
+  .diagram-outputs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px dashed #cbd5e1;
+    padding-top: 10px;
+  }
+
+  .out-item {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 8pt;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  blockquote {
+    border-left: 4px solid #f79039;
+    background: #fff7ed;
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 9.5pt;
+    color: #9a3412;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 20px 0;
+  }
+
+  /* Links */
+  a {
+    color: #0284c7;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Cover Page -->
+<div class="cover-page">
+  <div class="cover-header">
+    <div class="cover-instansi">Badan Pusat Statistik Kabupaten Pasaman</div>
+    <div class="cover-subinstansi">Provinsi Sumatera Barat</div>
+  </div>
+
+  <div>
+    <div class="cover-badge">BUKU PEDOMAN RESMI PENGGUNA</div>
+    <div class="cover-title">PANDUAN PENGGUNAAN SISTEM INFORMASI SIMPONITAS</div>
+    <div class="cover-subtitle">
+      "Sinergi Pembinaan Statistik Sektoral melalui Penerbitan Kompromin Akurat dan Berkualitas"
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div class="cover-author">Muhammad Rafi Tasrif, S.Tr.Stat</div>
+    <div class="cover-author-desc">Pranata Komputer Ahli Pertama — BPS Kabupaten Pasaman</div>
+    <div class="cover-author-desc" style="margin-top: 8px; font-weight: 600; color: #0f172a;">
+      Aktualisasi Pelatihan Dasar CPNS Golongan III BPS Tahun 2026
+    </div>
+  </div>
+</div>
+
+<!-- Main Body -->
+<div class="content">
+<h1 id="buku-pedoman-penggunaan-sistem-informasi-simponitas">BUKU PEDOMAN PENGGUNAAN SISTEM INFORMASI SIMPONITAS</h1>
+<p><strong>Badan Pusat Statistik (BPS) Kabupaten Pasaman — Provinsi Sumatera Barat</strong><br />
+<em>Sinergi Pembinaan Statistik Sektoral melalui Penerbitan Kompromin Akurat dan Berkualitas</em></p>
+<hr />
+<h2 id="daftar-isi">DAFTAR ISI</h2>
+<ol>
+<li><a href="#1-gambaran-umum-sistem">Gambaran Umum Sistem</a></li>
+<li><a href="#2-teknologi-dan-arsitektur-sistem">Teknologi dan Arsitektur Sistem</a></li>
+<li><a href="#3-alur-sistem">Alur Sistem</a></li>
+<li><a href="#4-struktur-menu">Struktur Menu</a></li>
+<li><a href="#5-hak-akses-pengguna">Hak Akses Pengguna</a></li>
+<li><a href="#6-panduan-penggunaan">Panduan Penggunaan</a></li>
+<li><a href="#7-pengelolaan-data">Pengelolaan Data</a></li>
+<li><a href="#8-keamanan-dan-login">Keamanan dan Login</a></li>
+<li><a href="#9-troubleshooting">Troubleshooting (Pemecahan Masalah)</a></li>
+<li><a href="#10-penutup">Penutup</a></li>
+</ol>
+<hr />
+<h1 id="1-gambaran-umum-sistem">1. Gambaran Umum Sistem</h1>
+<h3 id="11-nama-dan-tujuan-sistem">1.1. Nama dan Tujuan Sistem</h3>
+<ul>
+<li><strong>Nama Sistem</strong>: <strong>SIMPONITAS</strong></li>
+<li><strong>Kepanjangan</strong>: <em>Sinergi Pembinaan Statistik Sektoral melalui Penerbitan Kompromin Akurat dan Berkualitas</em></li>
+<li><strong>Instansi Pemilik</strong>: Badan Pusat Statistik (BPS) Kabupaten Pasaman, Provinsi Sumatera Barat.</li>
+<li><strong>Inisiator &amp; Pengembang</strong>: Muhammad Rafi Tasrif, S.Tr.Stat (Pranata Komputer Ahli Pertama) dalam rangka Aktualisasi Latsar CPNS Golongan III BPS Tahun 2026.</li>
+</ul>
+<p><strong>Tujuan Sistem SIMPONITAS</strong>:<br />
+SIMPONITAS dirancang sebagai platform layanan digital terpadu untuk memfasilitasi koordinasi, pengajuan layanan pembinaan, pendampingan penyusunan metadata, pemantauan pengumpulan data sektoral berkala, serta penerbitan dan pengarsipan dokumen Kompilasi Produk Administrasi (Kompromin) bagi seluruh Organisasi Perangkat Daerah (OPD) di lingkungan Pemerintah Kabupaten Pasaman sesuai prinsip Satu Data Indonesia (SDI).</p>
+<h3 id="12-fungsi-utama-sistem">1.2. Fungsi Utama Sistem</h3>
+<ol>
+<li><strong>Pusat Informasi dan Edukasi Pembinaan Statistik Sektoral</strong>: Menyediakan gambaran tujuan pembinaan, landasan hukum (UU No. 16/1997, Perpres No. 39/2019), serta tahapan alur integrasi data dari produsen data hingga publikasi resmi BPS.</li>
+<li><strong>Dashboard Pemantauan &amp; Analitik KPI (Key Performance Indicator)</strong>: Menyajikan grafik interaktif progres pembinaan instansi, status dokumen Kompromin, frekuensi kegiatan, dan rekapitulasi capaian seluruh OPD.</li>
+<li><strong>Pengelolaan Master Instansi OPD</strong>: Mendokumentasikan basis data 23 instansi OPD Kabupaten Pasaman beserta pejabat penanggung jawab, kontak narahubung, dan alamat surel kedinasan.</li>
+<li><strong>Layanan Pengajuan Permohonan Pembinaan Online</strong>: Memfasilitasi OPD dalam mengajukan permohonan pembinaan statistik (Kompromin, Metadata Statistik MS-D, Rekomendasi Statistik Romantik, dan Konsultasi Teknis) serta memfasilitasi BPS dalam menyetujui, menjadwalkan ulang, dan mendisposisikan tim pembina.</li>
+<li><strong>Pencatatan Riwayat &amp; Penerbitan Berita Acara Resmi</strong>: Merekam rekam jejak pelaksanaan pembinaan lengkap dengan notulen, perwakilan instansi, tim pembina, galeri foto dokumentasi (dengan fitur kompresi otomatis), serta fitur cetak Berita Acara Pembinaan berkop resmi.</li>
+<li><strong>Repositori Publikasi Kompromin Daerah</strong>: Katalog terpusat untuk menyimpan, memfilter status verifikasi (<em>Draft OPD</em>, <em>Dalam Penelaahan BPS</em>, <em>Terverifikasi &amp; Diterbitkan</em>), serta mengunduh dokumen publikasi Kompromin.</li>
+<li><strong>Pengumpulan &amp; Pemantauan Aliran Data OPD</strong>: Memantau pelaporan data statistik berkala per indikator (Triwulanan, Bulanan, Tahunan) dengan fitur <strong>Pratinjau Lembar Data Sektoral Terpadu</strong> sebelum pengunduhan dokumen lampiran.</li>
+<li><strong>Knowledgebase (Perpustakaan Pengetahuan)</strong>: Pusat unduhan dokumen regulasi, Standar Operasional Prosedur (SOP), buku panduan metadata, dan format template baku penyusunan data.</li>
+<li><strong>Tata Kelola Pengguna &amp; Peran (Role-Based Access Control / RBAC)</strong>: Pengaturan hak akses berbasis 5 peran dengan matriks sakelar otorisasi (<em>toggle switch</em>) yang dapat disesuaikan sewaktu-waktu oleh Administrator BPS.</li>
+</ol>
+<h3 id="13-permasalahan-yang-diselesaikan">1.3. Permasalahan yang Diselesaikan</h3>
+<p>Sebelum adanya sistem SIMPONITAS, proses pembinaan statistik sektoral menghadapi beberapa kendala nyata:
+* <strong>Pengajuan Pembinaan Masih Manual</strong>: Koordinasi pengajuan bimbingan teknis masih menggunakan surat fisik atau pesan singkat informal sehingga rentan luput dari pencatatan jadwal.
+* <strong>Jadwal Pembinaan Rentan Tumpang Tindih</strong>: BPS kesulitan memetakan ketersediaan waktu tim pembina dengan jadwal usulan OPD secara terintegrasi.
+* <strong>Dokumentasi &amp; Notulen Tercecer</strong>: Bukti pelaksanaan, notulen kesepakatan indikator, dan dokumentasi foto sering tersimpan pada arsip pribadi masing-masing pegawai dan tidak terpusat.
+* <strong>Sulitnya Memantau Data Rutin OPD</strong>: Pengumpulan data indikator berkala (triwulanan/tahunan) dari produsen data OPD sering mengalami keterlambatan karena tidak adanya pelacakan status tenggat waktu (<em>deadline</em>) dan status pengisian indikator yang transparan.
+* <strong>Akses Materi Pedoman Terbatas</strong>: OPD sering kesulitan mencari format baku template Kompromin dan kamus metadata standar statistik yang valid.</p>
+<hr />
+<h1 id="2-teknologi-dan-arsitektur-sistem">2. Teknologi dan Arsitektur Sistem</h1>
+<h3 id="21-teknologi-dan-framework-yang-digunakan">2.1. Teknologi dan Framework yang Digunakan</h3>
+<p>Sistem SIMPONITAS dibangun dengan arsitektur web modern yang mengutamakan kecepatan akses, responsivitas tinggi pada semua perangkat, dan kemudahan pengoperasian bagi pengguna awam:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Komponen</th>
+<th style="text-align: left;">Teknologi yang Digunakan</th>
+<th style="text-align: left;">Penjelasan &amp; Peran</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Frontend Framework</strong></td>
+<td style="text-align: left;">React.js (v18+) &amp; Vite</td>
+<td style="text-align: left;">Membangun antarmuka interaktif Single Page Application (SPA) yang cepat tanpa <em>reload</em> halaman penuh.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Desain &amp; UI Tokens</strong></td>
+<td style="text-align: left;">Vanilla CSS3 Modern (CSS Variables)</td>
+<td style="text-align: left;">Sistem desain responsif dengan warna aksen Pasaman Orange (<code>#f79039</code>), Glassmorphism, dan 3 pilihan mode tema (<em>Default</em>, <em>Biru Samudra</em>, dan <em>Mode Gelap</em>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tipografi</strong></td>
+<td style="text-align: left;">Plus Jakarta Sans (Google Fonts)</td>
+<td style="text-align: left;">Tipografi resmi yang dirancang untuk keterbacaan tinggi pada laporan formal maupun dashboard digital.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ikonografi</strong></td>
+<td style="text-align: left;">Lucide React</td>
+<td style="text-align: left;">Ikon berbasis SVG murni yang konsisten, bersih, dan bebas dari emotikon informal.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Kompresi Berkas</strong></td>
+<td style="text-align: left;">Canvas Image Compressor Client-side</td>
+<td style="text-align: left;">Fitur utilitas otomatis untuk mengompresi foto kegiatan agar muat cepat dan hemat ruang penyimpanan.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Pencetakan Dokumen</strong></td>
+<td style="text-align: left;">Native Browser Print Engine</td>
+<td style="text-align: left;">Menghasilkan cetakan Berita Acara resmi berkop surat BPS Kabupaten Pasaman yang siap dicetak langsung atau disimpan sebagai PDF.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Backend / API</strong></td>
+<td style="text-align: left;">Node.js Serverless Functions (<code>api/</code>)</td>
+<td style="text-align: left;">Endpoint API backend ringan tanpa server fisik (<em>serverless architecture</em>) untuk melayani request data pembinaan, kompromin, aliran data, dan role.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Penyimpanan Data</strong></td>
+<td style="text-align: left;">Hybrid Storage (<code>localStorage</code> + API)</td>
+<td style="text-align: left;">Mekanisme sinkronisasi data lokal browser dengan skema data terstruktur untuk menjamin keutuhan data dan respon instan pengguna.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-peran-github">2.2. Peran GitHub</h3>
+<p>GitHub berperan sebagai sistem kendali versi (<em>Version Control System</em>) terpusat untuk repositori kode sumber proyek:
+* <strong>Pelacakan Perubahan</strong>: Mencatat seluruh riwayat penambahan fitur, penyempurnaan antarmuka, dan perbaikan galat secara transparan.
+* <strong>Manajemen Rilis</strong>: Mengelola branch utama (<code>main</code>) sebagai sumber kode produksi yang siap diluncurkan.
+* <strong>Integrasi Berkelanjutan (CI/CD)</strong>: Terhubung langsung dengan platform hosting Vercel. Setiap kali kode di-push ke GitHub, Vercel secara otomatis mendeteksi perubahan, menguji build, dan memperbarui website secara otomatis (<em>Continuous Deployment</em>).</p>
+<h3 id="23-peran-vercel">2.3. Peran Vercel</h3>
+<p>Vercel berperan sebagai platform infrastruktur hosting awan (<em>Cloud Deployment Platform</em>):
+* <strong>Penyajian Antarmuka (Static Site Hosting)</strong>: Menyajikan berkas build frontend hasil kompilasi Vite secara cepat ke seluruh pengguna di Indonesia melalui jaringan <em>Edge Network</em>.
+* <strong>Eksekusi Serverless API</strong>: Menjalankan skrip backend di direktori <code>api/</code> (seperti <code>pembinaan.js</code>, <code>kompromin.js</code>, dll.) secara otomatis tanpa memerlukan server fisik yang menyala terus-menerus.
+* <strong>Keamanan SSL HTTPS</strong>: Menyediakan sertifikat keamanan enkripsi 256-bit standar industri secara otomatis sehingga transmisi data terjamin keamanannya.
+* <strong>Konfigurasi Routing (<code>vercel.json</code>)</strong>: Mengarahkan rute Single Page Application agar URL dapat diakses langsung tanpa galat <em>404 Not Found</em>.</p>
+<h3 id="24-peran-supabase-basis-data">2.4. Peran Supabase / Basis Data</h3>
+<ul>
+<li><strong>Kondisi Implementasi Aktual</strong>:<br />
+  Saat ini sistem SIMPONITAS menggunakan arsitektur <strong>Client-Side Persistent Datastore</strong> (<code>localStorage</code> engine) yang terstruktur rapi berdasarkan skema entitas data BPS Pasaman. Data pengguna, daftar OPD, permohonan pembinaan, notulen, kompromin, aliran data, serta konfigurasi hak akses tersimpan secara persisten pada browser pengguna dan disinkronkan dengan <em>mock baseline data</em>.</li>
+<li><strong>Peran Supabase (Rencana Pengembangan Lanjutan)</strong>:<br />
+  Platform Supabase (PostgreSQL Database, Supabase Auth, dan Supabase Storage) disiapkan sebagai arsitektur basis data relasional awan terpusat pada tahapan pengembangan berikutnya untuk memfasilitasi sinkronisasi multi-pengguna antar perangkat secara langsung (<em>real-time multi-tenant database</em>).</li>
+</ul>
+<h3 id="25-hubungan-antar-komponen-dan-diagram-alur-sistem">2.5. Hubungan Antar Komponen dan Diagram Alur Sistem</h3>
+<div class="diagram-box">
+  <div class="diagram-title">Diagram Arsitektur & Alur Kerja Sistem SIMPONITAS</div>
+  <div class="diagram-flow">
+    <div class="diagram-step">
+      <div class="step-num">1</div>
+      <div class="step-card">
+        <strong>Pengguna / OPD / BPS</strong>
+        <span>Mengakses via Web Browser Desktop / Mobile</span>
+      </div>
+    </div>
+    <div class="diagram-arrow">&#10140;</div>
+    <div class="diagram-step">
+      <div class="step-num">2</div>
+      <div class="step-card" style="border-top-color: #f79039;">
+        <strong>Vercel Cloud Platform</strong>
+        <span>Hosting SSL HTTPS 256-bit & Edge Network</span>
+      </div>
+    </div>
+    <div class="diagram-arrow">&#10140;</div>
+    <div class="diagram-step">
+      <div class="step-num">3</div>
+      <div class="step-card" style="border-top-color: #0284c7;">
+        <strong>React.js SPA + RBAC</strong>
+        <span>9 Modul Navigasi & Otorisasi 5 Peran</span>
+      </div>
+    </div>
+    <div class="diagram-arrow">&#10140;</div>
+    <div class="diagram-step">
+      <div class="step-num">4</div>
+      <div class="step-card" style="border-top-color: #16a34a;">
+        <strong>Hybrid Datastore</strong>
+        <span>LocalStorage + Node.js API /api/*</span>
+      </div>
+    </div>
+  </div>
+  <div class="diagram-outputs">
+    <span class="out-item">&#128196; Berita Acara PDF</span>
+    <span class="out-item">&#128202; Lembar Aliran Data</span>
+    <span class="out-item">&#128218; Dokumen Kompromin</span>
+    <span class="out-item">&#128214; Modul Knowledgebase</span>
+  </div>
+</div>
+
+<hr />
+<h1 id="3-alur-sistem">3. Alur Sistem</h1>
+<h3 id="31-alur-utama-pengoperasian-sistem">3.1. Alur Utama Pengoperasian Sistem</h3>
+<p>Alur kerja umum SIMPONITAS berjalan secara berurutan sebagai berikut:</p>
+<pre><code>[1. LOGIN] ──&gt; [2. DASHBOARD] ──&gt; [3. NAVIGASI MENU] ──&gt; [4. PROSES KERJA] ──&gt; [5. DATABASE] ──&gt; [6. OUTPUT]
+</code></pre>
+<ol>
+<li><strong>Login (Autentikasi)</strong>: Pengguna mengakses website, memasukkan Nomor Induk Pegawai (NIP) atau alamat surel kedinasan beserta kata sandi yang terdaftar. Alternatifnya, pengguna dapat menggunakan tombol <em>Quick Fill Akun Demo</em> atau tombol <em>Masuk sebagai Pengguna Publik / Tamu</em>.</li>
+<li><strong>Dashboard (Pemantauan Awal)</strong>: Sistem mengidentifikasi hak akses peran (<em>Role</em>) pengguna dan menampilkan ringkasan indikator kinerja utama (KPI), status permohonan pembinaan, grafik kompromin, serta pintasan navigasi cepat.</li>
+<li><strong>Navigasi Menu</strong>: Pengguna memilih modul yang diinginkan pada bilah navigasi samping (<em>Sidebar</em>) sesuai dengan tugas yang akan dilaksanakan.</li>
+<li><strong>Proses Kerja</strong>: Pengguna melakukan aksi bisnis sesuai perannya (mengajukan usulan, mengubah jadwal, mengisi nilai data dan mengunggah lampiran, menelaah dokumen, atau mengubah hak akses).</li>
+<li><strong>Database (Penyimpanan &amp; Sinkronisasi)</strong>: Setiap perubahan data secara otomatis divalidasi dan disimpan ke dalam penyimpanan persisten sistem.</li>
+<li><strong>Output (Hasil Keluaran)</strong>: Sistem menyajikan hasil dalam bentuk status layanan terbarukan, cetakan Berita Acara Pembinaan bertanda tangan, pratinjau lembar data, atau unduhan dokumen publikasi.</li>
+</ol>
+<h3 id="32-rincian-alur-proses-bisnis-utama">3.2. Rincian Alur Proses Bisnis Utama</h3>
+<h4 id="a-alur-pengajuan-dan-penjadwalan-layanan-pembinaan">A. Alur Pengajuan dan Penjadwalan Layanan Pembinaan</h4>
+<ol>
+<li><strong>Pengajuan oleh OPD</strong>: Pengguna Produsen Data OPD membuka menu <strong>Layanan Pembinaan</strong> ➔ menekan tombol <strong>Ajukan Pembinaan Baru</strong> ➔ mengisi nama narahubung (PIC), nomor kontak, jenis pembinaan, topik bimbingan, usulan tanggal, lokasi, serta deskripsi kebutuhan ➔ menekan <strong>Kirim Permohonan</strong>.</li>
+<li><strong>Penelaahan oleh BPS</strong>: Tim Pembina BPS menerima notifikasi permohonan berstatus <em>Menunggu Persetujuan</em>.</li>
+<li><strong>Persetujuan / Penjadwalan Ulang</strong>:</li>
+<li><em>Jika jadwal disetujui</em>: BPS menekan tombol <strong>Setujui</strong> (status berubah menjadi <em>Disetujui</em>).</li>
+<li><em>Jika jadwal perlu disesuaikan</em>: BPS menekan tombol <strong>Atur Jadwal / Disposisi</strong> untuk menentukan tanggal pelaksanaan baru, waktu pembinaan, lokasi, serta catatan konfirmasi ke OPD.</li>
+<li><strong>Riwayat Perubahan</strong>: Setiap penyesuaian tanggal atau catatan usulan otomatis dicatat dalam log <em>Riwayat Perubahan Usulan</em> yang dapat ditinjau oleh kedua belah pihak.</li>
+</ol>
+<h4 id="b-alur-pencatatan-riwayat-penerbitan-berita-acara">B. Alur Pencatatan Riwayat &amp; Penerbitan Berita Acara</h4>
+<ol>
+<li><strong>Pelaksanaan Kegiatan</strong>: Pembinaan dilaksanakan sesuai jadwal yang telah disepakati bersama.</li>
+<li><strong>Pengisian Notulen &amp; Dokumentasi</strong>: Tim Pembina BPS membuka menu <strong>Riwayat Pembinaan</strong> ➔ mencari kegiatan terkait ➔ menekan tombol <strong>Lengkapi Notulen &amp; Dokumentasi</strong>.</li>
+<li><strong>Input Notulen &amp; Foto</strong>: BPS menginput rangkuman hasil rapat notulen, catatan evaluasi BPS, mengunggah foto dokumentasi kegiatan (yang otomatis dikompresi agar ringan), dan mengunggah berkas lampiran notulen (opsional).</li>
+<li><strong>Penyelesaian Status</strong>: Status kegiatan diperbarui menjadi <em>Selesai</em>.</li>
+<li><strong>Cetak Berita Acara</strong>: Pengguna dapat menekan tombol <strong>Cetak Berita Acara</strong> untuk mencetak lembar Berita Acara resmi berstandar BPS Kabupaten Pasaman lengkap dengan kolom tanda tangan perwakilan OPD dan Pembina BPS.</li>
+</ol>
+<h4 id="c-alur-pengumpulan-pratinjau-aliran-data-opd">C. Alur Pengumpulan &amp; Pratinjau Aliran Data OPD</h4>
+<ol>
+<li><strong>Pembuatan Permintaan Data oleh BPS</strong>: Admin BPS membuat indikator data yang dibutuhkan (misal: <em>Produksi Perkebunan</em>, <em>Data Guru</em>, dll.) dengan menentukan frekuensi (Triwulanan, Bulanan, Tahunan) dan tenggat waktu pengisian.</li>
+<li><strong>Penginputan oleh OPD</strong>: Petugas OPD membuka menu <strong>Aliran Data OPD</strong> ➔ memilih indikator dan periode yang ingin diisi ➔ menekan tombol <strong>Input Data</strong> ➔ memasukkan realisasi angka capaian, catatan penjelasan, dan mengunggah berkas lampiran bukti dukung (Excel/PDF) ➔ menekan <strong>Kirim &amp; Simpan Data</strong>.</li>
+<li><strong>Pratinjau Dokumen Sebelum Unduh</strong>: Sebelum mengunduh berkas, pengguna (baik BPS maupun OPD) dapat menekan tombol <strong>Lihat Data / Pratinjau</strong> (ikon mata) untuk memeriksa <strong>Lembar Data Sektoral Terpadu</strong> yang memuat kop instansi, metadata indikator, realisasi angka, nama pengunggah, catatan OPD, dan badge verifikasi.</li>
+<li><strong>Unduh Berkas Satuan</strong>: Dokumen pendukung dapat diunduh langsung satu per satu melalui modal pratinjau tersebut.</li>
+</ol>
+<hr />
+<h1 id="4-struktur-menu">4. Struktur Menu</h1>
+<p>Bilah navigasi samping (<em>Sidebar</em>) menyajikan 9 menu utama yang disesuaikan secara dinamis dengan hak akses pengguna yang sedang aktif:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">No</th>
+<th style="text-align: left;">Nama Menu</th>
+<th style="text-align: left;">ID Tab</th>
+<th style="text-align: center;">Ikon</th>
+<th style="text-align: left;">Fungsi Utama Menu</th>
+<th style="text-align: left;">Kategori Pengguna</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>SIMPONITAS</strong></td>
+<td style="text-align: left;"><code>home</code></td>
+<td style="text-align: center;">Rumah</td>
+<td style="text-align: left;">Informasi profil sistem, visi pembinaan statistik sektoral, dasar hukum, alur integrasi data, dan panduan dasar.</td>
+<td style="text-align: left;">Semua Pengguna</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><strong>Dashboard Utama</strong></td>
+<td style="text-align: left;"><code>dashboard</code></td>
+<td style="text-align: center;">Tata Letak</td>
+<td style="text-align: left;">Ringkasan indikator kinerja pembinaan (KPI), 3 grafik visualisasi, rekap status Kompromin, dan tabel progres OPD.</td>
+<td style="text-align: left;">Semua Pengguna</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>Daftar OPD</strong></td>
+<td style="text-align: left;"><code>masterOpd</code></td>
+<td style="text-align: center;">Gedung</td>
+<td style="text-align: left;">Basis data direktori 23 Organisasi Perangkat Daerah Kabupaten Pasaman beserta pejabat penanggung jawab dan kontak.</td>
+<td style="text-align: left;">Semua Pengguna</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><strong>Layanan Pembinaan</strong></td>
+<td style="text-align: left;"><code>permohonan</code></td>
+<td style="text-align: center;">Tambah Berkas</td>
+<td style="text-align: left;">Formulir pengajuan permohonan pembinaan OPD, disposisi tim pembina BPS, dan pengaturan jadwal bimbingan.</td>
+<td style="text-align: left;">BPS &amp; OPD <em>(Publik tersembunyi)</em></td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;"><strong>Riwayat Pembinaan</strong></td>
+<td style="text-align: left;"><code>riwayat</code></td>
+<td style="text-align: center;">Riwayat</td>
+<td style="text-align: left;">Rekam jejak pembinaan yang terlaksana, pengisian notulen rapat, galeri dokumentasi foto, dan cetak Berita Acara resmi.</td>
+<td style="text-align: left;">BPS &amp; OPD <em>(Publik tersembunyi)</em></td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><strong>Repository Kompromin</strong></td>
+<td style="text-align: left;"><code>kompromin</code></td>
+<td style="text-align: center;">Dokumen</td>
+<td style="text-align: left;">Repositori publikasi dokumen Kompilasi Produk Administrasi (Kompromin) OPD yang telah ditelaah dan diterbitkan BPS.</td>
+<td style="text-align: left;">Semua Pengguna</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;"><strong>Aliran Data OPD</strong></td>
+<td style="text-align: left;"><code>dataSektoral</code></td>
+<td style="text-align: center;">Basis Data</td>
+<td style="text-align: left;">Pelacakan dan pengisian data sektoral berkala (Triwulan/Bulanan/Tahunan) dilengkapi lembar pratinjau dokumen resmi.</td>
+<td style="text-align: left;">BPS &amp; OPD <em>(Publik bersifat lihat)</em></td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;"><strong>Knowledgebase</strong></td>
+<td style="text-align: left;"><code>knowledgeBase</code></td>
+<td style="text-align: center;">Buku Terbuka</td>
+<td style="text-align: left;">Perpustakaan unduhan modul pedoman, SOP pembinaan, kamus metadata statistik (MS-D/MS-I), modul Romantik, dan template baku.</td>
+<td style="text-align: left;">Semua Pengguna</td>
+</tr>
+<tr>
+<td style="text-align: center;">9</td>
+<td style="text-align: left;"><strong>Manajemen Role &amp; Pengguna</strong></td>
+<td style="text-align: left;"><code>roleManagement</code></td>
+<td style="text-align: center;">Perisai Keamanan</td>
+<td style="text-align: left;">Pengaturan matriks hak akses (<em>toggle switches</em>) dan pengelolaan akun pengguna (tambah, edit, nonaktifkan, reset sandi).</td>
+<td style="text-align: left;">Khusus Admin BPS</td>
+</tr>
+</tbody>
+</table>
+<h3 id="elemen-navigasi-tambahan-bilah-atas-navbar">Elemen Navigasi Tambahan (Bilah Atas / Navbar):</h3>
+<ul>
+<li><strong>Tombol Ciutkan/Perluas Sidebar</strong>: Mengatur lebar sidebar pada desktop atau membuka drawer navigasi pada layar ponsel.</li>
+<li><strong>Pemilih 3 Mode Tampilan (<em>Theme Switcher</em>)</strong>:</li>
+<li><em>Mode Default (Oranye Pasaman)</em>: Tampilan cerah resmi BPS.</li>
+<li><em>Mode Biru Samudra</em>: Tampilan sejuk bernuansa biru es dengan kontras tinggi.</li>
+<li><em>Mode Gelap (Dark Mode)</em>: Tampilan gelap berlatar belakang arang gelap untuk kenyamanan mata di ruangan redup.</li>
+<li><strong>Kartu Identitas Pengguna</strong>: Menampilkan nama pegawai yang sedang login, instansi asal, dan lencana peran aktif.</li>
+<li><strong>Tombol Keluar (<em>Logout</em>)</strong>: Mengakhiri sesi pengguna dan mengembalikan sistem ke layar login.</li>
+</ul>
+<hr />
+<h1 id="5-hak-akses-pengguna">5. Hak Akses Pengguna</h1>
+<p>SIMPONITAS menerapkan sistem kendali akses berbasis peran (<em>Role-Based Access Control</em> / RBAC). Sistem membagi pengguna ke dalam 5 peran dengan tingkat wewenang yang berbeda:</p>
+<h3 id="51-matriks-hak-akses-peran">5.1. Matriks Hak Akses Peran</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">No</th>
+<th style="text-align: left;">Nama Peran (<em>Role</em>)</th>
+<th style="text-align: left;">Menu / Fitur yang Dapat Diakses</th>
+<th style="text-align: left;">Rincian Hak Akses Sistem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>Tim Pembina BPS (Admin)</strong></td>
+<td style="text-align: left;">Seluruh menu (SIMPONITAS, Dashboard, Master OPD, Layanan Pembinaan, Riwayat, Kompromin, Aliran Data, Knowledgebase, Manajemen Role &amp; Pengguna).</td>
+<td style="text-align: left;"><strong>Akses Penuh (Full Superadmin)</strong>:<br>• Menyetujui &amp; mengatur jadwal pembinaan<br>• Melengkapi notulen &amp; foto kegiatan<br>• Mencetak Berita Acara pembinaan<br>• Memverifikasi &amp; menerbitkan Kompromin<br>• Mengatur indikator Aliran Data OPD<br>• Mengelola modul Knowledgebase (CRUD)<br>• Mengubah matriks hak akses &amp; mengelola akun pengguna</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><strong>Tim Statistik Sektoral BPS</strong></td>
+<td style="text-align: left;">SIMPONITAS, Dashboard, Master OPD, Layanan Pembinaan, Riwayat, Kompromin, Aliran Data, Knowledgebase.</td>
+<td style="text-align: left;"><strong>Akses Teknis Pembina</strong>:<br>• Menyetujui &amp; mengatur jadwal pembinaan<br>• Mengisi notulen, pembina, dan foto riwayat<br>• Mencetak Berita Acara pembinaan<br>• Menelaah &amp; menerbitkan draft Kompromin<br>• Memantau &amp; memeriksa Aliran Data OPD<br>• Mengelola modul Knowledgebase<br>• <em>Tidak dapat mengakses Manajemen Role/Pengguna</em></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>Walidata OPD Pasaman</strong><br><em>(Diskominfo Pasaman)</em></td>
+<td style="text-align: left;">SIMPONITAS, Dashboard, Master OPD, Layanan Pembinaan, Riwayat, Kompromin, Aliran Data, Knowledgebase.</td>
+<td style="text-align: left;"><strong>Akses Pengawas Koordinasi Daerah</strong>:<br>• Memantau progres pembinaan seluruh OPD<br>• Mengajukan permohonan pembinaan instansi<br>• Melihat riwayat dan mencetak Berita Acara<br>• Menginput dan mengunggah data sektoral instansi<br>• Mengunduh dokumen Kompromin &amp; materi pedoman<br>• <em>Tidak dapat menyetujui jadwal atau menerbitkan Kompromin resmi BPS</em></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><strong>Produsen Data OPD Pasaman</strong><br><em>(Dinas/Badan Daerah)</em></td>
+<td style="text-align: left;">SIMPONITAS, Dashboard, Master OPD, Layanan Pembinaan, Riwayat, Kompromin, Aliran Data, Knowledgebase.</td>
+<td style="text-align: left;"><strong>Akses Operasional Instansi</strong>:<br>• Mengajukan permohonan pembinaan statistik<br>• Memperbarui data usulan permohonan instansi sendiri<br>• Melihat riwayat pembinaan instansinya<br>• Menginput realisasi nilai data &amp; mengunggah lampiran berkas berkala pada Aliran Data<br>• Melakukan pratinjau dan mengunduh berkas aliran data<br>• Mengunduh dokumen Kompromin &amp; materi pengetahuan</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;"><strong>Pengguna Publik / Tamu</strong><br><em>(Masyarakat &amp; Mahasiswa)</em></td>
+<td style="text-align: left;">SIMPONITAS, Dashboard Utama, Master OPD, Kompromin (Publikasi), Knowledgebase (Publik).</td>
+<td style="text-align: left;"><strong>Akses Informasi Terbuka (Read-Only)</strong>:<br>• Membaca informasi umum pembinaan statistik<br>• Melihat indikator agregat pada Dashboard<br>• Meninjau daftar instansi Master OPD Pasaman<br>• Mengunduh publikasi Kompromin yang telah berstatus <em>Terverifikasi &amp; Diterbitkan</em><br>• Mengunduh modul publik Knowledgebase<br>• <em>Menu internal Layanan Pembinaan, Riwayat, dan Aliran Data disembunyikan</em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-penjelasan-perbedaan-hak-akses">5.2. Penjelasan Perbedaan Hak Akses</h3>
+<ol>
+<li><strong>Pemisahan Pengusul dan Penyetujui</strong>: OPD bertindak sebagai pemohon (<em>submitter</em>), sedangkan BPS bertindak sebagai penelaah dan penyetujui jadwal (<em>approver</em>). OPD tidak dapat mengubah jadwal secara sepihak setelah disetujui BPS tanpa melalui fitur pengajuan penyesuaian.</li>
+<li><strong>Kerahasiaan Notulen Internal</strong>: Notulen, catatan evaluasi, dan pengesahan Berita Acara hanya dapat diisi dan diperbarui oleh Tim Pembina BPS untuk menjamin objektivitas evaluasi statistik.</li>
+<li><strong>Validitas Penerbitan Publikasi</strong>: Dokumen Kompromin hanya dapat diubah statusnya menjadi <em>Terverifikasi &amp; Diterbitkan</em> oleh akun BPS yang memiliki izin <code>verifyKompromin</code>.</li>
+<li><strong>Isolasi Fitur Administrasi</strong>: Menu pengaturan hak akses dan pembuatan akun baru dilindungi secara ketat dan hanya dapat dibuka oleh Admin BPS. Jika pengguna non-admin mencoba mengakses tab ini, sistem akan menampilkan layar blokir keamanan (<em>Akses Dibatasi</em>).</li>
+</ol>
+<hr />
+<h1 id="6-panduan-penggunaan">6. Panduan Penggunaan</h1>
+<p>Bagian ini memandu langkah operasional pengguna untuk setiap fitur utama sistem:</p>
+<pre><code>[Buka Menu] ──&gt; [Identifikasi Tombol Aksi] ──&gt; [Isi/Pilih Data] ──&gt; [Simpan / Cetak / Unduh]
+</code></pre>
+<hr />
+<h3 id="61-halaman-beranda-simponitas">6.1. Halaman Beranda (SIMPONITAS)</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>SIMPONITAS</strong> (ikon Rumah) pada bilah navigasi kiri.</li>
+<li><strong>Fungsi</strong>: Memperkenalkan profil sistem, dasar hukum Satu Data Indonesia, 5 tujuan utama pembinaan statistik sektoral, dan diagram alur integrasi data.</li>
+<li><strong>Tombol yang Tersedia</strong>:</li>
+<li>Tombol <strong>Mulai Layanan Pembinaan</strong>: Mengarahkan pengguna langsung ke modul Layanan Pembinaan.</li>
+<li>Tombol <strong>Lihat Dokumen Kompromin</strong>: Mengarahkan pengguna langsung ke katalog Repository Kompromin.</li>
+<li><strong>Output yang Dihasilkan</strong>: Pemahaman awal tentang tahapan pembinaan statistik sektoral bagi aparatur pemda.</li>
+</ul>
+<hr />
+<h3 id="62-dashboard-utama">6.2. Dashboard Utama</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Dashboard Utama</strong> pada sidebar.</li>
+<li><strong>Fungsi</strong>: Mengetahui indikator statistik pembinaan sektoral Kabupaten Pasaman secara visual dan <em>real-time</em>.</li>
+<li><strong>Elemen &amp; Tombol yang Tersedia</strong>:</li>
+<li><strong>Kartu Ringkasan KPI</strong>: Menampilkan Total OPD (23 instansi), Jumlah OPD Terbina, Jumlah Kompromin Terbit, dan Permohonan yang Masuk.</li>
+<li><strong>Bagan Pie Status Kompromin</strong>: Menampilkan proporsi status kompromin (<em>Terverifikasi</em>, <em>Dalam Penelaahan</em>, <em>Draft OPD</em>).</li>
+<li><strong>Bagan Batang Frekuensi Pembinaan</strong>: Menampilkan intensitas pembinaan per instansi.</li>
+<li><strong>Bagan Garis Tren Pembinaan</strong>: Menampilkan rekapitulasi kegiatan pembinaan per bulan sepanjang tahun 2026.</li>
+<li><strong>Tabel Progres Pembinaan OPD</strong>: Tabel pemantauan status setiap OPD dilengkapi kolom pencarian nama dinas.</li>
+<li><strong>Output</strong>: Informasi analitik eksekutif untuk pimpinan BPS dan pimpinan daerah dalam mengevaluasi statistik sektoral.</li>
+</ul>
+<hr />
+<h3 id="63-daftar-opd-master-opd">6.3. Daftar OPD (Master OPD)</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Daftar OPD</strong> pada sidebar.</li>
+<li><strong>Fungsi</strong>: Menyimpan dan mengelola direktori resmi instansi pemerintah Kabupaten Pasaman.</li>
+<li><strong>Tombol yang Tersedia</strong>:</li>
+<li><strong>Tambah Instansi OPD</strong> (ikon plus - <em>khusus Admin</em>): Membuka formulir pendaftaran dinas baru.</li>
+<li><strong>Lihat Detail</strong> (ikon mata): Melihat rincian nama instansi, singkatan/kode, pejabat penanggung jawab, surel, dan kontak.</li>
+<li><strong>Edit OPD</strong> (ikon pensil - <em>khusus Admin</em>): Memperbarui identitas instansi.</li>
+<li><strong>Hapus OPD</strong> (ikon tempat sampah - <em>khusus Admin</em>): Menghapus instansi dari basis data.</li>
+<li><strong>Bilah Pencarian</strong>: Menyaring nama dinas atau pejabat secara langsung.</li>
+<li><strong>Langkah Input OPD Baru</strong>:</li>
+<li>Klik tombol <strong>Tambah Instansi OPD</strong>.</li>
+<li>Masukkan <strong>Nama Instansi</strong> (contoh: <em>Dinas Sosial</em>).</li>
+<li>Masukkan <strong>Kode Singkatan</strong> (contoh: <em>DINSOS</em>).</li>
+<li>Masukkan <strong>Penanggung Jawab / Kepala Dinas</strong> beserta nomor <strong>Kontak HP</strong> dan <strong>Email Resmi</strong>.</li>
+<li>Klik <strong>Simpan Data Instansi</strong>.</li>
+</ul>
+<hr />
+<h3 id="64-layanan-pembinaan-permohonan-penjadwalan">6.4. Layanan Pembinaan (Permohonan &amp; Penjadwalan)</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Layanan Pembinaan</strong> pada sidebar.</li>
+<li><strong>Fungsi</strong>: Tempat OPD mengajukan usulan bimbingan statistik, dan tempat BPS menyetujui atau menetapkan jadwal pembinaan.</li>
+<li><strong>Tombol yang Tersedia</strong>:</li>
+<li><strong>Ajukan Pembinaan Baru</strong> (ikon plus): Membuka formulir pengajuan bimbingan (untuk OPD).</li>
+<li><strong>Setujui</strong> (ikon centang hijau - <em>khusus BPS</em>): Menyetujui usulan jadwal dari OPD secara langsung.</li>
+<li><strong>Atur Jadwal / Disposisi</strong> (ikon kalender - <em>khusus BPS</em>): Mengatur tanggal pelaksanaan definitif, waktu rapat, lokasi, dan catatan pembina.</li>
+<li><strong>Detail Permohonan</strong> (ikon mata): Melihat rincian pengajuan lengkap beserta log riwayat perubahannya.</li>
+<li><strong>Edit Usulan</strong> (ikon pensil): Memperbarui topik atau kebutuhan bimbingan (hanya sebelum kegiatan selesai).</li>
+<li><strong>Hapus Permohonan</strong> (ikon tong sampah): Membatalkan usulan pembinaan.</li>
+<li><strong>Langkah Mengajukan Pembinaan (Peran OPD)</strong>:</li>
+<li>Klik tombol <strong>Ajukan Pembinaan Baru</strong>.</li>
+<li>Pilih <strong>Instansi OPD</strong> pengusul (terisi otomatis sesuai akun OPD yang login).</li>
+<li>Masukkan <strong>Nama Pejabat / PIC Penghubung</strong> dan <strong>Nomor Kontak WhatsApp</strong>.</li>
+<li>Pilih <strong>Jenis Layanan Pembinaan</strong>:<ul>
+<li><em>Pendampingan Penyusunan Kompromin</em></li>
+<li><em>Pembinaan Metadata Statistik (MS-D)</em></li>
+<li><em>Rekomendasi Kegiatan Statistik (Romantik)</em></li>
+<li><em>Konsultasi Teknis Sektoral</em></li>
+</ul>
+</li>
+<li>Masukkan <strong>Topik Pembinaan</strong> dan jelaskan <strong>Uraian Kebutuhan Bimbingan</strong>.</li>
+<li>Pilih <strong>Usulan Tanggal Pelaksanaan</strong> dan preferensi <strong>Lokasi</strong> (contoh: <em>Ruang Rapat BPS Kabupaten Pasaman</em> atau <em>Daring via Zoom</em>).</li>
+<li>Klik tombol <strong>Kirim Permohonan ke BPS</strong>.</li>
+<li><strong>Langkah Penjadwalan Ulang / Disposisi (Peran BPS)</strong>:</li>
+<li>Pada baris permohonan yang berstatus <em>Menunggu Persetujuan</em>, klik tombol <strong>Atur Jadwal / Disposisi</strong>.</li>
+<li>Tentukan <strong>Tanggal Pelaksanaan Definitif</strong> yang disepakati.</li>
+<li>Atur rentang <strong>Waktu Pembinaan</strong> (contoh: <em>09:00 - 12:00 WIB</em>).</li>
+<li>Perbarui kepastian <strong>Lokasi Rapat</strong>.</li>
+<li>Tuliskan <strong>Catatan Konfirmasi BPS</strong> (contoh: <em>Jadwal disetujui, harap membawa draf tabel kompromin awal</em>).</li>
+<li>Klik <strong>Konfirmasi &amp; Simpan Jadwal</strong>. Status permohonan otomatis berubah menjadi <em>Disetujui</em> / <em>Dalam Proses</em>.</li>
+</ul>
+<hr />
+<h3 id="65-riwayat-pembinaan-galeri-dokumentasi">6.5. Riwayat Pembinaan &amp; Galeri Dokumentasi</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Riwayat Pembinaan</strong> pada sidebar.</li>
+<li><strong>Fungsi</strong>: Mendokumentasikan hasil pelaksanaan kegiatan bimbingan yang telah terlaksana dan mencetak dokumen pertanggungjawaban.</li>
+<li><strong>Dua Mode Tampilan Sub-Tab</strong>:</li>
+<li><strong>Daftar Riwayat Pembinaan</strong>: Tampilan daftar kartu rekam jejak kegiatan pembinaan lengkap dengan topik, pembina, perwakilan OPD, dan notulen.</li>
+<li><strong>Galeri Dokumentasi Kegiatan</strong>: Tampilan album foto visual kegiatan pembinaan di lapangan.</li>
+<li><strong>Fitur Filter</strong>:</li>
+<li>Pencarian kata kunci topik/nama pembina.</li>
+<li>Filter pilihan nama OPD.</li>
+<li>Filter status (<em>Selesai</em>, <em>Dalam Proses</em>, <em>Disetujui</em>, <em>Menunggu Persetujuan</em>).</li>
+<li>Tombol <strong>Reset Filter</strong> untuk mengembalikan tampilan ke daftar awal.</li>
+<li><strong>Langkah Melengkapi Notulen &amp; Dokumentasi (Peran BPS)</strong>:</li>
+<li>Cari kartu kegiatan pembinaan yang ingin dilengkapi, klik tombol <strong>Lengkapi Notulen &amp; Dokumentasi</strong>.</li>
+<li>Tuliskan ringkasan hasil pembahasan pada kolom <strong>Notulen Pembinaan</strong>.</li>
+<li>Tuliskan evaluasi teknis pada kolom <strong>Catatan Evaluasi Tim Pembina BPS</strong>.</li>
+<li>Pada bagian <strong>Foto Dokumentasi Kegiatan</strong>, klik area unggah foto untuk melampirkan foto rapat (sistem akan mengompres foto secara otomatis tanpa mengurangi kejelasan visual).</li>
+<li>Masukkan keterangan judul/kegiatan foto.</li>
+<li>Klik <strong>Simpan Notulen &amp; Dokumentasi</strong>. Status otomatis diperbarui menjadi <em>Selesai</em>.</li>
+<li><strong>Langkah Mencetak Berita Acara Resmi</strong>:</li>
+<li>Pada kartu kegiatan yang telah berstatus <em>Selesai</em> atau <em>Disetujui</em>, klik tombol <strong>Cetak Berita Acara</strong> (ikon printer).</li>
+<li>Dialog cetak resmi browser akan terbuka otomatis dengan format Berita Acara yang memuat:<ul>
+<li>Kop resmi Badan Pusat Statistik Kabupaten Pasaman.</li>
+<li>Nomor Surat dan Tanggal Pelaksanaan.</li>
+<li>Identitas OPD dan Nama Narahubung.</li>
+<li>Uraian Hasil Pembinaan dan Rekomendasi Statistik.</li>
+<li>Kolom tanda tangan resmi kedua belah pihak (Perwakilan OPD dan Tim Pembina BPS).</li>
+</ul>
+</li>
+<li>Pilih tujuan printer fisik atau pilih opsi <strong>Save as PDF</strong> untuk mengunduh salinan berkas digital.</li>
+</ul>
+<hr />
+<h3 id="66-repository-kompromin">6.6. Repository Kompromin</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Repository Kompromin</strong> pada sidebar.</li>
+<li><strong>Fungsi</strong>: Menyimpan dan mempublikasikan buku dokumen Kompilasi Produk Administrasi (Kompromin) yang telah disusun oleh OPD bersama BPS.</li>
+<li><strong>Tombol yang Tersedia</strong>:</li>
+<li><strong>Publikasikan Dokumen Kompromin</strong> (ikon plus - <em>khusus BPS</em>): Mendaftarkan dokumen buku kompromin baru.</li>
+<li><strong>Detail &amp; Pratinjau</strong> (ikon mata): Membaca ringkasan isi buku, tahun terbit, dan status verifikasi.</li>
+<li><strong>Unduh Dokumen</strong> (ikon unduh): Mengunduh berkas lengkap publikasi Kompromin (PDF).</li>
+<li><strong>Edit Dokumen</strong> (ikon pensil - <em>khusus BPS</em>): Mengubah metadata judul atau berkas.</li>
+<li><strong>Hapus</strong> (ikon tempat sampah - <em>khusus BPS</em>): Menghapus arsip dokumen.</li>
+<li><strong>Langkah Menerbitkan Dokumen Kompromin (Peran BPS)</strong>:</li>
+<li>Klik tombol <strong>Publikasikan Dokumen Kompromin</strong>.</li>
+<li>Masukkan <strong>Judul Publikasi Kompromin</strong> (contoh: <em>Buku Kompilasi Produk Administrasi Pelayanan Kesehatan Dasar 2025</em>).</li>
+<li>Pilih <strong>Instansi OPD Penyusun</strong>.</li>
+<li>Masukkan <strong>Tahun Pelaporan</strong>.</li>
+<li>Tentukan <strong>Status Verifikasi</strong>:<ul>
+<li><em>Draft OPD</em> (Masih dalam perancangan OPD).</li>
+<li><em>Dalam Penelaahan BPS</em> (Sedang diperiksa kesesuaian variabel dan metadatanya oleh BPS).</li>
+<li><em>Terverifikasi &amp; Diterbitkan</em> (Telah disahkan dan siap diakses publik).</li>
+</ul>
+</li>
+<li>Masukkan <strong>Ringkasan / Abstrak Dokumen</strong>.</li>
+<li>Unggah berkas <strong>Gambar Sampul (Cover)</strong> dan <strong>Berkas Dokumen Publikasi (PDF)</strong>.</li>
+<li>Klik <strong>Simpan Publikasi Kompromin</strong>.</li>
+</ul>
+<hr />
+<h3 id="67-aliran-data-opd">6.7. Aliran Data OPD</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Aliran Data OPD</strong> pada sidebar.</li>
+<li><strong>Fungsi</strong>: Memantau pengumpulan data indikator statistik sektoral dari OPD produsen data secara berkala (Triwulanan, Bulanan, Tahunan) dan menyajikan lembar pratinjau sebelum dokumen diunduh.</li>
+<li><strong>Dua Pilihan Mode Tampilan</strong>:</li>
+<li><strong>Tampilan Kartu (Grid View)</strong>: Menampilkan kartu indikator dengan diagram cincin progres (<em>progress ring</em>) pengisian periode.</li>
+<li><strong>Tampilan Tabel (Table View)</strong>: Menampilkan matriks ringkas seluruh indikator dan status keterisian setiap periode pelaporan.</li>
+<li><strong>Langkah Mengisi Data dan Mengunggah Bukti Dukung (Peran OPD)</strong>:</li>
+<li>Buka menu <strong>Aliran Data OPD</strong>.</li>
+<li>Cari indikator data yang ditugaskan ke dinas Anda (misal: <em>Jumlah Produksi Perkebunan</em>).</li>
+<li>Perluas kartu indikator dengan mengklik tombol panah bawah.</li>
+<li>Pada periode yang ingin diisi (misal: <em>Triwulan III</em> yang berstatus <em>Belum Diinput</em>), klik tombol <strong>Input Data</strong> (ikon unggah).</li>
+<li>Masukkan <strong>Realisasi Nilai Data / Angka Capaian</strong> (contoh: <em>16,420 Ton</em>).</li>
+<li>Masukkan <strong>Catatan Penjelasan OPD</strong> (contoh: <em>Data mencakup rekapitulasi panen kelapa sawit dan karet per nagari bulan Juli-September</em>).</li>
+<li>Unggah <strong>Berkas Dokumen Pendukung</strong> (format Excel/PDF laporan resmi).</li>
+<li>Klik <strong>Kirim &amp; Simpan Data</strong>. Status periode akan berubah menjadi <em>Sudah Diinput</em> (hijau).</li>
+<li><strong>Langkah Melihat Pratinjau Dokumen (<em>Document Preview Sheet</em>)</strong>:</li>
+<li>Pada kartu atau tabel periode data yang telah berstatus <em>Sudah Diinput</em>, klik tombol <strong>Lihat Data / Pratinjau</strong> (ikon mata).</li>
+<li>Jendela modal <strong>Pratinjau Dokumen Aliran Data</strong> akan muncul, menampilkan lembar resmi berstandar:<ul>
+<li>Identitas Kop Surat Resmi: <em>Pemerintah Kabupaten Pasaman &amp; BPS Pasaman — Lembar Data Sektoral Terpadu</em>.</li>
+<li>Metadata Indikator: Nama Indikator, Instansi Produsen Data (OPD), Periode Pelaporan, dan Angka Realisasi Capaian.</li>
+<li>Informasi Lampiran Berkas: Nama file dokumen, tanggal pengunggahan, dan nama petugas pengunggah.</li>
+<li>Badge <em>Dokumen Valid</em>.</li>
+<li>Kotak Catatan Penjelasan dari OPD.</li>
+</ul>
+</li>
+<li>Pengguna dapat membaca seluruh ringkasan data tersebut terlebih dahulu.</li>
+<li><strong>Langkah Mengunduh Berkas Satuan</strong>:</li>
+<li>Langsung dari dalam jendela modal pratinjau di atas, klik tombol <strong>Unduh Dokumen Ini (nama_berkas.ext)</strong> pada bagian kanan bawah. Berkas lampiran spesifik periode tersebut akan langsung diunduh ke komputer Anda.</li>
+</ul>
+<hr />
+<h3 id="68-knowledgebase-perpustakaan-pengetahuan">6.8. Knowledgebase (Perpustakaan Pengetahuan)</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Knowledgebase</strong> pada sidebar.</li>
+<li><strong>Fungsi</strong>: Pusat referensi pedoman teknis statistik sektoral bagi aparatur perencana dan pengelola data OPD.</li>
+<li><strong>Materi yang Dikelola</strong>:</li>
+<li>Standar Operasional Prosedur (SOP) Pembinaan Statistik Sektoral BPS Pasaman.</li>
+<li>Format Template Baku Kompilasi Produk Administrasi (Excel &amp; Word).</li>
+<li>Buku Petunjuk Teknis Metadata Statistik Struktur (MS-D &amp; MS-I).</li>
+<li>Panduan Pengajuan Rekomendasi Kegiatan Statistik (Aplikasi Romantik).</li>
+<li><strong>Fitur &amp; Tombol</strong>:</li>
+<li>Tombol <strong>Unduh Modul / Panduan</strong>: Mengunduh berkas materi pedoman secara langsung.</li>
+<li>Tombol <strong>Tambah Modul Panduan</strong> (<em>khusus Admin/Pembina BPS</em>): Menambahkan dokumen regulasi atau template baru.</li>
+<li>Bilah Pencarian Cepat: Menemukan pedoman berdasarkan kata kunci topik.</li>
+</ul>
+<hr />
+<h3 id="69-manajemen-role-pengguna">6.9. Manajemen Role &amp; Pengguna</h3>
+<ul>
+<li><strong>Cara Mengakses</strong>: Klik menu <strong>Manajemen Role &amp; Pengguna</strong> pada sidebar (hanya dapat diakses oleh peran <em>Admin BPS</em>).</li>
+<li><strong>Fungsi</strong>: Mengatur hak istimewa setiap peran (<em>RBAC Permissions</em>) dan mengelola akun seluruh pegawai pemda serta tim BPS.</li>
+<li><strong>Dua Mode Tab</strong>:</li>
+<li><strong>Matriks Hak Akses Peran (<em>Roles &amp; Permissions</em>)</strong>:<ul>
+<li>Menampilkan daftar peran yang terdaftar.</li>
+<li>Menampilkan sakelar geser (<em>toggle switches</em>) untuk 8 jenis izin operasional:</li>
+<li><em>Lihat Dashboard Analytics &amp; KPI</em></li>
+<li><em>Pengajuan Permohonan Pembinaan Baru</em></li>
+<li><em>Persetujuan &amp; Penjadwalan Pembinaan (BPS)</em></li>
+<li><em>Verifikasi &amp; Penerbitan Dokumen Kompromin</em></li>
+<li><em>Kelola &amp; Update Dataset Data Sektoral</em></li>
+<li><em>Akses &amp; Unduh Modul Knowledge Base</em></li>
+<li><em>Kelola, Tambah, Edit &amp; Hapus Modul Knowledge Base (CRUD)</em></li>
+<li><em>Akses Laman Manajemen Role &amp; Hak Akses</em></li>
+<li>Tombol <strong>Simpan Hak Akses</strong>: Menyimpan perubahan konfigurasi sakelar ke sistem secara langsung (<em>real-time</em>).</li>
+</ul>
+</li>
+<li><strong>Manajemen Akun Pengguna (<em>Users</em>)</strong>:<ul>
+<li>Menampilkan tabel seluruh akun terdaftar beserta NIP, Nama, Email, Instansi, Peran Aktif, dan Status (<em>Aktif / Nonaktif</em>).</li>
+<li>Tombol <strong>Tambah Pengguna Baru</strong>: Mendaftarkan akun aparatur OPD atau pegawai BPS baru.</li>
+<li>Tombol <strong>Lihat Sandi</strong> (ikon mata): Menampilkan kata sandi pengguna untuk kemudahan koordinasi teknis.</li>
+<li>Tombol <strong>Edit Pengguna</strong>: Mengubah instansi, peran jabatan, atau memperbarui kata sandi akun.</li>
+<li>Tombol <strong>Hapus Pengguna</strong>: Menghapus akun pegawai yang sudah tidak bertugas.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3 id="610-mengganti-mode-tampilan-tema-visual">6.10. Mengganti Mode Tampilan (Tema Visual)</h3>
+<p>SIMPONITAS menyediakan 3 mode kenyamanan visual yang dapat diganti kapan saja tanpa memengaruhi data kerja:
+1. Klik tombol <strong>Pemilih Mode Tampilan</strong> pada pojok kanan atas bilah navigasi (Navbar).
+2. Pilih salah satu dari 3 mode yang tersedia:
+   * <strong>Mode Default</strong>: Tema resmi berlatar belakang putih bersih dengan aksen Oranye BPS Pasaman.
+   * <strong>Mode Biru Samudra</strong>: Tema berlatar belakang biru es cerah dengan aksen biru laut yang menyejukkan mata untuk penggunaan jangka panjang.
+   * <strong>Mode Gelap</strong>: Tema gelap pekat (<em>true dark mode</em>) dengan teks kontras tinggi untuk penggunaan di ruangan minim cahaya.
+3. Pilihan tema Anda akan otomatis tersimpan di peramban web (<em>browser</em>) dan tetap aktif saat Anda kembali login di lain waktu.</p>
+<hr />
+<h1 id="7-pengelolaan-data">7. Pengelolaan Data</h1>
+<p>Sistem SIMPONITAS mengelola 8 entitas data utama yang saling berelasi secara logis:</p>
+<pre><code>[Master OPD] ───────┬──────&gt; [Permohonan &amp; Riwayat Pembinaan] ──&gt; [Dokumentasi &amp; Galeri]
+                    ├──────&gt; [Aliran Data Sektoral OPD] ───────&gt; [Dokumen Lampiran]
+                    ├──────&gt; [Repository Kompromin]
+                    └──────&gt; [Pengguna / Akun Pegawai] &lt;───────── [Peran &amp; Hak Akses]
+</code></pre>
+<h3 id="71-struktur-entitas-data-utama">7.1. Struktur Entitas Data Utama</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">No</th>
+<th style="text-align: left;">Nama Entitas Data</th>
+<th style="text-align: left;">Deskripsi Objek Data</th>
+<th style="text-align: left;">Atribut Kunci yang Disimpan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><strong>Master OPD</strong> (<code>opdList</code>)</td>
+<td style="text-align: left;">Direktori 23 Organisasi Perangkat Daerah Pemkab Pasaman.</td>
+<td style="text-align: left;"><code>id</code>, <code>nama</code>, <code>kode</code>, <code>penanggungJawab</code>, <code>kontak</code>, <code>email</code>, <code>status</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;"><strong>Permohonan &amp; Riwayat</strong> (<code>pembinaanList</code>)</td>
+<td style="text-align: left;">Berkas permohonan bimbingan dan rekam jejak notulen hasil pembinaan.</td>
+<td style="text-align: left;"><code>id</code>, <code>opdId</code>, <code>opdNama</code>, <code>jenis</code>, <code>topik</code>, <code>namaPIC</code>, <code>kontak</code>, <code>uraianKebutuhan</code>, <code>tanggalUsulan</code>, <code>tanggalPelaksanaan</code>, <code>waktuPembinaan</code>, <code>status</code>, <code>lokasi</code>, <code>pembinaBPS</code>, <code>perwakilanOPD</code>, <code>notulen</code>, <code>catatanBps</code>, <code>riwayatPerubahan</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;"><strong>Dokumentasi &amp; Galeri</strong> (<code>galleryList</code>)</td>
+<td style="text-align: left;">Arsip foto bukti pelaksanaan kegiatan bimbingan statistik sektoral.</td>
+<td style="text-align: left;"><code>id</code>, <code>pembinaanId</code>, <code>judulKegiatan</code>, <code>opdId</code>, <code>opdNama</code>, <code>tanggal</code>, <code>keterangan</code>, <code>fotoUrl</code>, <code>fotoFileName</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;"><strong>Repository Kompromin</strong> (<code>komprominList</code>)</td>
+<td style="text-align: left;">Dokumen buku Kompilasi Produk Administrasi yang dipublikasikan.</td>
+<td style="text-align: left;"><code>id</code>, <code>judul</code>, <code>opdId</code>, <code>opdNama</code>, <code>tahun</code>, <code>statusVerifikasi</code>, <code>ringkasan</code>, <code>coverUrl</code>, <code>fileUrl</code>, <code>fileName</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;"><strong>Aliran Data OPD</strong> (<code>aliranDataList</code>)</td>
+<td style="text-align: left;">Indikator statistik rutin berkala dan rekaman pelaporan capaian tiap periode.</td>
+<td style="text-align: left;"><code>id</code>, <code>namaIndikator</code>, <code>deskripsi</code>, <code>opdId</code>, <code>opdNama</code>, <code>tahun</code>, <code>jenisPeriode</code>, <code>tenggatWaktu</code>, <code>statusAktif</code>, <code>periodes</code> (<code>periodeId</code>, <code>periodeNama</code>, <code>status</code>, <code>nilaiData</code>, <code>dokumenUrl</code>, <code>dokumenName</code>, <code>catatanOpd</code>, <code>tanggalInput</code>, <code>inputOleh</code>).</td>
+</tr>
+<tr>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;"><strong>Arsip Pengetahuan</strong> (<code>knowledgeBase</code>)</td>
+<td style="text-align: left;">Berkas panduan, SOP, kamus metadata, dan materi acuan statistik.</td>
+<td style="text-align: left;"><code>id</code>, <code>judul</code>, <code>tipe</code>, <code>ukuran</code>, <code>tanggal</code>, <code>deskripsi</code>, <code>fileUrl</code>, <code>fileName</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">7</td>
+<td style="text-align: left;"><strong>Pengguna Sistem</strong> (<code>userList</code>)</td>
+<td style="text-align: left;">Akun aparatur sipil negara yang berhak mengakses sistem.</td>
+<td style="text-align: left;"><code>id</code>, <code>nip</code>, <code>nama</code>, <code>email</code>, <code>instansi</code>, <code>opdId</code>, <code>roleId</code>, <code>password</code>, <code>status</code>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;"><strong>Konfigurasi Role</strong> (<code>roleData</code>)</td>
+<td style="text-align: left;">Definisi peran dan sakelar izin operasional (<em>RBAC matrix</em>).</td>
+<td style="text-align: left;"><code>id</code>, <code>name</code>, <code>badge</code>, <code>description</code>, <code>permissions</code> (8 atribut boolean izin).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-mekanisme-penyimpanan-dan-validasi">7.2. Mekanisme Penyimpanan dan Validasi</h3>
+<ul>
+<li><strong>Penyimpanan Lokal Persisten</strong>: Setiap kali pengguna menambah atau mengedit data, sistem secara otomatis memperbarui status memori dan menyimpannya ke dalam <code>localStorage</code> terenkripsi lokal peramban dengan awalan kunci <code>simponitas_*</code>.</li>
+<li><strong>Integritas Relasi Data</strong>: Saat nama dinas diperbarui pada Master OPD, seluruh data pada menu Permohonan, Riwayat, Kompromin, dan Aliran Data yang merujuk pada <code>opdId</code> instansi tersebut tetap terhubung secara konsisten.</li>
+<li><strong>Optimasi Penyimpanan Gambar</strong>: Foto dokumentasi kegiatan otomatis dikompresi melalui algoritma <em>Client-side HTML5 Canvas</em> sebelum disimpan. Hal ini mencegah browser kehabisan memori (<em>quota limit</em>) sekaligus memastikan pemuatan halaman tetap secepat kilat.</li>
+</ul>
+<hr />
+<h1 id="8-keamanan-dan-login">8. Keamanan dan Login</h1>
+<h3 id="81-alur-autentikasi-pengguna">8.1. Alur Autentikasi Pengguna</h3>
+<p>Sistem SIMPONITAS menerapkan prinsip keamanan berlapis yang mudah digunakan:
+1. <strong>Identifikasi Akun</strong>: Pengguna memasukkan identitas unik berupa <strong>NIP (Nomor Induk Pegawai)</strong> atau <strong>Alamat Surel Kedinasan</strong>.
+2. <strong>Pemeriksaan Sandi</strong>: Sistem memeriksa kesesuaian sandi dengan data akun terdaftar. Pengguna dapat memanfaatkan ikon mata (<em>Show/Hide Password</em>) untuk memastikan ketepatan pengetikan sandi.
+3. <strong>Pemeriksaan Status Akun</strong>: Sistem secara otomatis menolak akses apabila status akun telah diubah menjadi <strong>Nonaktif</strong> oleh Administrator BPS.
+4. <strong>Pemberian Sesi Aktif</strong>: Jika kredensial valid, sistem membuat token sesi terverifikasi di peramban pengguna dan menetapkan hak akses peran sesuai jabatannya.</p>
+<h3 id="82-akses-publik-tamu-guest-mode">8.2. Akses Publik / Tamu (Guest Mode)</h3>
+<p>Bagi pimpinan daerah, akademisi, mahasiswa, atau masyarakat umum yang tidak memiliki akun pegawai, SIMPONITAS menyediakan tombol <strong>Masuk sebagai Pengguna Publik / Tamu</strong>:
+* Akses ini tidak memerlukan sandi.
+* Sistem secara otomatis mengunci hak akses ke peran <code>role-publik</code>.
+* Seluruh formulir pengajuan internal, notulen pembinaan, dan menu manajemen pengguna ditutup secara otomatis dari tampilan layar untuk mencegah perubahan data yang tidak sah.</p>
+<h3 id="83-perlindungan-hak-akses-role-based-gate">8.3. Perlindungan Hak Akses (<em>Role-Based Gate</em>)</h3>
+<ul>
+<li><strong>Penyaringan Bilah Navigasi</strong>: Menu pada sidebar hanya menampilkan tautan yang diizinkan untuk peran yang sedang aktif. Pengguna non-BPS tidak akan melihat menu <em>Manajemen Role &amp; Pengguna</em>.</li>
+<li><strong>Penjagaan Komponen Halaman (<em>Page-Level Shield</em>)</strong>: Jika pengguna mencoba memanggil fungsi atau tab terlarang, sistem menampilkan komponen peringatan keamanan (<em>Security Shield Alert</em>) dengan pesan resmi bahwa hak akses dibatasi.</li>
+<li><strong>Isolasi Aksi Edit &amp; Hapus</strong>: Tombol hapus dan persetujuan jadwal hanya dirender aktif jika objek izin <code>approvePembinaan</code> bernilai <code>true</code>.</li>
+</ul>
+<hr />
+<h1 id="9-troubleshooting-pemecahan-masalah">9. Troubleshooting (Pemecahan Masalah)</h1>
+<p>Berikut panduan penanganan kendala teknis operasional yang mungkin ditemui pengguna:</p>
+<h3 id="kendala-1-gagal-masuk-sistem-muncul-pesan-galat-sandi">Kendala 1: Gagal Masuk Sistem / Muncul Pesan Galat Sandi</h3>
+<ul>
+<li><strong>Penyebab</strong>: Terjadi kesalahan pengetikan NIP/email atau salah memasukkan huruf kapital pada kata sandi.</li>
+<li><strong>Solusi</strong>:</li>
+<li>Pastikan tombol <em>Caps Lock</em> pada papan ketik (<em>keyboard</em>) tidak aktif.</li>
+<li>Klik ikon mata pada kolom sandi untuk memeriksa kebenaran karakter yang diketik.</li>
+<li>Jika masih gagal, hubungi Admin BPS Kabupaten Pasaman untuk mereset kata sandi Anda melalui menu <em>Manajemen Role &amp; Pengguna</em>.</li>
+</ul>
+<h3 id="kendala-2-menu-layanan-pembinaan-atau-aliran-data-tidak-muncul-di-sidebar">Kendala 2: Menu Layanan Pembinaan atau Aliran Data Tidak Muncul di Sidebar</h3>
+<ul>
+<li><strong>Penyebab</strong>: Anda sedang masuk menggunakan akun <em>Pengguna Publik / Tamu</em> yang hanya memiliki hak baca pada dokumen publikasi.</li>
+<li><strong>Solusi</strong>:</li>
+<li>Klik tombol <strong>Keluar Akun</strong> pada bagian bawah sidebar atau navbar.</li>
+<li>Masuk kembali menggunakan akun resmi instansi OPD Anda (NIP/Email dan Sandi dinas).</li>
+</ul>
+<h3 id="kendala-3-tampilan-tulisan-terasa-kurang-jelas-pada-layar-monitor">Kendala 3: Tampilan Tulisan Terasa Kurang Jelas pada Layar Monitor</h3>
+<ul>
+<li><strong>Penyebab</strong>: Pengaturan kecerahan layar monitor atau preferensi kontras warna belum sesuai.</li>
+<li><strong>Solusi</strong>:</li>
+<li>Klik tombol pemilih mode tampilan pada pojok kanan atas layar.</li>
+<li>Beralihlah ke <strong>Mode Biru Samudra</strong> (latar sejuk dengan teks biru tua tegas) atau <strong>Mode Gelap</strong> (latar hitam dengan teks putih terang).</li>
+</ul>
+<h3 id="kendala-4-berkas-dokumen-tidak-terunduh-saat-menekan-tombol-unduh">Kendala 4: Berkas Dokumen Tidak Terunduh Saat Menekan Tombol Unduh</h3>
+<ul>
+<li><strong>Penyebab</strong>: Peramban web Anda memblokir jendela sembulan (<em>pop-up blocker</em>) unduhan otomatis.</li>
+<li><strong>Solusi</strong>:</li>
+<li>Periksa ikon peringatan pop-up pada bilah alamat (<em>address bar</em>) browser Anda (di samping URL).</li>
+<li>Pilih opsi <em>Selalu izinkan pop-up dan unduhan dari situs ini</em> (<em>Always allow pop-ups</em>).</li>
+<li>Klik kembali tombol unduh berkas yang diinginkan.</li>
+</ul>
+<h3 id="kendala-5-cetak-berita-acara-terpotong-saat-dicetak-ke-kertas-fisik">Kendala 5: Cetak Berita Acara Terpotong Saat Dicetak ke Kertas Fisik</h3>
+<ul>
+<li><strong>Penyebab</strong>: Ukuran kertas atau margin pada kotak dialog cetak browser belum disesuaikan.</li>
+<li><strong>Solusi</strong>:</li>
+<li>Saat dialog cetak printer muncul, pilih ukuran kertas <strong>A4</strong> atau <strong>Folio (F4)</strong>.</li>
+<li>Pada opsi <em>Layout</em>, pilih <strong>Portrait</strong> (Tegak).</li>
+<li>Pada opsi <em>Margins</em>, pilih <strong>Default</strong> atau <strong>Minimum</strong>.</li>
+<li>Pastikan opsi <em>Headers and footers</em> dinonaktifkan agar cetakan dokumen terlihat bersih dan rapi.</li>
+</ul>
+<hr />
+<h1 id="10-penutup">10. Penutup</h1>
+<p>Buku Pedoman Penggunaan Sistem Informasi <strong>SIMPONITAS</strong> ini disusun sebagai panduan operasional resmi bagi seluruh pemangku kepentingan statistik di Kabupaten Pasaman, baik tim internal Badan Pusat Statistik Kabupaten Pasaman, Dinas Komunikasi dan Informatika selaku Walidata Daerah, maupun seluruh Organisasi Perangkat Daerah (OPD) selaku Produsen Data Sektoral.</p>
+<p>Melalui digitalisasi alur pembinaan, transparansi penjadwalan, pendokumentasian notulen terpadu, pemantauan aliran data berkala, serta penerbitan Kompilasi Produk Administrasi (Kompromin) yang terverifikasi, SIMPONITAS diharapkan mampu mewujudkan tata kelola statistik sektoral yang akuntabel, berkualitas, dan berkelanjutan guna mendukung terwujudnya Satu Data Indonesia di Kabupaten Pasaman.</p>
+<hr />
+<p><em>Buku Pedoman Penggunaan Sistem SIMPONITAS BPS Kabupaten Pasaman — Versi Produksi 1.0 (2026).</em></p>
+</div>
+
+</body>
+</html>

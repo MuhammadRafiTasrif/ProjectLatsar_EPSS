@@ -27,6 +27,16 @@ import {
   INITIAL_USER_LIST
 } from './data/mockData';
 
+import { isSupabaseConfigured } from './lib/supabaseClient';
+import {
+  fetchOpdFromSupabase,
+  fetchPembinaanFromSupabase,
+  fetchKomprominFromSupabase,
+  fetchAliranDataFromSupabase,
+  fetchKnowledgeBaseFromSupabase,
+  fetchUsersFromSupabase
+} from './services/supabaseService';
+
 export default function App() {
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('simponitas_theme');
@@ -301,6 +311,19 @@ export default function App() {
     const updated = roleData.roles.find(r => r.id === currentRole.id);
     if (updated) setCurrentRole(updated);
   }, [roleData]);
+
+  // Initial Sync from Supabase Cloud Database (Project ID: kbczdbqxsqksznjdhuup)
+  useEffect(() => {
+    if (isSupabaseConfigured) {
+      console.info('🔄 Mengambil data awal dari Supabase Cloud Database...');
+      fetchOpdFromSupabase().then(data => { if (data && data.length) setOpdList(data); });
+      fetchPembinaanFromSupabase().then(data => { if (data && data.length) setPembinaanList(data); });
+      fetchKomprominFromSupabase().then(data => { if (data && data.length) setKomprominList(data); });
+      fetchAliranDataFromSupabase().then(data => { if (data && data.length) setAliranDataList(data); });
+      fetchKnowledgeBaseFromSupabase().then(data => { if (data && data.length) setKnowledgeBaseList(data); });
+      fetchUsersFromSupabase().then(data => { if (data && data.length) setUserList(data); });
+    }
+  }, []);
 
   const toggleTheme = () => setIsDark(!isDark);
 
