@@ -7,24 +7,21 @@ const THEMES = [
     name: 'Mode Oranye (Default)',
     shortName: 'Oranye',
     icon: Sun,
-    color: '#f79039',
-    desc: 'Warna hangat khas SIMPONITAS'
+    color: '#f79039'
   },
   {
     id: 'ocean',
     name: 'Mode Biru Samudra',
     shortName: 'Biru Adem',
     icon: Waves,
-    color: '#0284c7',
-    desc: 'Tone biru segar, cerah, & adem di mata'
+    color: '#0284c7'
   },
   {
     id: 'dark',
     name: 'Mode Gelap',
     shortName: 'Gelap',
     icon: Moon,
-    color: '#38bdf8',
-    desc: 'Kontras tinggi, nyaman di malam hari'
+    color: '#38bdf8'
   }
 ];
 
@@ -156,7 +153,7 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
                 position: 'absolute',
                 right: 0,
                 top: 'calc(100% + 8px)',
-                width: '240px',
+                width: '210px',
                 background: 'var(--bg-card)',
                 border: '1px solid var(--border-color)',
                 borderRadius: 'var(--radius-lg)',
@@ -165,11 +162,11 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
                 zIndex: 60,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '4px'
+                gap: '3px'
               }}
             >
-              <div style={{ padding: '6px 10px 4px 10px', fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Pilih Tampilan Tema
+              <div style={{ padding: '6px 8px 4px 8px', fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Pilihan Tema
               </div>
 
               {THEMES.map(t => {
@@ -187,8 +184,8 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '10px',
-                      padding: '8px 10px',
+                      gap: '9px',
+                      padding: '7px 10px',
                       borderRadius: 'var(--radius-md)',
                       border: isSelected ? '1px solid var(--primary-border)' : '1px solid transparent',
                       background: isSelected ? 'var(--primary-light)' : 'transparent',
@@ -200,8 +197,8 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
                   >
                     <div
                       style={{
-                        width: '28px',
-                        height: '28px',
+                        width: '26px',
+                        height: '26px',
                         borderRadius: 'var(--radius-sm)',
                         background: isSelected ? 'var(--primary)' : 'var(--bg-surface)',
                         display: 'flex',
@@ -210,18 +207,14 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
                         flexShrink: 0
                       }}
                     >
-                      <IconComponent size={15} color={isSelected ? '#ffffff' : t.color} />
+                      <IconComponent size={14} color={isSelected ? '#ffffff' : t.color} />
                     </div>
 
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: isSelected ? 'var(--primary)' : 'var(--text-main)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span>{t.name}</span>
-                        {isSelected && <Check size={14} color="var(--primary)" />}
-                      </div>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '2px', lineHeight: '1.2' }}>
-                        {t.desc}
-                      </div>
-                    </div>
+                    <span style={{ fontSize: '0.82rem', fontWeight: isSelected ? 800 : 600, color: isSelected ? 'var(--primary)' : 'var(--text-main)', flex: 1 }}>
+                      {t.name}
+                    </span>
+
+                    {isSelected && <Check size={14} color="var(--primary)" />}
                   </button>
                 );
               })}
