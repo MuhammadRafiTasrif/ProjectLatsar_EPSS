@@ -28,8 +28,10 @@ import {
 } from './data/mockData';
 
 export default function App() {
-  const [isDark, setIsDark] = useState(() => {
-    return localStorage.getItem('simponitas_theme') === 'dark';
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('simponitas_theme');
+    if (saved === 'dark' || saved === 'ocean' || saved === 'light') return saved;
+    return 'light';
   });
 
   const [activeTab, setActiveTab] = useState('home');
@@ -245,14 +247,14 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (isDark) {
+    document.documentElement.classList.remove('dark', 'theme-ocean');
+    if (theme === 'dark') {
       document.documentElement.classList.add('dark');
-      localStorage.setItem('simponitas_theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('simponitas_theme', 'light');
+    } else if (theme === 'ocean') {
+      document.documentElement.classList.add('theme-ocean');
     }
-  }, [isDark]);
+    localStorage.setItem('simponitas_theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     localStorage.setItem('simponitas_opd', JSON.stringify(opdList));
@@ -356,8 +358,8 @@ export default function App() {
 
       <div className="main-content">
         <Navbar
-          isDark={isDark}
-          toggleTheme={toggleTheme}
+          theme={theme}
+          setTheme={setTheme}
           currentRole={currentRole}
           setRole={handleSetRole}
           roles={roleData.roles}

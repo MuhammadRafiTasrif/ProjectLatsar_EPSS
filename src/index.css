@@ -80,6 +80,102 @@
   --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.55);
 }
 
+/* ── MODE BIRU SAMUDRA (Cerah & Adem) ── */
+.theme-ocean {
+  --primary: #0284c7;
+  --primary-hover: #0369a1;
+  --primary-active: #075985;
+  --primary-light: rgba(2, 132, 199, 0.12);
+  --primary-glow: rgba(2, 132, 199, 0.25);
+  --primary-border: rgba(2, 132, 199, 0.30);
+
+  --accent-blue: #0284c7;
+  --accent-blue-light: rgba(2, 132, 199, 0.12);
+  --accent-green: #0d9488;
+  --accent-green-light: rgba(13, 148, 136, 0.12);
+  --accent-red: #e11d48;
+  --accent-red-light: rgba(225, 29, 72, 0.12);
+  --accent-amber: #d97706;
+  --accent-amber-light: rgba(217, 119, 6, 0.12);
+
+  /* Soft and fresh light blue background */
+  --bg-main: #f0f7ff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fbff;
+  --bg-surface: #e0f2fe;
+  --bg-nav: rgba(255, 255, 255, 0.95);
+  --border-color: #bae6fd;
+
+  /* Deep ocean slate typography for high contrast */
+  --text-main: #0c4a6e;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+
+  --shadow-sm: 0 1px 3px rgba(2, 132, 199, 0.06);
+  --shadow-md: 0 4px 12px rgba(2, 132, 199, 0.10);
+  --shadow-lg: 0 8px 24px -4px rgba(2, 132, 199, 0.15);
+}
+
+.theme-ocean .nav-item {
+  color: #334155;
+}
+
+.theme-ocean .nav-item:hover {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0284c7;
+}
+
+.theme-ocean .nav-item:hover .nav-item-label {
+  color: #0284c7;
+}
+
+.theme-ocean .nav-item.active {
+  background: #0284c7;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35);
+}
+
+.theme-ocean .nav-item.active .nav-item-label {
+  color: #ffffff !important;
+}
+
+.theme-ocean .brand-badge {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.theme-ocean .badge-primary {
+  background: rgba(2, 132, 199, 0.12);
+  color: #0369a1;
+  border-color: rgba(2, 132, 199, 0.30);
+}
+
+.theme-ocean .btn-primary {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+}
+
+.theme-ocean .btn-primary:hover {
+  background: #0369a1;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+}
+
+.theme-ocean .segmented-tab-btn.active {
+  background: var(--bg-card);
+  color: #0284c7;
+  font-weight: 700;
+}
+
+.theme-ocean .notulen-box {
+  background: #e0f2fe;
+  border-left-color: #0284c7;
+}
+
+.theme-ocean .notulen-box-text {
+  color: #0f172a;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -799,6 +895,10 @@ input:checked + .slider:before {
 /* Responsive: Mobile Phone (<= 768px) */
 @media (max-width: 768px) {
   .nav-brand .brand-text {
+    display: none;
+  }
+
+  .theme-toggle-label {
     display: none;
   }
 

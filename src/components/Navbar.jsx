@@ -1,8 +1,54 @@
-import React from 'react';
-import { Sun, Moon, Shield, Menu, BarChart3, LogOut, UserCheck } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Sun, Moon, Waves, Shield, Menu, BarChart3, LogOut, Check, ChevronDown, Sparkles } from 'lucide-react';
 
-export default function Navbar({ isDark, toggleTheme, currentRole, setRole, roles, onMenuToggle, currentUser, onLogout }) {
+const THEMES = [
+  {
+    id: 'light',
+    name: 'Mode Oranye (Default)',
+    shortName: 'Oranye',
+    icon: Sun,
+    color: '#f79039',
+    desc: 'Warna hangat khas SIMPONITAS'
+  },
+  {
+    id: 'ocean',
+    name: 'Mode Biru Samudra',
+    shortName: 'Biru Adem',
+    icon: Waves,
+    color: '#0284c7',
+    desc: 'Tone biru segar, cerah, & adem di mata'
+  },
+  {
+    id: 'dark',
+    name: 'Mode Gelap',
+    shortName: 'Gelap',
+    icon: Moon,
+    color: '#38bdf8',
+    desc: 'Kontras tinggi, nyaman di malam hari'
+  }
+];
+
+export default function Navbar({ theme = 'light', setTheme, currentRole, setRole, roles, onMenuToggle, currentUser, onLogout }) {
   const isAdmin = currentRole?.id === 'role-admin' || Boolean(currentRole?.permissions?.manageRoles);
+  const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const themeMenuRef = useRef(null);
+
+  const activeThemeObj = THEMES.find(t => t.id === theme) || THEMES[0];
+  const ActiveIcon = activeThemeObj.icon;
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (themeMenuRef.current && !themeMenuRef.current.contains(e.target)) {
+        setIsThemeMenuOpen(false);
+      }
+    };
+    if (isThemeMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isThemeMenuOpen]);
 
   const handleConfirmLogout = () => {
     if (window.confirm('Apakah Anda yakin ingin keluar (logout) dari SIMPONITAS?')) {
@@ -79,15 +125,109 @@ export default function Navbar({ isDark, toggleTheme, currentRole, setRole, role
           </div>
         )}
 
-        <button
-          onClick={toggleTheme}
-          className="btn btn-secondary"
-          style={{ width: '40px', height: '40px', padding: 0, borderRadius: 'var(--radius-md)' }}
-          aria-label={isDark ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap'}
-          title={isDark ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap'}
-        >
-          {isDark ? <Sun size={18} color="#f79039" /> : <Moon size={18} color="#475569" />}
-        </button>
+        {/* ── Theme Switcher Menu (3 Modes: Oranye, Biru Samudra, Gelap) ── */}
+        <div style={{ position: 'relative' }} ref={themeMenuRef}>
+          <button
+            type="button"
+            onClick={() => setIsThemeMenuOpen(prev => !prev)}
+            className="btn btn-secondary"
+            style={{
+              padding: '6px 10px',
+              height: '38px',
+              borderRadius: 'var(--radius-md)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: isThemeMenuOpen ? '1px solid var(--primary)' : '1px solid var(--border-color)'
+            }}
+            aria-label="Pilih Mode Tema"
+            title="Pilih Mode Tema (Oranye, Biru Samudra, Gelap)"
+          >
+            <ActiveIcon size={16} color={activeThemeObj.color} />
+            <span className="theme-toggle-label" style={{ fontSize: '0.78rem', fontWeight: 700 }}>
+              {activeThemeObj.shortName}
+            </span>
+            <ChevronDown size={13} color="var(--text-muted)" style={{ transform: isThemeMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
+          </button>
+
+          {isThemeMenuOpen && (
+            <div
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: 'calc(100% + 8px)',
+                width: '240px',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 'var(--radius-lg)',
+                boxShadow: 'var(--shadow-lg)',
+                padding: '6px',
+                zIndex: 60,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '4px'
+              }}
+            >
+              <div style={{ padding: '6px 10px 4px 10px', fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Pilih Tampilan Tema
+              </div>
+
+              {THEMES.map(t => {
+                const IconComponent = t.icon;
+                const isSelected = theme === t.id;
+
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => {
+                      if (setTheme) setTheme(t.id);
+                      setIsThemeMenuOpen(false);
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '8px 10px',
+                      borderRadius: 'var(--radius-md)',
+                      border: isSelected ? '1px solid var(--primary-border)' : '1px solid transparent',
+                      background: isSelected ? 'var(--primary-light)' : 'transparent',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      width: '100%',
+                      transition: 'all 0.15s ease'
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: 'var(--radius-sm)',
+                        background: isSelected ? 'var(--primary)' : 'var(--bg-surface)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0
+                      }}
+                    >
+                      <IconComponent size={15} color={isSelected ? '#ffffff' : t.color} />
+                    </div>
+
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '0.82rem', fontWeight: 700, color: isSelected ? 'var(--primary)' : 'var(--text-main)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <span>{t.name}</span>
+                        {isSelected && <Check size={14} color="var(--primary)" />}
+                      </div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '2px', lineHeight: '1.2' }}>
+                        {t.desc}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
         <div
           className="navbar-profile-section"
