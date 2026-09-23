@@ -19,9 +19,10 @@ import {
   Plus,
   Check,
   X,
-  Filter
+  Filter,
+  RotateCcw
 } from 'lucide-react';
-import { upsertUserToSupabase, deleteUserFromSupabase, upsertRoleToSupabase } from '../services/supabaseService';
+import { upsertUserToSupabase, deleteUserFromSupabase, upsertRoleToSupabase, deleteRoleFromSupabase } from '../services/supabaseService';
 
 export default function RoleManagement({
   roleData,
@@ -44,10 +45,20 @@ export default function RoleManagement({
   const [userSearchTerm, setUserSearchTerm] = useState('');
   const [userRoleFilter, setUserRoleFilter] = useState('ALL');
 
-  // Active Role Selection for Permission Matrix
+  // Active Role Selection for Permission Matrix & Draft State for unsaved changes
   const [activeRoleId, setActiveRoleId] = useState(roleData?.roles[0]?.id || 'role-admin');
+  const [rolesDraft, setRolesDraft] = useState(() => roleData?.roles || []);
+  const [isDirty, setIsDirty] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [feedbackMsg, setFeedbackMsg] = useState('');
+
+  // Sync draft when external roleData changes, provided no unsaved local changes exist
+  React.useEffect(() => {
+    if (!isDirty && roleData?.roles) {
+      setRolesDraft(roleData.roles);
+    }
+  }, [roleData?.roles, isDirty]);
 
   // Modals State for User CRUD
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -93,7 +104,7 @@ export default function RoleManagement({
           <ShieldAlert size={36} />
         </div>
         <h3 className="empty-state-title" style={{ fontSize: '1.25rem', color: '#ef4444', fontWeight: 800 }}>
-          Akses Dibatasi — Khusus Admin BPS
+          Akses Dibatasi: Khusus Admin BPS
         </h3>
         <p className="empty-state-desc" style={{ maxWidth: '520px', margin: '8px auto 0 auto', lineHeight: '1.5' }}>
           Halaman Manajemen Pengguna & Role ini hanya dapat diakses oleh **Admin BPS**. Anda sedang masuk sebagai <strong>{currentRole?.name || 'Pengguna Publik'}</strong>.
@@ -102,8 +113,16 @@ export default function RoleManagement({
     );
   }
 
-  // Current selected role object for permissions matrix
-  const currentSelectedRole = roleData.roles.find(r => r.id === activeRoleId) || roleData.roles[0];
+  // Current selected role object for permissions matrix from draft
+  const currentSelectedRole = rolesDraft.find(r => r.id === activeRoleId) || rolesDraft[0] || roleData?.roles?.[0];
+
+  // Helper check if role has pending unsaved changes
+  const hasPendingChanges = (roleId) => {
+    const orig = roleData?.roles?.find(r => r.id === roleId);
+    const draft = rolesDraft?.find(r => r.id === roleId);
+    if (!orig || !draft) return false;
+    return JSON.stringify(orig.permissions) !== JSON.stringify(draft.permissions);
+  };
 
   // Helper trigger feedback notification
   const triggerNotification = (msg) => {
@@ -236,43 +255,75 @@ export default function RoleManagement({
   // ROLE & PERMISSION CRUD HANDLERS
   // =========================================================================
   const handleTogglePermission = (roleId, permKey) => {
-    let targetUpdatedRole = null;
-    const updatedRoles = roleData.roles.map(r => {
+    const updatedRoles = rolesDraft.map(r => {
       if (r.id === roleId) {
-        targetUpdatedRole = {
+        return {
           ...r,
           permissions: {
             ...r.permissions,
             [permKey]: !r.permissions[permKey]
           }
         };
-        return targetUpdatedRole;
       }
       return r;
     });
 
-    setRoleData({ ...roleData, roles: updatedRoles });
-    if (targetUpdatedRole) upsertRoleToSupabase(targetUpdatedRole);
-    triggerNotification('Hak akses role berhasil diperbarui.');
+    setRolesDraft(updatedRoles);
+    setIsDirty(true);
   };
 
   const handleToggleAllForRole = (roleId, enable) => {
-    let targetUpdatedRole = null;
-    const updatedRoles = roleData.roles.map(r => {
+    const updatedRoles = rolesDraft.map(r => {
       if (r.id === roleId) {
         const newPerms = {};
         Object.keys(r.permissions).forEach(k => {
           newPerms[k] = enable;
         });
-        targetUpdatedRole = { ...r, permissions: newPerms };
-        return targetUpdatedRole;
+        return { ...r, permissions: newPerms };
       }
       return r;
     });
 
-    setRoleData({ ...roleData, roles: updatedRoles });
-    if (targetUpdatedRole) upsertRoleToSupabase(targetUpdatedRole);
-    triggerNotification(`Seluruh hak akses untuk role telah ${enable ? 'diaktifkan' : 'dimatikan'}.`);
+    setRolesDraft(updatedRoles);
+    setIsDirty(true);
+  };
+
+  const handleSaveRolePermissions = async () => {
+    setIsSaving(true);
+    try {
+      // 1. Update App state & LocalStorage
+      setRoleData({ ...roleData, roles: rolesDraft });
+
+      // 2. Identify and sync modified roles with Supabase
+      const modifiedRoles = rolesDraft.filter(draftRole => {
+        const origRole = roleData?.roles?.find(r => r.id === draftRole.id);
+        if (!origRole) return true;
+        return JSON.stringify(origRole.permissions) !== JSON.stringify(draftRole.permissions) ||
+               origRole.name !== draftRole.name ||
+               origRole.description !== draftRole.description ||
+               origRole.badge !== draftRole.badge;
+      });
+
+      for (const r of modifiedRoles) {
+        await upsertRoleToSupabase(r);
+      }
+
+      setIsDirty(false);
+      triggerNotification('Perubahan hak akses role berhasil disimpan ke database.');
+    } catch (err) {
+      console.error('Gagal menyimpan role ke Supabase:', err);
+      alert('Terjadi kesalahan saat menyimpan perubahan role ke database.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDiscardChanges = () => {
+    if (window.confirm('Batalkan seluruh perubahan hak akses yang belum disimpan?')) {
+      setRolesDraft(roleData.roles);
+      setIsDirty(false);
+      triggerNotification('Perubahan hak akses dibatalkan.');
+    }
   };
 
   const handleOpenCreateRoleModal = () => {
@@ -317,19 +368,23 @@ export default function RoleManagement({
 
     if (editingRole) {
       // Edit existing role
+      let updatedRoleToSave = null;
       const updatedRoles = roleData.roles.map(r => {
         if (r.id === editingRole.id) {
-          return {
+          updatedRoleToSave = {
             ...r,
             name: roleFormData.name.trim(),
             description: roleFormData.description.trim(),
             badge: roleFormData.badge.trim(),
             permissions: roleFormData.permissions
           };
+          return updatedRoleToSave;
         }
         return r;
       });
       setRoleData({ ...roleData, roles: updatedRoles });
+      setRolesDraft(updatedRoles);
+      if (updatedRoleToSave) upsertRoleToSupabase(updatedRoleToSave);
       triggerNotification(`Role "${roleFormData.name}" berhasil diperbarui.`);
     } else {
       // Create new role
@@ -340,7 +395,10 @@ export default function RoleManagement({
         badge: roleFormData.badge.trim() || 'Role Custom',
         permissions: roleFormData.permissions
       };
-      setRoleData({ ...roleData, roles: [...roleData.roles, newRoleObj] });
+      const updatedRoles = [...roleData.roles, newRoleObj];
+      setRoleData({ ...roleData, roles: updatedRoles });
+      setRolesDraft(updatedRoles);
+      upsertRoleToSupabase(newRoleObj);
       setActiveRoleId(newRoleObj.id);
       triggerNotification(`Role baru "${newRoleObj.name}" berhasil dibuat.`);
     }
@@ -359,6 +417,8 @@ export default function RoleManagement({
     if (window.confirm(`Apakah Anda yakin ingin menghapus role "${roleObj.name}"? Pengguna dengan role ini akan dipindahkan ke role default.`)) {
       const updatedRoles = roleData.roles.filter(r => r.id !== roleObj.id);
       setRoleData({ ...roleData, roles: updatedRoles });
+      setRolesDraft(updatedRoles);
+      deleteRoleFromSupabase(roleObj.id);
 
       // Re-assign users holding deleted role to role-admin or default
       if (setUserList) {
@@ -572,10 +632,11 @@ export default function RoleManagement({
                 Pilih Peran Pengguna:
               </span>
 
-              {roleData.roles.map(r => {
+              {rolesDraft.map(r => {
                 const isSelected = r.id === activeRoleId;
                 const systemRoleIds = ['role-admin', 'role-ketua-tim', 'role-walidata-opd', 'role-produsen-opd', 'role-publik'];
                 const isSystemRole = systemRoleIds.includes(r.id);
+                const hasPending = hasPendingChanges(r.id);
 
                 return (
                   <div
@@ -593,11 +654,18 @@ export default function RoleManagement({
                       transition: 'all 0.2s ease'
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
                       <span style={{ fontWeight: 700, fontSize: '0.88rem', color: isSelected ? 'var(--primary-hover)' : 'var(--text-main)' }}>
                         {r.name}
                       </span>
-                      <span className="badge badge-primary" style={{ fontSize: '0.65rem' }}>{r.badge}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        {hasPending && (
+                          <span className="badge badge-warning" style={{ fontSize: '0.62rem', padding: '1px 5px' }} title="Ada perubahan belum disimpan">
+                            ● Draft
+                          </span>
+                        )}
+                        <span className="badge badge-primary" style={{ fontSize: '0.65rem' }}>{r.badge}</span>
+                      </div>
                     </div>
                     <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', lineHeight: '1.3' }}>
                       {r.description}
@@ -630,26 +698,91 @@ export default function RoleManagement({
             <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border-color)', flexWrap: 'wrap', gap: '8px' }}>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>
                       {currentSelectedRole.name}
                     </h3>
                     <span className="badge badge-info">{currentSelectedRole.badge}</span>
+                    {hasPendingChanges(currentSelectedRole.id) && (
+                      <span className="badge badge-warning" style={{ fontSize: '0.68rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        ● Perubahan Belum Disimpan
+                      </span>
+                    )}
                   </div>
                   <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                    Aktifkan atau nonaktifkan hak akses fitur melalui Toggle Switch
+                    Aktifkan atau nonaktifkan hak akses fitur melalui Toggle Switch, lalu klik tombol Simpan Perubahan Role.
                   </p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                   <button onClick={() => handleToggleAllForRole(currentSelectedRole.id, true)} className="btn btn-secondary" style={{ padding: '6px 10px', fontSize: '0.76rem' }}>
                     Aktifkan Semua
                   </button>
                   <button onClick={() => handleToggleAllForRole(currentSelectedRole.id, false)} className="btn btn-secondary" style={{ padding: '6px 10px', fontSize: '0.76rem' }}>
                     Matikan Semua
                   </button>
+                  {isDirty && (
+                    <button
+                      onClick={handleDiscardChanges}
+                      className="btn btn-secondary"
+                      style={{ padding: '6px 10px', fontSize: '0.76rem', color: '#ef4444' }}
+                      title="Batalkan perubahan hak akses"
+                    >
+                      <RotateCcw size={13} />
+                      <span>Batal</span>
+                    </button>
+                  )}
+                  <button
+                    onClick={handleSaveRolePermissions}
+                    disabled={!isDirty || isSaving}
+                    className="btn btn-primary"
+                    style={{
+                      padding: '7px 15px',
+                      fontSize: '0.8rem',
+                      fontWeight: 700,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      opacity: (!isDirty || isSaving) ? 0.5 : 1,
+                      cursor: (!isDirty || isSaving) ? 'not-allowed' : 'pointer'
+                    }}
+                  >
+                    <Save size={14} />
+                    <span>{isSaving ? 'Menyimpan...' : 'Simpan Perubahan Role'}</span>
+                  </button>
                 </div>
               </div>
+
+              {/* Status Banner when there are unsaved changes */}
+              {isDirty && (
+                <div style={{
+                  padding: '10px 14px',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'rgba(247, 144, 57, 0.12)',
+                  border: '1px solid rgba(247, 144, 57, 0.35)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '10px',
+                  flexWrap: 'wrap'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <AlertCircle size={18} color="#f79039" />
+                    <span style={{ fontSize: '0.82rem', color: 'var(--text-main)', fontWeight: 600 }}>
+                      Terdapat perubahan hak akses role yang belum disimpan ke database.
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <button onClick={handleDiscardChanges} className="btn btn-secondary" style={{ padding: '5px 10px', fontSize: '0.74rem' }}>
+                      Batal
+                    </button>
+                    <button onClick={handleSaveRolePermissions} disabled={isSaving} className="btn btn-primary" style={{ padding: '5px 12px', fontSize: '0.74rem' }}>
+                      <Save size={13} />
+                      <span>{isSaving ? 'Menyimpan...' : 'Simpan Sekarang'}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {Object.keys(roleData.permissionLabels).map(permKey => {
@@ -707,7 +840,7 @@ export default function RoleManagement({
               <div style={{ marginTop: '0.5rem', padding: '10px', borderRadius: 'var(--radius-sm)', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <AlertCircle size={18} color="var(--primary)" />
                 <p style={{ fontSize: '0.78rem', color: 'var(--text-main)', lineHeight: '1.4' }}>
-                  <strong>Catatan:</strong> Pengaturan toggle memperbarui hak akses secara real-time dan tersimpan otomatis.
+                  <strong>Catatan:</strong> Klik toggle switch untuk mengatur hak akses fitur, lalu tekan tombol <strong>Simpan Perubahan Role</strong> agar perubahan tersimpan ke sistem dan database Supabase.
                 </p>
               </div>
             </div>

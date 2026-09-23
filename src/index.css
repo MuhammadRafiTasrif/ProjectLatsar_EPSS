@@ -295,6 +295,7 @@ p {
   overflow-y: auto;
   overflow-x: hidden;
   flex-shrink: 0;
+  text-align: left;
   transition: width var(--transition-normal), padding var(--transition-normal);
 }
 
@@ -382,6 +383,8 @@ p {
 .nav-item {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  text-align: left;
   gap: 10px;
   padding: 10px 14px;
   border-radius: var(--radius-md);
@@ -401,7 +404,16 @@ p {
 
 .nav-item .nav-item-label {
   color: inherit;
+  text-align: left;
+  flex: 1;
   transition: color var(--transition-fast);
+}
+
+.sidebar-header-text,
+.sidebar-footer-text,
+.sidebar-footer p,
+.sidebar-role-switch label {
+  text-align: left;
 }
 
 .nav-item:hover {

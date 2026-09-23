@@ -459,3 +459,13 @@ export async function deleteUserFromSupabase(id) {
   }
 }
 
+export async function deleteRoleFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('roles').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete role:', err);
+  }
+}
+
+

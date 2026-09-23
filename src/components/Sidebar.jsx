@@ -84,7 +84,7 @@ export default function Sidebar({
           marginBottom: '6px'
         }}>
           {!isCollapsed && (
-            <span className="sidebar-header-text" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.3px' }}>
+            <span className="sidebar-header-text" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.3px', textAlign: 'left' }}>
               Navigasi Sistem
             </span>
           )}
@@ -116,8 +116,8 @@ export default function Sidebar({
         </div>
 
         {roles && currentRole && setRole && !isCollapsed && (
-          <div className="sidebar-role-switch" style={{ padding: '0 8px 10px 8px', borderBottom: '1px solid var(--border-color)', marginBottom: '8px' }}>
-            <label htmlFor="sidebar-role-select" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+          <div className="sidebar-role-switch" style={{ padding: '0 8px 10px 8px', borderBottom: '1px solid var(--border-color)', marginBottom: '8px', textAlign: 'left' }}>
+            <label htmlFor="sidebar-role-select" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px', textAlign: 'left' }}>
               Peran Pengguna:
             </label>
             {isAdmin ? (
@@ -129,7 +129,7 @@ export default function Sidebar({
                   if (selected) setRole(selected);
                 }}
                 className="form-select"
-                style={{ width: '100%', padding: '6px 10px', fontSize: '0.8rem', fontWeight: 700 }}
+                style={{ width: '100%', padding: '6px 10px', fontSize: '0.8rem', fontWeight: 700, textAlign: 'left' }}
               >
                 {roles.map(r => (
                   <option key={r.id} value={r.id}>
@@ -138,7 +138,7 @@ export default function Sidebar({
                 ))}
               </select>
             ) : (
-              <div style={{ background: 'var(--bg-surface)', padding: '6px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', fontSize: '0.78rem', fontWeight: 800, color: 'var(--primary)' }}>
+              <div style={{ background: 'var(--bg-surface)', padding: '6px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', fontSize: '0.78rem', fontWeight: 800, color: 'var(--primary)', textAlign: 'left' }}>
                 {currentRole.name}
               </div>
             )}
@@ -154,22 +154,24 @@ export default function Sidebar({
             const isActive = activeTab === item.id;
 
             return (
-              <li key={item.id}>
+              <li key={item.id} style={{ width: '100%', textAlign: 'left' }}>
                 <button
                   className={`nav-item ${isActive ? 'active' : ''}`}
                   onClick={() => handleNavClick(item)}
                   style={{
                     opacity: isAllowed ? 1 : 0.45,
-                    cursor: isAllowed ? 'pointer' : 'not-allowed'
+                    cursor: isAllowed ? 'pointer' : 'not-allowed',
+                    textAlign: 'left',
+                    justifyContent: isCollapsed ? 'center' : 'flex-start'
                   }}
                   title={!isAllowed ? `Fitur dibatasi untuk peran "${currentRole?.name}"` : item.label}
                 >
-                  <span className="icon">
+                  <span className="icon" style={{ flexShrink: 0 }}>
                     <Icon size={18} color={isActive ? '#ffffff' : isAllowed ? (item.isSpecial ? '#f79039' : 'currentColor') : 'var(--text-muted)'} />
                   </span>
-                  <span className="nav-item-label" style={{ flex: 1 }}>{item.label}</span>
+                  <span className="nav-item-label" style={{ flex: 1, textAlign: 'left' }}>{item.label}</span>
                   {item.isSpecial && (
-                    <span className="badge badge-primary" style={{ fontSize: '0.65rem', padding: '2px 6px' }}>
+                    <span className="badge badge-primary" style={{ fontSize: '0.65rem', padding: '2px 6px', flexShrink: 0 }}>
                       Control
                     </span>
                   )}
@@ -179,15 +181,15 @@ export default function Sidebar({
           })}
         </ul>
 
-        <div className="sidebar-footer" style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', padding: isCollapsed ? '1rem 0 0 0' : '1rem 8px 0 8px' }}>
-          <div style={{ padding: isCollapsed ? '8px' : '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: isCollapsed ? 'center' : 'flex-start' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Building size={14} color="var(--primary)" />
-              <span className="sidebar-footer-text" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-secondary)' }}>BPS Kab. Pasaman</span>
+        <div className="sidebar-footer" style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', padding: isCollapsed ? '1rem 0 0 0' : '1rem 8px 0 8px', textAlign: 'left' }}>
+          <div style={{ padding: isCollapsed ? '8px' : '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: isCollapsed ? 'center' : 'flex-start', textAlign: 'left' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: '100%', justifyContent: isCollapsed ? 'center' : 'flex-start' }}>
+              <Building size={14} color="var(--primary)" style={{ flexShrink: 0 }} />
+              <span className="sidebar-footer-text" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-secondary)', textAlign: 'left' }}>BPS Kab. Pasaman</span>
             </div>
             {!isCollapsed && (
               <>
-                <p className="sidebar-footer-text" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: '1.3' }}>
+                <p className="sidebar-footer-text" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: '1.3', textAlign: 'left', margin: 0, width: '100%' }}>
                   Aplikasi Resmi Pembinaan Statistik Sektoral Latsar CPNS 2026.
                 </p>
                 {onLogout && (
