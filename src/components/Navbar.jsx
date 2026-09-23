@@ -18,10 +18,10 @@ const THEMES = [
   },
   {
     id: 'dark',
-    name: 'Mode Gelap',
-    shortName: 'Gelap',
+    name: 'Dark Mode (Midnight)',
+    shortName: 'Midnight',
     icon: Moon,
-    color: '#38bdf8'
+    color: '#0D9488'
   }
 ];
 
@@ -122,7 +122,7 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
           </div>
         )}
 
-        {/* ── Theme Switcher Menu (3 Modes: Oranye, Light Clean, Gelap) ── */}
+        {/* ── Theme Switcher Menu (3 Modes: Oranye, Light Clean, Dark Midnight) ── */}
         <div style={{ position: 'relative' }} ref={themeMenuRef}>
           <button
             type="button"
@@ -138,7 +138,7 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
               border: isThemeMenuOpen ? '1px solid var(--primary)' : '1px solid var(--border-color)'
             }}
             aria-label="Pilih Mode Tema"
-            title="Pilih Mode Tema (Oranye, Light Mode Clean, Gelap)"
+            title="Pilih Mode Tema (Oranye, Light Mode Clean, Dark Mode Midnight)"
           >
             <ActiveIcon size={16} color={activeThemeObj.color} />
             <span className="theme-toggle-label" style={{ fontSize: '0.78rem', fontWeight: 700 }}>
