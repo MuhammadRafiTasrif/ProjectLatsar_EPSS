@@ -164,32 +164,15 @@ ALTER TABLE knowledge_base ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery ENABLE ROW LEVEL SECURITY;
 
 -- Allow full access for anon/authenticated (Public Client Read/Write Policy for SPA)
-CREATE POLICY "Allow anon read opd" ON opd FOR SELECT USING (true);
-CREATE POLICY "Allow anon insert/update opd" ON opd FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read roles" ON roles FOR SELECT USING (true);
-CREATE POLICY "Allow anon update roles" ON roles FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read users" ON users FOR SELECT USING (true);
-CREATE POLICY "Allow anon all users" ON users FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read pembinaan" ON pembinaan FOR SELECT USING (true);
-CREATE POLICY "Allow anon all pembinaan" ON pembinaan FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read kompromin" ON kompromin FOR SELECT USING (true);
-CREATE POLICY "Allow anon all kompromin" ON kompromin FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read aliran_data" ON aliran_data FOR SELECT USING (true);
-CREATE POLICY "Allow anon all aliran_data" ON aliran_data FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read aliran_history" ON aliran_history FOR SELECT USING (true);
-CREATE POLICY "Allow anon all aliran_history" ON aliran_history FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read knowledge_base" ON knowledge_base FOR SELECT USING (true);
-CREATE POLICY "Allow anon all knowledge_base" ON knowledge_base FOR ALL USING (true);
-
-CREATE POLICY "Allow anon read gallery" ON gallery FOR SELECT USING (true);
-CREATE POLICY "Allow anon all gallery" ON gallery FOR ALL USING (true);
+CREATE POLICY "Allow anon all opd" ON opd FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all roles" ON roles FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all users" ON users FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all pembinaan" ON pembinaan FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all kompromin" ON kompromin FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all aliran_data" ON aliran_data FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all aliran_history" ON aliran_history FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all knowledge_base" ON knowledge_base FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow anon all gallery" ON gallery FOR ALL USING (true) WITH CHECK (true);
 
 -- =============================================================================
 -- 4. SEED INITIAL DATA (DATASET AWAL RESMI BPS PASAMAN)
