@@ -486,8 +486,7 @@ export const INITIAL_ROLE_MANAGEMENT = {
         manageDataSektoral: true,
         accessKnowledgeBase: true,
         manageKnowledgeBase: true,
-        manageRoles: true,
-        exportData: true
+        manageRoles: true
       }
     },
     {
@@ -503,8 +502,7 @@ export const INITIAL_ROLE_MANAGEMENT = {
         manageDataSektoral: true,
         accessKnowledgeBase: true,
         manageKnowledgeBase: true,
-        manageRoles: false,
-        exportData: true
+        manageRoles: false
       }
     },
     {
@@ -520,8 +518,7 @@ export const INITIAL_ROLE_MANAGEMENT = {
         manageDataSektoral: true,
         accessKnowledgeBase: true,
         manageKnowledgeBase: false,
-        manageRoles: false,
-        exportData: true
+        manageRoles: false
       }
     },
     {
@@ -537,8 +534,7 @@ export const INITIAL_ROLE_MANAGEMENT = {
         manageDataSektoral: true,
         accessKnowledgeBase: true,
         manageKnowledgeBase: false,
-        manageRoles: false,
-        exportData: true
+        manageRoles: false
       }
     },
     {
@@ -554,8 +550,7 @@ export const INITIAL_ROLE_MANAGEMENT = {
         manageDataSektoral: false,
         accessKnowledgeBase: true,
         manageKnowledgeBase: false,
-        manageRoles: false,
-        exportData: false
+        manageRoles: false
       }
     }
   ],
@@ -567,8 +562,7 @@ export const INITIAL_ROLE_MANAGEMENT = {
     manageDataSektoral: 'Kelola & Update Dataset Data Sektoral',
     accessKnowledgeBase: 'Akses & Unduh Modul Knowledge Base',
     manageKnowledgeBase: 'Kelola, Tambah, Edit & Hapus Modul Knowledge Base (CRUD)',
-    manageRoles: 'Akses Laman Manajemen Role & Hak Akses',
-    exportData: 'Cetak Berita Acara & Ekspor Data (PDF/CSV)'
+    manageRoles: 'Akses Laman Manajemen Role & Hak Akses'
   }
 };
 

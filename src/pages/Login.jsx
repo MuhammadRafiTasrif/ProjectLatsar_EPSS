@@ -20,8 +20,7 @@ export default function Login({ onLogin, roles = [], userList = [], opdList = []
         verifyKompromin: false,
         manageDataSektoral: false,
         accessKnowledgeBase: true,
-        manageRoles: false,
-        exportData: false
+        manageRoles: false
       }
     };
 

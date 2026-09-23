@@ -208,7 +208,7 @@ export default function App() {
             if (r.id === 'role-produsen-opd' || r.id === 'role-walidata-opd') {
               return {
                 ...r,
-                permissions: { ...r.permissions, manageDataSektoral: true, exportData: true }
+                permissions: { ...r.permissions, manageDataSektoral: true }
               };
             }
             return r;

@@ -80,8 +80,7 @@ export default function RoleManagement({
       manageDataSektoral: true,
       accessKnowledgeBase: true,
       manageKnowledgeBase: false,
-      manageRoles: false,
-      exportData: true
+      manageRoles: false
     }
   });
 
@@ -279,8 +278,7 @@ export default function RoleManagement({
         manageDataSektoral: true,
         accessKnowledgeBase: true,
         manageKnowledgeBase: false,
-        manageRoles: false,
-        exportData: true
+        manageRoles: false
       }
     });
     setIsRoleModalOpen(true);

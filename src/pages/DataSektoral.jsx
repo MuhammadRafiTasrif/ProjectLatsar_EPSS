@@ -3,9 +3,9 @@ import Modal from '../components/Modal';
 import {
   Plus, Search, Trash2, Edit, Upload, FileCheck, Clock,
   CheckCircle2, Inbox, Building2, ChevronDown, ChevronUp,
-  Send, Download, X, Database, LayoutGrid, Table2, Filter, RotateCcw, Eye
+  Send, Download, X, Database, LayoutGrid, Table2, Filter, RotateCcw, Eye, FileText
 } from 'lucide-react';
-import { exportToCSV, formatDateIndo, formatBytes, compressImageFile } from '../utils/helpers';
+import { formatDateIndo, formatBytes, compressImageFile } from '../utils/helpers';
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -324,11 +324,6 @@ export default function DataSektoral({
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {currentPermissions.exportData && (
-            <button onClick={() => exportToCSV('aliran_data_sektoral', filteredList)} className="btn btn-secondary">
-              <Download size={15} /><span>Ekspor CSV</span>
-            </button>
-          )}
           {isBpsUser && (
             <button onClick={handleOpenAdd} className="btn btn-primary">
               <Plus size={15} /><span>Tambah Permintaan Data</span>
@@ -992,72 +987,119 @@ export default function DataSektoral({
         </form>
       </Modal>
 
-      {/* ── Detail & Download Modal ── */}
+      {/* ── Detail & Document Preview Modal ── */}
       <Modal
         isOpen={Boolean(detailModal)}
         onClose={() => setDetailModal(null)}
-        title={`Rincian Aliran Data — ${cleanPeriodeNama(detailModal?.periode?.periodeNama)}`}
+        title={`Pratinjau Dokumen Aliran Data — ${cleanPeriodeNama(detailModal?.periode?.periodeNama)}`}
       >
         {detailModal && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+            {/* Top Status Badges */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
               <span className={`badge ${detailModal.periode.status === 'Sudah Diinput' ? 'badge-success' : 'badge-secondary'}`}>
-                {detailModal.periode.status === 'Sudah Diinput' ? '✓ Sudah Terisi' : '- Belum Diinput'}
+                {detailModal.periode.status === 'Sudah Diinput' ? '✓ Berkas Terunggah' : '○ Belum Diisi'}
               </span>
               <span className="badge badge-primary" style={{ fontSize: '0.72rem' }}>
                 {detailModal.item.kategori || 'Sektoral'}
               </span>
             </div>
 
-            <div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '4px' }}>
-                {detailModal.item.namaIndikator}
-              </h3>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: 'var(--primary-hover)', fontWeight: 700 }}>
-                <Building2 size={14} />
-                <span>{detailModal.item.opdNama}</span>
+            {/* Document Preview Sheet Box */}
+            <div style={{
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border-color)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '1.25rem',
+              boxShadow: 'var(--shadow-sm)',
+              position: 'relative'
+            }}>
+              {/* Official Header */}
+              <div style={{ textAlign: 'center', borderBottom: '2px solid var(--border-color)', paddingBottom: '10px', marginBottom: '12px' }}>
+                <span style={{ fontSize: '0.68rem', fontWeight: 800, letterSpacing: '0.5px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                  Pemerintah Kabupaten Pasaman & BPS Pasaman
+                </span>
+                <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '2px' }}>
+                  LEMBAR DATA SEKTORAL TERPADU
+                </h4>
+                <span style={{ fontSize: '0.74rem', color: 'var(--primary)', fontWeight: 700 }}>
+                  SIMPONITAS — SISTEM INFORMASI PEMBINAAN STATISTIK SEKTORAL
+                </span>
               </div>
-              {detailModal.item.deskripsi && (
-                <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '6px', lineHeight: '1.4' }}>
-                  {detailModal.item.deskripsi}
-                </p>
-              )}
-            </div>
 
-            <div style={{ background: 'var(--bg-surface)', padding: '12px 14px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.82rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Periode & Tahun:</span>
-                <strong style={{ color: 'var(--text-main)' }}>{cleanPeriodeNama(detailModal.periode.periodeNama)} {detailModal.item.tahun} ({detailModal.item.jenisPeriode || 'Triwulan'})</strong>
+              {/* Document Metadata Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px', fontSize: '0.8rem', marginBottom: '12px' }}>
+                <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', display: 'block' }}>Nama Indikator:</span>
+                  <strong style={{ color: 'var(--text-main)', fontSize: '0.82rem' }}>{detailModal.item.namaIndikator}</strong>
+                </div>
+
+                <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', display: 'block' }}>Produsen Data (OPD):</span>
+                  <strong style={{ color: 'var(--primary-hover)', fontSize: '0.82rem' }}>{detailModal.item.opdNama}</strong>
+                </div>
+
+                <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', display: 'block' }}>Periode Pelaporan:</span>
+                  <strong style={{ color: 'var(--text-main)' }}>{cleanPeriodeNama(detailModal.periode.periodeNama)} {detailModal.item.tahun} ({detailModal.item.jenisPeriode || 'Triwulan'})</strong>
+                </div>
+
+                <div style={{ background: 'var(--bg-card)', padding: '8px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', display: 'block' }}>Realisasi Nilai / Angka:</span>
+                  <strong style={{ color: 'var(--accent-green)', fontSize: '0.9rem' }}>{detailModal.periode.nilaiData || '(Belum diinput)'}</strong>
+                </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Nilai / Angka Data:</span>
-                <strong style={{ color: 'var(--accent-green)', fontSize: '0.92rem' }}>{detailModal.periode.nilaiData || '(Belum diisi)'}</strong>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Berkas Pendukung:</span>
-                <strong style={{ color: 'var(--primary-hover)' }}>{detailModal.periode.dokumenName || 'Tidak ada berkas terlampir'}</strong>
-              </div>
-              {detailModal.periode.status === 'Sudah Diinput' && (
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                    <span style={{ color: 'var(--text-secondary)' }}>Waktu Pengiriman:</span>
-                    <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{detailModal.periode.tanggalInput || '-'}</span>
+
+              {/* File Information Box */}
+              <div style={{
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 'var(--radius-md)',
+                padding: '10px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '8px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FileText size={18} color="var(--primary)" />
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '4px' }}>
-                    <span style={{ color: 'var(--text-secondary)' }}>Penginput (OPD):</span>
-                    <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{detailModal.periode.inputOleh || '-'}</span>
+                  <div>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', display: 'block' }}>
+                      {detailModal.periode.dokumenName || 'Belum Ada Lampiran Berkas'}
+                    </span>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                      {detailModal.periode.status === 'Sudah Diinput'
+                        ? `Diunggah oleh: ${detailModal.periode.inputOleh || 'Petugas OPD'} · ${detailModal.periode.tanggalInput || '-'}`
+                        : 'Menunggu pengisian dari OPD'}
+                    </span>
                   </div>
-                </>
-              )}
+                </div>
+
+                {detailModal.periode.status === 'Sudah Diinput' && (
+                  <span className="badge badge-success" style={{ fontSize: '0.7rem' }}>
+                    ✓ Dokumen Valid
+                  </span>
+                )}
+              </div>
+
+              {/* OPD Notes / Description */}
               {detailModal.periode.catatanOpd && (
-                <div style={{ marginTop: '4px', borderTop: '1px dashed var(--border-color)', paddingTop: '8px' }}>
-                  <span style={{ color: 'var(--text-secondary)', display: 'block', marginBottom: '2px', fontWeight: 600 }}>Catatan dari OPD:</span>
-                  <p style={{ color: 'var(--text-main)', fontStyle: 'italic', margin: 0 }}>"{detailModal.periode.catatanOpd}"</p>
+                <div style={{ marginTop: '10px', background: 'var(--bg-card)', padding: '10px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: '2px' }}>
+                    Catatan Penjelasan dari OPD:
+                  </span>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-main)', margin: 0, fontStyle: 'italic' }}>
+                    "{detailModal.periode.catatanOpd}"
+                  </p>
                 </div>
               )}
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '0.5rem' }}>
+            {/* Footer Modal Actions */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
               <button type="button" onClick={() => setDetailModal(null)} className="btn btn-secondary">
                 Tutup
               </button>
@@ -1068,7 +1110,7 @@ export default function DataSektoral({
                   className="btn btn-primary"
                 >
                   <Download size={14} />
-                  <span>Unduh Berkas Pendukung</span>
+                  <span>Unduh Dokumen Ini ({detailModal.periode.dokumenName || 'Berkas'})</span>
                 </button>
               )}
             </div>
