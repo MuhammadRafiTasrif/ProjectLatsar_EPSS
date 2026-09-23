@@ -12,7 +12,8 @@ import {
   Building,
   X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 
 export default function Sidebar({
@@ -25,26 +26,43 @@ export default function Sidebar({
   onToggleCollapse,
   currentRole,
   setRole,
-  roles
+  roles,
+  onLogout
 }) {
+  const isAdmin = currentRole?.id === 'role-admin' ||
+    currentRole?.id?.includes('admin') ||
+    currentRole?.name?.toLowerCase().includes('admin') ||
+    Boolean(currentRole?.permissions?.manageRoles) ||
+    Boolean(currentPermissions?.manageRoles);
+
   const menuItems = [
-    { id: 'home', label: 'Halaman Awal', icon: Home, perm: 'viewDashboard' },
-    { id: 'dashboard', label: 'Dashboard Utama', icon: LayoutDashboard, perm: 'viewDashboard' },
+    { id: 'home', label: 'SIMPONITAS', icon: Home },
+    { id: 'dashboard', label: 'Dashboard Utama', icon: LayoutDashboard },
+    { id: 'masterOpd', label: 'Daftar OPD', icon: Building },
     { id: 'permohonan', label: 'Layanan Pembinaan', icon: FilePlus, perm: 'submitPembinaan' },
-    { id: 'riwayat', label: 'Riwayat & Notulen', icon: History, perm: 'viewDashboard' },
-    { id: 'kompromin', label: 'Repository Kompromin', icon: FileText, perm: 'viewDashboard' },
-    { id: 'dataSektoral', label: 'Data Sektoral OPD', icon: Database, perm: 'viewDashboard' },
-    { id: 'dataLineage', label: 'Aliran Data (Lineage)', icon: GitMerge, perm: 'viewDashboard' },
-    { id: 'knowledgeBase', label: 'Knowledge Base & SOP', icon: BookOpen, perm: 'accessKnowledgeBase' },
-    { id: 'roleManagement', label: 'Manajemen Role', icon: ShieldCheck, perm: 'manageRoles', isSpecial: true }
+    { id: 'riwayat', label: 'Riwayat Pembinaan', icon: History, requireInternal: true },
+    { id: 'kompromin', label: 'Repository Kompromin', icon: FileText },
+    { id: 'dataSektoral', label: 'Aliran Data OPD', icon: Database },
+    { id: 'knowledgeBase', label: 'Knowledgebase', icon: BookOpen },
+    { id: 'roleManagement', label: 'Manajemen Role & Pengguna', icon: ShieldCheck, perm: 'manageRoles', isSpecial: true }
   ];
 
-  const handleNavClick = (item) => {
-    const isAllowed = currentPermissions[item.perm];
-    if (!isAllowed) {
-      alert(`Fitur "${item.label}" dibatasi untuk peran "${currentRole?.name || 'saat ini'}". Silakan pilih peran BPS atau Administrator untuk mengakses fitur ini.`);
-      return;
+  // Filter menu items so sidebar ONLY displays features permitted for the active role
+  const visibleMenuItems = menuItems.filter(item => {
+    if (item.id === 'roleManagement') {
+      return isAdmin || Boolean(currentPermissions?.manageRoles);
     }
+    if (item.isSpecial) {
+      return Boolean(currentPermissions[item.perm]);
+    }
+    if (currentRole?.id === 'role-publik') {
+      // Guest role hides internal submission & history modules
+      if (item.id === 'permohonan' || item.id === 'riwayat') return false;
+    }
+    return true;
+  });
+
+  const handleNavClick = (item) => {
     setActiveTab(item.id);
     if (onClose) onClose();
   };
@@ -102,29 +120,37 @@ export default function Sidebar({
             <label htmlFor="sidebar-role-select" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
               Peran Pengguna:
             </label>
-            <select
-              id="sidebar-role-select"
-              value={currentRole.id}
-              onChange={(e) => {
-                const selected = roles.find(r => r.id === e.target.value);
-                if (selected) setRole(selected);
-              }}
-              className="form-select"
-              style={{ width: '100%', padding: '6px 10px', fontSize: '0.8rem', fontWeight: 700 }}
-            >
-              {roles.map(r => (
-                <option key={r.id} value={r.id}>
-                  {r.name}
-                </option>
-              ))}
-            </select>
+            {isAdmin ? (
+              <select
+                id="sidebar-role-select"
+                value={currentRole.id}
+                onChange={(e) => {
+                  const selected = roles.find(r => r.id === e.target.value);
+                  if (selected) setRole(selected);
+                }}
+                className="form-select"
+                style={{ width: '100%', padding: '6px 10px', fontSize: '0.8rem', fontWeight: 700 }}
+              >
+                {roles.map(r => (
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <div style={{ background: 'var(--bg-surface)', padding: '6px 10px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', fontSize: '0.78rem', fontWeight: 800, color: 'var(--primary)' }}>
+                {currentRole.name}
+              </div>
+            )}
           </div>
         )}
 
         <ul className="nav-menu">
-          {menuItems.map(item => {
+          {visibleMenuItems.map(item => {
             const Icon = item.icon;
-            const isAllowed = currentPermissions[item.perm];
+            const isAllowed = item.id === 'roleManagement'
+              ? (isAdmin || Boolean(currentPermissions?.manageRoles))
+              : (item.isSpecial ? Boolean(currentPermissions[item.perm]) : true);
             const isActive = activeTab === item.id;
 
             return (
@@ -133,11 +159,8 @@ export default function Sidebar({
                   className={`nav-item ${isActive ? 'active' : ''}`}
                   onClick={() => handleNavClick(item)}
                   style={{
-                    width: '100%',
-                    border: 'none',
-                    textAlign: 'left',
                     opacity: isAllowed ? 1 : 0.45,
-                    position: 'relative'
+                    cursor: isAllowed ? 'pointer' : 'not-allowed'
                   }}
                   title={!isAllowed ? `Fitur dibatasi untuk peran "${currentRole?.name}"` : item.label}
                 >
@@ -157,14 +180,32 @@ export default function Sidebar({
         </ul>
 
         <div className="sidebar-footer" style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', padding: isCollapsed ? '1rem 0 0 0' : '1rem 8px 0 8px' }}>
-          <div style={{ padding: isCollapsed ? '8px' : '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', alignItems: isCollapsed ? 'center' : 'flex-start' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: isCollapsed ? 0 : '4px' }}>
+          <div style={{ padding: isCollapsed ? '8px' : '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: isCollapsed ? 'center' : 'flex-start' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Building size={14} color="var(--primary)" />
               <span className="sidebar-footer-text" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-secondary)' }}>BPS Kab. Pasaman</span>
             </div>
-            <p className="sidebar-footer-text" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: '1.3' }}>
-              Aplikasi Resmi Pembinaan Statistik Sektoral Latsar CPNS 2026.
-            </p>
+            {!isCollapsed && (
+              <>
+                <p className="sidebar-footer-text" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: '1.3' }}>
+                  Aplikasi Resmi Pembinaan Statistik Sektoral Latsar CPNS 2026.
+                </p>
+                {onLogout && (
+                  <button
+                    onClick={() => {
+                      if (window.confirm('Apakah Anda yakin ingin keluar (logout) dari SIMPONITAS?')) {
+                        onLogout();
+                      }
+                    }}
+                    className="btn btn-secondary"
+                    style={{ width: '100%', padding: '6px', fontSize: '0.75rem', color: '#ef4444', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <LogOut size={13} />
+                    <span>Keluar Akun</span>
+                  </button>
+                )}
+              </>
+            )}
           </div>
         </div>
       </aside>

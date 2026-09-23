@@ -59,7 +59,8 @@ export function printElement(elementId, title = 'Berita Acara Pembinaan SIMPONIT
     .info-table th { background: #fff7ed; padding: 10px; border: 1px solid #cbd5e1; color: #c76717; text-align: left; }
     .footer-sign { margin-top: 50px; display: flex; justify-content: space-between; text-align: center; }
   `);
-  printWindow.document.write('</style></head><body>');
+  printWindow.document.write('</style></head>');
+  printWindow.document.write('<body>');
   printWindow.document.write(elem.innerHTML);
   printWindow.document.write('</body></html>');
   printWindow.document.close();
@@ -69,3 +70,95 @@ export function printElement(elementId, title = 'Berita Acara Pembinaan SIMPONIT
     printWindow.close();
   }, 250);
 }
+
+export function formatBytes(bytes, decimals = 1) {
+  if (!bytes || bytes === 0) return '0 KB';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+export function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.72) {
+  return new Promise((resolve, reject) => {
+    if (!file) {
+      reject(new Error('No file provided'));
+      return;
+    }
+
+    // If file is not an image (e.g. PDF/Word), return basic info
+    if (!file.type.startsWith('image/')) {
+      resolve({
+        file,
+        compressedUrl: null,
+        originalSize: file.size,
+        compressedSize: file.size,
+        ratio: 0,
+        isCompressed: false,
+        fileName: file.name
+      });
+      return;
+    }
+
+    const originalSize = file.size;
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        // Scaling calculations while preserving aspect ratio
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compress image to JPEG format with specified quality
+        const compressedUrl = canvas.toDataURL('image/jpeg', quality);
+
+        // Calculate approximate size in bytes from base64 length
+        const base64Length = compressedUrl.split(',')[1]?.length || 0;
+        const compressedSize = Math.round(base64Length * 0.75);
+
+        const ratio = Math.round(((originalSize - compressedSize) / originalSize) * 100);
+
+        resolve({
+          compressedUrl,
+          originalSize,
+          compressedSize,
+          ratio: ratio > 0 ? ratio : 0,
+          isCompressed: true,
+          fileName: file.name
+        });
+      };
+      img.onerror = () => {
+        resolve({
+          compressedUrl: e.target.result,
+          originalSize,
+          compressedSize: originalSize,
+          ratio: 0,
+          isCompressed: false,
+          fileName: file.name
+        });
+      };
+      img.src = e.target.result;
+    };
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
+}
+

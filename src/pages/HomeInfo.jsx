@@ -80,7 +80,7 @@ export default function HomeInfo({ onNavigate }) {
             color: 'var(--text-main)',
             marginBottom: '0.75rem'
           }}>
-            Pusat Informasi & Sinergi Pembinaan Statistik Sektoral Pasaman
+            Sinergi Pembinaan Statistik Sektoral melalui Penerbitan Kompromin Akurat dan Berkualitas
           </h1>
 
           <p style={{
@@ -89,35 +89,10 @@ export default function HomeInfo({ onNavigate }) {
             lineHeight: '1.65',
             marginBottom: '1.5rem'
           }}>
-            Aplikasi yang dirancang untuk memfasilitasi kolaborasi, koordinasi, serta coaching pembinaan statistik bagi seluruh Organisasi Perangkat Daerah (OPD) dalam mewujudkan penerbitan Kompilasi Produk Administrasi (Kompromin) yang akurat dan berkualitas.
+            Website yang dirancang untuk memfasilitasi kolaborasi, koordinasi, serta coaching pembinaan statistik bagi seluruh Organisasi Perangkat Daerah (OPD) di Kabupaten Pasaman dalam mewujudkan penerbitan Kompilasi Produk Administrasi (Kompromin) yang akurat dan berkualitas.
           </p>
 
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            <button
-              onClick={() => onNavigate('permohonan')}
-              className="btn btn-primary"
-              style={{ padding: '10px 20px', fontSize: '0.88rem' }}
-            >
-              Pengajuan Pembinaan OPD
-              <ArrowRight size={16} />
-            </button>
-            <button
-              onClick={() => onNavigate('kompromin')}
-              className="btn btn-secondary"
-              style={{ padding: '10px 20px', fontSize: '0.88rem' }}
-            >
-              <FileText size={16} color="var(--primary)" />
-              Repository Kompromin
-            </button>
-            <button
-              onClick={() => onNavigate('dashboard')}
-              className="btn btn-secondary"
-              style={{ padding: '10px 20px', fontSize: '0.88rem' }}
-            >
-              <BarChart3 size={16} color="var(--accent-blue)" />
-              Dashboard Analitik
-            </button>
-          </div>
+
         </div>
 
         <div style={{
@@ -131,7 +106,7 @@ export default function HomeInfo({ onNavigate }) {
           {[
             { icon: Building2, color: 'var(--primary)', title: 'Penghubung Utama OPD', desc: 'Permohonan pembinaan & coaching statistik sektoral bagi instansi daerah.' },
             { icon: FileCheck, color: 'var(--accent-blue)', title: 'Pemantauan Kompromin', desc: 'Pantau dan evaluasi proses penyusunan Kompilasi Produk Administrasi.' },
-            { icon: Award, color: 'var(--accent-green)', title: 'Standar Kualitas Tinggi', desc: 'Data statistik sektoral terintegrasi, mematuhi kaidah metodologi ilmiah.' }
+            { icon: Award, color: 'var(--accent-green)', title: 'Aliran Data OPD', desc: 'Data statistik sektoral terintegrasi.' }
           ].map((card, idx) => (
             <div key={idx} style={{ padding: '1rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
@@ -216,13 +191,13 @@ export default function HomeInfo({ onNavigate }) {
           color: 'var(--text-main)',
           marginBottom: '1.25rem'
         }}>
-          Statistik sektoral adalah statistik yang pemanfaatannya ditujukan untuk memenuhi kebutuhan suatu instansi pemerintah tertentu dalam rangka penyelenggaraan tugas-tugas pemerintahan dan pembangunan yang merupakan tugas pokok instansi pemerintah yang bersangkutan. Kegiatan statistik sektoral dilaksanakan oleh instansi pemerintah non-BPS yang sesuai dengan lingkup tugas dan fungsinya, baik secara mandiri atau bekerjasama dengan BPS. Hasil statistik sektoral wajib diserahkan kepada BPS.
+          Statistik sektoral adalah statistik yang pemanfaatannya ditujukan untuk memenuhi kebutuhan suatu instansi pemerintah tertentu dalam rangka penyelenggaraan tugas-tugas pemerintahan dan pembangunan yang merupakan tugas pokok instansi pemerintah yang bersangkutan. Kegiatan statistik sektoral dilaksanakan oleh instansi pemerintah yang sesuai dengan lingkup tugas dan fungsinya, baik secara mandiri atau bekerjasama dengan BPS.
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
           {[
             { label: 'Tujuan Pemanfaatan', color: 'var(--accent-blue)', title: 'Tugas Pokok Pemerintahan', desc: 'Memenuhi kebutuhan data spesifik untuk perumusan program kerja instansi daerah.' },
-            { label: 'Pelaksana Kegiatan', color: 'var(--primary)', title: 'Instansi Non-BPS (OPD)', desc: 'Dilaksanakan oleh OPD/dinas secara mandiri maupun kolaborasi bersama BPS.' },
+            { label: 'Pelaksana Kegiatan', color: 'var(--primary)', title: 'Organisasi Pemerintah Daerah', desc: 'Dilaksanakan oleh OPD/dinas secara mandiri maupun kolaborasi bersama BPS.' },
             { label: 'Kewajiban Penyerahan', color: 'var(--accent-green)', title: 'Penyerahan Hasil ke BPS', desc: 'Hasil statistik sektoral wajib diserahkan kepada BPS sebagai Pembina Data.' }
           ].map((item, idx) => (
             <div key={idx} style={{ background: 'var(--bg-surface)', padding: '1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
@@ -234,126 +209,6 @@ export default function HomeInfo({ onNavigate }) {
         </div>
       </section>
 
-      {/* Tujuan Pembinaan */}
-      <section className="glass-card" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)' }}>
-        <div style={{ marginBottom: '1.25rem' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary)' }}>
-            Arah & Pilar Pembinaan
-          </span>
-          <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)', marginTop: '2px' }}>
-            Tujuan Pembinaan Statistik Sektoral
-          </h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            Lima sasaran strategis pembinaan statistik sektoral bagi OPD Kabupaten Pasaman:
-          </p>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {/* Featured Strategic Pillars (Pilar 1 & 2) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
-            {tujuanPembinaan.slice(0, 2).map((item) => {
-              const IconComp = item.icon;
-              return (
-                <div
-                  key={item.id}
-                  className="glass-card"
-                  style={{
-                    padding: '1.5rem',
-                    borderRadius: 'var(--radius-md)',
-                    border: `1px solid ${item.color}30`,
-                    background: 'var(--bg-card)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: 'var(--radius-md)',
-                      background: `${item.color}14`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <IconComp size={22} color={item.color} />
-                    </div>
-                    <span className="badge" style={{
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      color: item.color,
-                      background: `${item.color}12`,
-                      border: `1px solid ${item.color}25`
-                    }}>
-                      Pilar Utama 0{item.id}
-                    </span>
-                  </div>
-
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)', lineHeight: '1.3' }}>
-                    {item.title}
-                  </h3>
-
-                  <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-                    {item.desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Operational Pillars (Pilar 3, 4, 5) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.85rem' }}>
-            {tujuanPembinaan.slice(2).map((item) => {
-              const IconComp = item.icon;
-              return (
-                <div
-                  key={item.id}
-                  className="glass-card"
-                  style={{
-                    padding: '1.1rem',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border-color)',
-                    background: 'var(--bg-surface)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <div style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: `${item.color}12`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      <IconComp size={18} color={item.color} />
-                    </div>
-                    <span style={{
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      color: 'var(--text-muted)'
-                    }}>
-                      Pilar 0{item.id}
-                    </span>
-                  </div>
-
-                  <h4 style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: '1.3' }}>
-                    {item.title}
-                  </h4>
-
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                    {item.desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Apa itu Kompromin */}
       <section className="glass-card" style={{
@@ -431,31 +286,7 @@ export default function HomeInfo({ onNavigate }) {
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <section className="glass-card" style={{
-        padding: '1.5rem',
-        borderRadius: 'var(--radius-lg)',
-        textAlign: 'center'
-      }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '0.5rem' }}>
-          Siap Memulai Pembinaan Statistik Sektoral?
-        </h3>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', maxWidth: '560px', margin: '0 auto 1.25rem auto' }}>
-          Gunakan fitur SIMPONITAS untuk mengajukan permohonan pembinaan, melihat repositori dokumen Kompromin, atau mempelajari modul & SOP statistik sektoral.
-        </p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-          <button onClick={() => onNavigate('permohonan')} className="btn btn-primary" style={{ padding: '10px 18px', fontSize: '0.85rem' }}>
-            Akses Layanan Pembinaan
-          </button>
-          <button onClick={() => onNavigate('dataSektoral')} className="btn btn-secondary" style={{ padding: '10px 18px', fontSize: '0.85rem' }}>
-            Lihat Data Sektoral OPD
-          </button>
-          <button onClick={() => onNavigate('knowledgeBase')} className="btn btn-secondary" style={{ padding: '10px 18px', fontSize: '0.85rem' }}>
-            Modul Knowledge Base & SOP
-          </button>
-        </div>
-      </section>
 
     </div>
   );

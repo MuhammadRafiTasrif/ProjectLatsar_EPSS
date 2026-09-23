@@ -4,19 +4,24 @@ import { X } from 'lucide-react';
 export default function Modal({ isOpen, onClose, title, children }) {
   const contentRef = useRef(null);
 
+  // Focus modal container ONLY ONCE when opening initially
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      contentRef.current.focus();
+    }
+  }, [isOpen]);
+
+  // Handle Escape key listener
   useEffect(() => {
     if (!isOpen) return;
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape' && onClose) {
+        onClose();
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
-
-    if (contentRef.current) {
-      contentRef.current.focus();
-    }
-
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 

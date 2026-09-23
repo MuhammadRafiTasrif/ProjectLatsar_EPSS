@@ -7,6 +7,14 @@ Format pencatatan mengacu pada standar umum pembaruan perangkat lunak:
 - **Fixed**: Perbaikan bug, error logika, atau kendala performa.
 - **Removed**: Fitur atau kode yang dihapus.
 
+## [1.2.0] - 2026-09-20
+### Added
+- **Laporan Tahapan 3.1: Mengembangkan Basis Data SIMPONITAS (`Laporan_Kegiatan_3_1_Mengembangkan_Basis_Data.md` & `.docx`)**: Pendokumentasian skema relasional, 5 entitas inti (OPD, Permohonan, Kompromin, Data Sektoral, Role Matrix), dan sinkronisasi LocalStorage/API datastore.
+- **Laporan Tahapan 3.2: Mengembangkan Backend dan Fungsi Utama SIMPONITAS (`Laporan_Kegiatan_3_2_Mengembangkan_Backend_dan_Fungsi_Utama.md` & `.docx`)**: Pendokumentasian RESTful API Serverless Node.js (`/api/*.js`), otorisasi RBAC 5 peran, dan fungsi logika verifikasi kompromin.
+- **Laporan Tahapan 3.3: Mengembangkan Dashboard Antarmuka SIMPONITAS (`Laporan_Kegiatan_3_3_Mengembangkan_Dashboard_Antarmuka.md` & `.docx`)**: Pendokumentasian antarmuka pengguna React.js skala 80%, design system Pasaman Orange (`#f79039`), 8 modul utama, dan kepatuhan WCAG AA anti-slop.
+- **Laporan Tahapan 3.4: Mengintegrasikan Fitur dan Basis Data SIMPONITAS (`Laporan_Kegiatan_3_4_Mengintegrasikan_Fitur_dan_Basis_Data.md` & `.docx`)**: Pendokumentasian integrasi end-to-end frontend ke backend serverless API & local storage layer secara live.
+- **Laporan Tahapan 3.5: Melakukan Hosting Website SIMPONITAS (`Laporan_Kegiatan_3_5_Melakukan_Hosting_Website.md` & `.docx`)**: Pendokumentasian pembentukan bundel Vite (`dist`), deployment platform cloud Vercel (`vercel.json`), pengujian SSL HTTPS, serta evaluasi responsivitas multi-perangkat.
+
 ## [1.1.0] - 2026-09-06
 ### Added
 - **Laporan I: Identifikasi Fitur & Kebutuhan Sistem (`Laporan_1_Identifikasi_Fitur_SIMPONITAS.docx`)**: Dokumen formal Word memuat 16 Kebutuhan Fungsional (FR), 8 Kebutuhan Non-Fungsional (NFR), analisis persona pengguna (5 aktor), gap analysis As-Is vs To-Be, dan matriks prioritas MoSCoW.

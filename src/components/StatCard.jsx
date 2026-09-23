@@ -1,8 +1,18 @@
 import React from 'react';
 
-export default function StatCard({ title, value, subtext, icon: Icon, color = '#f79039' }) {
+export default function StatCard({ title, value, subtext, icon: Icon, color = '#f79039', onClick }) {
   return (
-    <div className="glass-card" style={{ padding: '1.25rem', position: 'relative' }}>
+    <div
+      className="glass-card"
+      onClick={onClick}
+      style={{
+        padding: '1.25rem',
+        position: 'relative',
+        cursor: onClick ? 'pointer' : 'default',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+      }}
+      title={onClick ? `Klik untuk melihat detail ${title}` : undefined}
+    >
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
           <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)' }}>{title}</span>
@@ -24,10 +34,12 @@ export default function StatCard({ title, value, subtext, icon: Icon, color = '#
         </div>
       </div>
       {subtext && (
-        <div style={{ marginTop: '10px', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-          {subtext}
+        <div style={{ marginTop: '10px', fontSize: '0.78rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span>{subtext}</span>
+          {onClick && <span style={{ color: color, fontWeight: 700, fontSize: '0.74rem' }}>Lihat Detail &rarr;</span>}
         </div>
       )}
     </div>
   );
 }
+
