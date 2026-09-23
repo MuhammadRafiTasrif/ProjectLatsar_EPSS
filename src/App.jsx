@@ -35,7 +35,8 @@ import {
   fetchAliranDataFromSupabase,
   fetchKnowledgeBaseFromSupabase,
   fetchRolesFromSupabase,
-  fetchUsersFromSupabase
+  fetchUsersFromSupabase,
+  fetchGalleryFromSupabase
 } from './services/supabaseService';
 
 export default function App() {
@@ -324,6 +325,7 @@ export default function App() {
       fetchKnowledgeBaseFromSupabase().then(data => { if (data && data.length) setKnowledgeBaseList(data); });
       fetchRolesFromSupabase().then(data => { if (data && data.roles?.length) setRoleData(data); });
       fetchUsersFromSupabase().then(data => { if (data && data.length) setUserList(data); });
+      fetchGalleryFromSupabase().then(data => { if (data && data.length) setGalleryList(data); });
     }
   }, []);
 

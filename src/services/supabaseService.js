@@ -258,6 +258,60 @@ export async function upsertKnowledgeBaseToSupabase(kb) {
   }
 }
 
+// ── GALLERY ──
+export async function fetchGalleryFromSupabase() {
+  if (!isSupabaseConfigured) return null;
+  try {
+    const { data, error } = await supabase.from('gallery').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!data || !data.length) return null;
+
+    return data.map(g => ({
+      id: g.id,
+      pembinaanId: g.pembinaan_id || '',
+      judulKegiatan: g.judul_kegiatan || '',
+      opdId: g.opd_id || '',
+      opdNama: g.opd_nama || '',
+      tanggal: g.tanggal || '',
+      keterangan: g.keterangan || '',
+      fotoUrl: g.foto_url || g.url || '',
+      fotoFileName: g.foto_file_name || g.caption || ''
+    }));
+  } catch (err) {
+    console.warn('Supabase fetch gallery:', err);
+    return null;
+  }
+}
+
+export async function upsertGalleryToSupabase(gal) {
+  if (!isSupabaseConfigured) return;
+  try {
+    const payload = {
+      id: gal.id,
+      pembinaan_id: gal.pembinaanId || gal.pembinaan_id || '',
+      judul_kegiatan: gal.judulKegiatan || gal.judul_kegiatan || '',
+      opd_id: gal.opdId || gal.opd_id || '',
+      opd_nama: gal.opdNama || gal.opd_nama || '',
+      tanggal: gal.tanggal || '',
+      keterangan: gal.keterangan || '',
+      foto_url: gal.fotoUrl || gal.foto_url || '',
+      foto_file_name: gal.fotoFileName || gal.foto_file_name || ''
+    };
+    await supabase.from('gallery').upsert(payload);
+  } catch (err) {
+    console.warn('Supabase upsert gallery:', err);
+  }
+}
+
+export async function deleteGalleryFromSupabase(id) {
+  if (!isSupabaseConfigured) return;
+  try {
+    await supabase.from('gallery').delete().eq('id', id);
+  } catch (err) {
+    console.warn('Supabase delete gallery:', err);
+  }
+}
+
 // ── ROLES & PERMISSIONS ──
 export async function fetchRolesFromSupabase() {
   if (!isSupabaseConfigured) return null;

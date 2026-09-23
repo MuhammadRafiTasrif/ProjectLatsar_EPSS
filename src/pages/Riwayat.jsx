@@ -26,7 +26,7 @@ import {
   RotateCcw
 } from 'lucide-react';
 import { formatDateIndo, printElement, compressImageFile, formatBytes } from '../utils/helpers';
-import { upsertPembinaanToSupabase, deletePembinaanFromSupabase } from '../services/supabaseService';
+import { upsertPembinaanToSupabase, deletePembinaanFromSupabase, upsertGalleryToSupabase, deleteGalleryFromSupabase } from '../services/supabaseService';
 
 export default function Riwayat({
   pembinaanList = [],
@@ -290,6 +290,7 @@ export default function Riwayat({
         fotoFileName: pt.fileName || 'foto_kegiatan.jpg'
       }));
       setGalleryList([...newGalItems, ...galleryList]);
+      newGalItems.forEach(item => upsertGalleryToSupabase(item));
     }
 
     setIsCompleteModalOpen(false);
@@ -346,7 +347,10 @@ export default function Riwayat({
       fotoFileName: pt.name
     }));
 
-    if (setGalleryList) setGalleryList([...newEntries, ...galleryList]);
+    if (setGalleryList) {
+      setGalleryList([...newEntries, ...galleryList]);
+      newEntries.forEach(item => upsertGalleryToSupabase(item));
+    }
 
     // 2. Link & attach photos to chosen activity in pembinaanList (History tab & Berita Acara)
     if (galleryFormData.pembinaanId && setPembinaanList) {
@@ -357,21 +361,24 @@ export default function Riwayat({
         caption: galleryFormData.judulKegiatan
       }));
 
+      let targetPemToSave = null;
       const updatedPembinaan = pembinaanList.map(pem => {
         if (pem.id === galleryFormData.pembinaanId) {
           const existingPhotos = pem.fotoList || [];
           const updatedPhotos = [...existingPhotos, ...newPhotoObjects];
-          return {
+          targetPemToSave = {
             ...pem,
             fotoList: updatedPhotos,
             dokumentasiUrl: updatedPhotos[0]?.url || pem.dokumentasiUrl,
             dokumentasiFileName: updatedPhotos[0]?.fileName || pem.dokumentasiFileName
           };
+          return targetPemToSave;
         }
         return pem;
       });
 
       setPembinaanList(updatedPembinaan);
+      if (targetPemToSave) upsertPembinaanToSupabase(targetPemToSave);
     }
 
     setIsUploadGalleryModalOpen(false);
@@ -390,6 +397,7 @@ export default function Riwayat({
   const handleDeleteGalleryPhoto = (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus foto dokumentasi ini dari galeri?')) {
       if (setGalleryList) setGalleryList(galleryList.filter(g => g.id !== id));
+      deleteGalleryFromSupabase(id);
     }
   };
 
@@ -397,6 +405,7 @@ export default function Riwayat({
     if (window.confirm(`Apakah Anda yakin ingin menghapus data Rekam Jejak & Notulen kegiatan "${topik}" (${opdNama})?\n\nData yang dihapus tidak dapat dikembalikan.`)) {
       if (setPembinaanList) {
         setPembinaanList(prev => prev.filter(item => item.id !== itemId));
+        deletePembinaanFromSupabase(itemId);
       }
       if (setGalleryList) {
         setGalleryList(prev => prev.filter(photo => photo.pembinaanId !== itemId));
@@ -408,9 +417,10 @@ export default function Riwayat({
   const handleDeleteNotulenOnly = (itemId, topik) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus / mengosongkan Notulen & Berkas BA untuk kegiatan "${topik}"?`)) {
       const nowStamp = new Date().toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+      let clearedEntryToSave = null;
       const updatedList = pembinaanList.map(item => {
         if (item.id === itemId) {
-          return {
+          clearedEntryToSave = {
             ...item,
             notulen: '',
             notulenDocUrl: '',
@@ -426,10 +436,12 @@ export default function Riwayat({
               ...(item.riwayatPerubahan || [])
             ]
           };
+          return clearedEntryToSave;
         }
         return item;
       });
       if (setPembinaanList) setPembinaanList(updatedList);
+      if (clearedEntryToSave) upsertPembinaanToSupabase(clearedEntryToSave);
       alert('Data notulen kegiatan berhasil dihapus.');
     }
   };
