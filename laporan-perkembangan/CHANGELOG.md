@@ -7,6 +7,15 @@ Format pencatatan mengacu pada standar umum pembaruan perangkat lunak:
 - **Fixed**: Perbaikan bug, error logika, atau kendala performa.
 - **Removed**: Fitur atau kode yang dihapus.
 
+## [1.3.0] - 2026-10-03
+### Added
+- **Laporan Tahapan 4.1: Menyusun Skenario dan Instrumen Uji Coba SIMPONITAS (`Laporan_Kegiatan_4_1_Menyusun_Skenario_dan_Instrumen_Uji_Coba.md` & `.docx`)**: Pendokumentasian skenario pengujian fungsional black-box, matriks kasus uji (24 butir kasus uji), dan perancangan kuesioner evaluasi System Usability Scale (SUS).
+- **Laporan Tahapan 4.2: Melaksanakan Uji Coba SIMPONITAS Bersama Pengguna Internal (`Laporan_Kegiatan_4_2_Melaksanakan_Uji_Coba_Pengguna_Internal.md` & `.docx`)**: Pendokumentasian pelaksanaan uji coba sistem bersama staf internal BPS Kabupaten Pasaman dengan tingkat kelulusan 95.8%, uji lintas browser dan perangkat.
+- **Laporan Tahapan 4.3: Mengumpulkan Masukan dan Hasil Evaluasi Pengguna (`Laporan_Kegiatan_4_3_Mengumpulkan_Masukan_dan_Evaluasi_Pengguna.md` & `.docx`)**: Tabulasi skor SUS rata-rata 82.5 (kategori Grade A / Excellent), pengelompokan masukan kualitatif, serta penyusunan matriks prioritas perbaikan aplikasi.
+- **Laporan Tahapan 4.4: Melakukan Perbaikan Berdasarkan Hasil Uji Coba dan Evaluasi (`Laporan_Kegiatan_4_4_Melakukan_Perbaikan_Hasil_Uji_Coba.md` & `.docx`)**: Implementasi proteksi unduh kompromin, pembaruan skema tema Midnight WCAG AAA, tombol simpan konfirmasi peran, dan kompresi citra foto dokumentasi.
+- **Laporan Tahapan 4.5: Melakukan Konsultasi Penyempurnaan kepada Mentor (`Laporan_Kegiatan_4_5_Melakukan_Konsultasi_Penyempurnaan_Mentor.md` & `.docx`)**: Pelaksanaan konsultasi dan demonstrasi aplikasi bersama Mentor BPS Kabupaten Pasaman, penyerahan Buku Pedoman, serta penandatanganan lembar persetujuan sistem.
+- **Laporan Tahapan 4.6: Menyusun Laporan Hasil Aktualisasi (`Laporan_Kegiatan_4_6_Menyusun_Laporan_Hasil_Aktualisasi.md` & `.docx`)**: Penyusunan dokumen laporan akhir aktualisasi Latsar CPNS secara utuh, rekapitulasi bukti fisik (evidences matrix), dan bahan tayang seminar pertanggungjawaban.
+
 ## [1.2.0] - 2026-09-20
 ### Added
 - **Laporan Tahapan 3.1: Mengembangkan Basis Data SIMPONITAS (`Laporan_Kegiatan_3_1_Mengembangkan_Basis_Data.md` & `.docx`)**: Pendokumentasian skema relasional, 5 entitas inti (OPD, Permohonan, Kompromin, Data Sektoral, Role Matrix), dan sinkronisasi LocalStorage/API datastore.

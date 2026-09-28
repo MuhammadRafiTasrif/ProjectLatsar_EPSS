@@ -178,18 +178,17 @@ export default function MasterOpd({
           <table className="custom-table" style={{ width: '100%' }}>
             <thead>
               <tr>
-                <th style={{ width: '40px', textAlign: 'center' }}>No</th>
-                <th style={{ width: '35%' }}>Nama OPD</th>
-                <th style={{ width: '18%' }}>Penanggung Jawab (PIC)</th>
-                <th style={{ width: '18%' }}>Kontak PIC</th>
-                <th style={{ width: '17%' }}>Email Resmi</th>
-                <th style={{ width: '12%', textAlign: 'center' }}>Aksi</th>
+                <th style={{ width: '50px', textAlign: 'center' }}>No</th>
+                <th style={{ width: '42%' }}>Nama OPD</th>
+                <th style={{ width: '23%' }}>Penanggung Jawab (PIC)</th>
+                <th style={{ width: '20%' }}>Email Resmi</th>
+                <th style={{ width: '15%', textAlign: 'center' }}>Aksi</th>
               </tr>
             </thead>
             <tbody>
               {filteredList.length === 0 ? (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>
+                  <td colSpan={5} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>
                     Tidak ditemukan data Master OPD yang cocok dengan kata kunci "{searchTerm}".
                   </td>
                 </tr>
@@ -204,7 +203,6 @@ export default function MasterOpd({
                       </div>
                     </td>
                     <td style={{ fontSize: '0.82rem', color: 'var(--text-main)', fontWeight: 600 }}>{opd.penanggungJawab || '-'}</td>
-                    <td style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{opd.kontak || '-'}</td>
                     <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{opd.email || '-'}</td>
                     <td style={{ textAlign: 'center' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
