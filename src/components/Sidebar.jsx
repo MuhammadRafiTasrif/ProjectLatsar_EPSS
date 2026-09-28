@@ -181,34 +181,34 @@ export default function Sidebar({
           })}
         </ul>
 
-        <div className="sidebar-footer" style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', padding: isCollapsed ? '1rem 0 0 0' : '1rem 8px 0 8px', textAlign: 'left' }}>
-          <div style={{ padding: isCollapsed ? '8px' : '10px', borderRadius: 'var(--radius-md)', background: 'var(--bg-surface)', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: isCollapsed ? 'center' : 'flex-start', textAlign: 'left' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', width: '100%', justifyContent: isCollapsed ? 'center' : 'flex-start' }}>
-              <Building size={14} color="var(--primary)" style={{ flexShrink: 0 }} />
-              <span className="sidebar-footer-text" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-secondary)', textAlign: 'left' }}>BPS Kab. Pasaman</span>
-            </div>
-            {!isCollapsed && (
-              <>
-                <p className="sidebar-footer-text" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: '1.3', textAlign: 'left', margin: 0, width: '100%' }}>
-                  Aplikasi Resmi Pembinaan Statistik Sektoral Latsar CPNS 2026.
-                </p>
-                {onLogout && (
-                  <button
-                    onClick={() => {
-                      if (window.confirm('Apakah Anda yakin ingin keluar (logout) dari SIMPONITAS?')) {
-                        onLogout();
-                      }
-                    }}
-                    className="btn btn-secondary"
-                    style={{ width: '100%', padding: '6px', fontSize: '0.75rem', color: '#ef4444', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '6px' }}
-                  >
-                    <LogOut size={13} />
-                    <span>Keluar Akun</span>
-                  </button>
-                )}
-              </>
-            )}
-          </div>
+        <div className="sidebar-footer" style={{ marginTop: 'auto', paddingTop: '0.8rem', borderTop: '1px solid var(--border-color)', padding: isCollapsed ? '0.8rem 0 0 0' : '0.8rem 8px 0 8px', textAlign: 'left' }}>
+          {onLogout && (
+            <button
+              onClick={() => {
+                if (window.confirm('Apakah Anda yakin ingin keluar (logout) dari SIMPONITAS?')) {
+                  onLogout();
+                }
+              }}
+              className="btn btn-secondary"
+              style={{
+                width: '100%',
+                padding: isCollapsed ? '8px' : '8px 12px',
+                fontSize: '0.78rem',
+                color: '#ef4444',
+                justifyContent: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border-color)'
+              }}
+              title="Keluar Akun"
+              aria-label="Keluar Akun"
+            >
+              <LogOut size={15} />
+              {!isCollapsed && <span>Keluar Akun</span>}
+            </button>
+          )}
         </div>
       </aside>
     </>
