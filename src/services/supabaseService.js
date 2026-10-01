@@ -121,7 +121,7 @@ export async function fetchKomprominFromSupabase() {
   try {
     const { data, error } = await supabase.from('kompromin').select('*').order('tahun', { ascending: false });
     if (error) throw error;
-    if (!data || !data.length) return null;
+    if (!data || data.length === 0) return [];
 
     return data.map(k => {
       const isTerverifikasi = k.status_verifikasi === 'Terverifikasi';

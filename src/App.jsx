@@ -321,12 +321,8 @@ export default function App() {
       fetchOpdFromSupabase().then(data => { if (data && data.length) setOpdList(data); });
       fetchPembinaanFromSupabase().then(data => { if (data && data.length) setPembinaanList(data); });
       fetchKomprominFromSupabase().then(data => {
-        if (data && data.length) {
-          setKomprominList(prevList => {
-            const supabaseIds = new Set(data.map(d => d.id));
-            const localOnly = prevList.filter(p => !supabaseIds.has(p.id));
-            return [...data, ...localOnly];
-          });
+        if (data !== null) {
+          setKomprominList(data);
         }
       });
       fetchAliranDataFromSupabase().then(data => { if (data && data.length) setAliranDataList(data); });
