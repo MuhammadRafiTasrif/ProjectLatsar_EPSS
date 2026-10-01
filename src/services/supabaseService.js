@@ -123,19 +123,29 @@ export async function fetchKomprominFromSupabase() {
     if (error) throw error;
     if (!data || !data.length) return null;
 
-    return data.map(k => ({
-      id: k.id,
-      judul: k.judul || '',
-      opdId: k.opd_id || '',
-      opdNama: k.opd_nama || '',
-      tahun: k.tahun || 2026,
-      statusVerifikasi: k.status_verifikasi || 'Draft OPD',
-      ringkasan: k.ringkasan || '',
-      coverUrl: k.cover_url || '',
-      coverFileName: k.cover_file_name || '',
-      fileUrl: k.file_url || '',
-      fileName: k.file_name || ''
-    }));
+    return data.map(k => {
+      const isTerverifikasi = k.status_verifikasi === 'Terverifikasi';
+      const isReview = k.status_verifikasi === 'Dalam Review' || k.status_verifikasi === 'Dalam Penelaahan';
+      return {
+        id: k.id,
+        judul: k.judul || '',
+        namaKompromin: k.judul || '',
+        opdId: k.opd_id || '',
+        opdNama: k.opd_nama || '',
+        tahun: k.tahun || 2026,
+        statusVerifikasi: k.status_verifikasi || 'Draft OPD',
+        perencanaanData: 'Selesai',
+        pengumpulanData: isTerverifikasi || isReview ? 'Selesai' : 'Proses',
+        pemeriksaanData: isTerverifikasi ? 'Selesai' : (isReview ? 'Proses' : 'Belum'),
+        publikasiData: isTerverifikasi ? 'Telah Terverifikasi' : 'Belum',
+        catatan: k.ringkasan || '',
+        ringkasan: k.ringkasan || '',
+        coverUrl: k.cover_url || '',
+        coverFileName: k.cover_file_name || '',
+        fileUrl: k.file_url || '',
+        fileName: k.file_name || ''
+      };
+    });
   } catch (err) {
     console.warn('Supabase fetch kompromin:', err);
     return null;
@@ -143,24 +153,45 @@ export async function fetchKomprominFromSupabase() {
 }
 
 export async function upsertKomprominToSupabase(k) {
-  if (!isSupabaseConfigured) return;
+  if (!isSupabaseConfigured) return { success: false, error: 'Supabase tidak terkonfigurasi' };
   try {
     const payload = {
       id: k.id,
-      judul: k.judul || '',
+      judul: k.judul || k.namaKompromin || '',
       opd_id: k.opdId || k.opd_id || '',
-      opd_nama: k.opdNama || k.opd_nama || '',
+      opd_nama: k.opdNama || k.opd_nama || 'Instansi Terkait',
       tahun: Number(k.tahun) || 2026,
-      status_verifikasi: k.statusVerifikasi || k.status_verifikasi || 'Draft OPD',
-      ringkasan: k.ringkasan || '',
+      status_verifikasi: k.statusVerifikasi || k.status_verifikasi || (k.publikasiData === 'Telah Terverifikasi' ? 'Terverifikasi' : 'Draft OPD'),
+      ringkasan: k.ringkasan || k.catatan || '',
       cover_url: k.coverUrl || k.cover_url || '',
       cover_file_name: k.coverFileName || k.cover_file_name || '',
       file_url: k.fileUrl || k.file_url || '',
       file_name: k.fileName || k.file_name || ''
     };
-    await supabase.from('kompromin').upsert(payload);
+    const { data, error } = await supabase.from('kompromin').upsert(payload).select();
+    if (error) {
+      console.error('Supabase upsert kompromin gagal:', error);
+      return { success: false, error: error.message };
+    }
+    return { success: true, data };
   } catch (err) {
-    console.warn('Supabase upsert kompromin:', err);
+    console.error('Supabase upsert kompromin exception:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function deleteKomprominFromSupabase(id) {
+  if (!isSupabaseConfigured) return { success: false, error: 'Supabase tidak terkonfigurasi' };
+  try {
+    const { error } = await supabase.from('kompromin').delete().eq('id', id);
+    if (error) {
+      console.error('Supabase delete kompromin gagal:', error);
+      return { success: false, error: error.message };
+    }
+    return { success: true };
+  } catch (err) {
+    console.error('Supabase delete kompromin exception:', err);
+    return { success: false, error: err.message };
   }
 }
 
@@ -420,15 +451,6 @@ export async function deletePembinaanFromSupabase(id) {
     await supabase.from('pembinaan').delete().eq('id', id);
   } catch (err) {
     console.warn('Supabase delete pembinaan:', err);
-  }
-}
-
-export async function deleteKomprominFromSupabase(id) {
-  if (!isSupabaseConfigured) return;
-  try {
-    await supabase.from('kompromin').delete().eq('id', id);
-  } catch (err) {
-    console.warn('Supabase delete kompromin:', err);
   }
 }
 

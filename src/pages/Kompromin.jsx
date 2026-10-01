@@ -39,6 +39,7 @@ export default function Kompromin({
   const [isFormModalOpen, setIsFormModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [detailItem, setDetailItem] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [formData, setFormData] = useState({
     judul: '',
@@ -94,7 +95,8 @@ export default function Kompromin({
     if (!file) return;
 
     try {
-      const res = await compressImageFile(file, 1200, 1200, 0.72);
+      // Scale down image to max 800x800 and 0.6 quality to ensure safe payload size for Supabase
+      const res = await compressImageFile(file, 800, 800, 0.6);
       const displayUrl = res.compressedUrl || URL.createObjectURL(file);
       const displayName = res.isCompressed
         ? `${file.name} (Terkompres ${res.ratio}% - ${formatBytes(res.compressedSize)})`
@@ -123,68 +125,98 @@ export default function Kompromin({
     }));
   };
 
-  const handleSavePublication = (e) => {
+  const handleSavePublication = async (e) => {
     e.preventDefault();
+    if (isSaving) return;
+
     const opdObj = opdList.find(o => o.id === formData.opdId);
     const opdNama = opdObj ? opdObj.nama : 'Dinas Pemkab Pasaman';
 
-    if (editingItem) {
-      // Update publication
-      let updatedEntry = null;
-      const updated = komprominList.map(it => {
-        if (it.id === editingItem.id) {
-          updatedEntry = {
-            ...it,
-            judul: formData.judul,
-            opdId: formData.opdId,
-            opdNama: opdNama,
-            tahun: Number(formData.tahun),
-            statusVerifikasi: formData.statusVerifikasi,
-            ringkasan: formData.ringkasan,
-            coverUrl: formData.coverUrl,
-            coverFileName: formData.coverFileName,
-            fileUrl: formData.fileUrl,
-            fileName: formData.fileName
-          };
-          return updatedEntry;
+    setIsSaving(true);
+    try {
+      if (editingItem) {
+        const updatedEntry = {
+          ...editingItem,
+          judul: formData.judul,
+          namaKompromin: formData.judul,
+          opdId: formData.opdId,
+          opdNama: opdNama,
+          tahun: Number(formData.tahun) || new Date().getFullYear(),
+          statusVerifikasi: formData.statusVerifikasi,
+          perencanaanData: editingItem.perencanaanData || 'Selesai',
+          pengumpulanData: editingItem.pengumpulanData || (formData.statusVerifikasi === 'Terverifikasi' ? 'Selesai' : 'Proses'),
+          pemeriksaanData: editingItem.pemeriksaanData || (formData.statusVerifikasi === 'Terverifikasi' ? 'Selesai' : 'Belum'),
+          publikasiData: editingItem.publikasiData || (formData.statusVerifikasi === 'Terverifikasi' ? 'Telah Terverifikasi' : 'Belum'),
+          ringkasan: formData.ringkasan,
+          catatan: formData.ringkasan,
+          coverUrl: formData.coverUrl,
+          coverFileName: formData.coverFileName,
+          fileUrl: formData.fileUrl,
+          fileName: formData.fileName
+        };
+
+        const res = await upsertKomprominToSupabase(updatedEntry);
+
+        const updated = komprominList.map(it => it.id === editingItem.id ? updatedEntry : it);
+        if (setKomprominList) setKomprominList(updated);
+
+        if (res?.success) {
+          alert('Publikasi Kompromin berhasil diperbarui dan tersimpan di database Supabase!');
+        } else {
+          alert(`Publikasi Kompromin diperbarui secara lokal. Catatan sinkronisasi cloud: ${res?.error || 'Koneksi database bermasalah'}`);
         }
-        return it;
-      });
+      } else {
+        const isVer = formData.statusVerifikasi === 'Terverifikasi';
+        const newEntry = {
+          id: `komp-${Date.now()}`,
+          judul: formData.judul,
+          namaKompromin: formData.judul,
+          opdId: formData.opdId,
+          opdNama: opdNama,
+          tahun: Number(formData.tahun) || new Date().getFullYear(),
+          statusVerifikasi: formData.statusVerifikasi,
+          perencanaanData: 'Selesai',
+          pengumpulanData: isVer ? 'Selesai' : 'Proses',
+          pemeriksaanData: isVer ? 'Selesai' : 'Belum',
+          publikasiData: isVer ? 'Telah Terverifikasi' : 'Belum',
+          tanggalTerbit: new Date().toISOString().split('T')[0],
+          jumlahTabel: 16,
+          ringkasan: formData.ringkasan,
+          catatan: formData.ringkasan,
+          coverUrl: formData.coverUrl,
+          coverFileName: formData.coverFileName,
+          fileUrl: formData.fileUrl,
+          fileName: formData.fileName
+        };
 
-      if (setKomprominList) setKomprominList(updated);
-      if (updatedEntry) upsertKomprominToSupabase(updatedEntry);
-      alert('Publikasi Kompromin berhasil diperbarui!');
-    } else {
-      // Create new publication
-      const newEntry = {
-        id: `komp-${Date.now()}`,
-        judul: formData.judul,
-        opdId: formData.opdId,
-        opdNama: opdNama,
-        tahun: Number(formData.tahun),
-        statusVerifikasi: formData.statusVerifikasi,
-        tanggalTerbit: new Date().toISOString().split('T')[0],
-        jumlahTabel: 16,
-        ringkasan: formData.ringkasan,
-        coverUrl: formData.coverUrl,
-        coverFileName: formData.coverFileName,
-        fileUrl: formData.fileUrl,
-        fileName: formData.fileName
-      };
+        const res = await upsertKomprominToSupabase(newEntry);
 
-      if (setKomprominList) setKomprominList([newEntry, ...komprominList]);
-      upsertKomprominToSupabase(newEntry);
-      alert('Publikasi Kompromin resmi berhasil diunggah dan diterbitkan oleh BPS Pasaman!');
+        if (setKomprominList) setKomprominList([newEntry, ...komprominList]);
+
+        if (res?.success) {
+          alert('Publikasi Kompromin resmi berhasil diunggah dan tersimpan ke database Supabase!');
+        } else {
+          alert(`Publikasi Kompromin berhasil ditambahkan secara lokal. Catatan sinkronisasi cloud: ${res?.error || 'Koneksi database bermasalah'}`);
+        }
+      }
+
+      setIsFormModalOpen(false);
+      resetForm();
+    } catch (err) {
+      console.error('Error saat menyimpan publikasi:', err);
+      alert('Terjadi kesalahan saat menyimpan publikasi: ' + err.message);
+    } finally {
+      setIsSaving(false);
     }
-
-    setIsFormModalOpen(false);
-    resetForm();
   };
 
-  const handleDeletePublication = (id) => {
+  const handleDeletePublication = async (id) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus publikasi Kompromin ini?')) {
       if (setKomprominList) setKomprominList(komprominList.filter(item => item.id !== id));
-      deleteKomprominFromSupabase(id);
+      const res = await deleteKomprominFromSupabase(id);
+      if (res && !res.success) {
+        console.warn('Gagal menghapus dari Supabase:', res.error);
+      }
     }
   };
 
@@ -546,12 +578,17 @@ export default function Kompromin({
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '1.25rem' }}>
-            <button type="button" onClick={() => { setIsFormModalOpen(false); resetForm(); }} className="btn btn-secondary">
+            <button
+              type="button"
+              onClick={() => { setIsFormModalOpen(false); resetForm(); }}
+              className="btn btn-secondary"
+              disabled={isSaving}
+            >
               Batal
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" disabled={isSaving}>
               <Upload size={15} />
-              <span>{editingItem ? 'Simpan Perubahan' : 'Upload & Terbitkan'}</span>
+              <span>{isSaving ? 'Menyimpan ke Cloud...' : (editingItem ? 'Simpan Perubahan' : 'Upload & Terbitkan')}</span>
             </button>
           </div>
         </form>

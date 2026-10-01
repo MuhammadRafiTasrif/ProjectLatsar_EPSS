@@ -320,7 +320,15 @@ export default function App() {
       console.info('🔄 Mengambil data awal dari Supabase Cloud Database...');
       fetchOpdFromSupabase().then(data => { if (data && data.length) setOpdList(data); });
       fetchPembinaanFromSupabase().then(data => { if (data && data.length) setPembinaanList(data); });
-      fetchKomprominFromSupabase().then(data => { if (data && data.length) setKomprominList(data); });
+      fetchKomprominFromSupabase().then(data => {
+        if (data && data.length) {
+          setKomprominList(prevList => {
+            const supabaseIds = new Set(data.map(d => d.id));
+            const localOnly = prevList.filter(p => !supabaseIds.has(p.id));
+            return [...data, ...localOnly];
+          });
+        }
+      });
       fetchAliranDataFromSupabase().then(data => { if (data && data.length) setAliranDataList(data); });
       fetchKnowledgeBaseFromSupabase().then(data => { if (data && data.length) setKnowledgeBaseList(data); });
       fetchRolesFromSupabase().then(data => { if (data && data.roles?.length) setRoleData(data); });

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../components/Modal';
 import StatCard from '../components/StatCard';
+import { upsertKomprominToSupabase } from '../services/supabaseService';
 import {
   Building2,
   CheckCircle2,
@@ -159,7 +160,7 @@ export default function Dashboard({
     if (searchTerm.trim()) {
       const q = searchTerm.toLowerCase();
       const matchOpd = (item.opdNama || '').toLowerCase().includes(q);
-      const matchJudul = (item.namaKompromin || '').toLowerCase().includes(q);
+      const matchJudul = (item.judul || item.namaKompromin || '').toLowerCase().includes(q);
       const matchCatatan = (item.catatan || '').toLowerCase().includes(q);
       if (!matchOpd && !matchJudul && !matchCatatan) return false;
     }
@@ -182,7 +183,7 @@ export default function Dashboard({
     setProgressFormData({
       opdId: komprominItem.opdId || '',
       opdNama: komprominItem.opdNama || '',
-      namaKompromin: komprominItem.namaKompromin || '',
+      namaKompromin: komprominItem.namaKompromin || komprominItem.judul || '',
       tahun: komprominItem.tahun || 2026,
       perencanaanData: komprominItem.perencanaanData || 'Belum',
       pengumpulanData: komprominItem.pengumpulanData || 'Belum',
@@ -193,17 +194,19 @@ export default function Dashboard({
     setIsUpdateProgressModalOpen(true);
   };
 
-  const handleSaveProgressUpdate = (e) => {
+  const handleSaveProgressUpdate = async (e) => {
     e.preventDefault();
     if (!editingKompromin || !setKomprominList) return;
 
     const newPub = progressFormData.publikasiData;
     const statusVer = newPub === 'Telah Terverifikasi' ? 'Terverifikasi' : 'Dalam Review';
 
+    let updatedTarget = null;
     const updated = komprominList.map((k) => {
       if (k.id === editingKompromin.id) {
-        return {
+        updatedTarget = {
           ...k,
+          judul: progressFormData.namaKompromin.trim(),
           namaKompromin: progressFormData.namaKompromin.trim(),
           tahun: Number(progressFormData.tahun),
           perencanaanData: progressFormData.perencanaanData,
@@ -213,13 +216,17 @@ export default function Dashboard({
           catatan: progressFormData.catatan,
           statusVerifikasi: statusVer
         };
+        return updatedTarget;
       }
       return k;
     });
 
     setKomprominList(updated);
+    if (updatedTarget) {
+      await upsertKomprominToSupabase(updatedTarget);
+    }
     setIsUpdateProgressModalOpen(false);
-    alert(`Progres Kompromin "${progressFormData.namaKompromin}" berhasil diperbarui!`);
+    alert(`Progres Kompromin "${progressFormData.namaKompromin}" berhasil diperbarui dan tersimpan ke database!`);
   };
 
   // Handlers for Add New Kompromin Modal
@@ -239,7 +246,7 @@ export default function Dashboard({
     setIsCreateKomprominModalOpen(true);
   };
 
-  const handleSaveCreateKompromin = (e) => {
+  const handleSaveCreateKompromin = async (e) => {
     e.preventDefault();
     if (!progressFormData.namaKompromin.trim()) {
       alert('Nama Kompromin wajib diisi!');
@@ -256,8 +263,9 @@ export default function Dashboard({
       id: `komp-${Date.now()}`,
       opdId: progressFormData.opdId,
       opdNama: opdNama,
+      judul: progressFormData.namaKompromin.trim(),
       namaKompromin: progressFormData.namaKompromin.trim(),
-      tahun: Number(progressFormData.tahun),
+      tahun: Number(progressFormData.tahun) || 2026,
       perencanaanData: progressFormData.perencanaanData,
       pengumpulanData: progressFormData.pengumpulanData,
       pemeriksaanData: progressFormData.pemeriksaanData,
@@ -275,8 +283,9 @@ export default function Dashboard({
     if (setKomprominList) {
       setKomprominList([newItem, ...komprominList]);
     }
+    await upsertKomprominToSupabase(newItem);
     setIsCreateKomprominModalOpen(false);
-    alert(`Kompromin baru "${newItem.namaKompromin}" berhasil ditambahkan untuk ${opdNama}.`);
+    alert(`Kompromin baru "${newItem.namaKompromin}" berhasil ditambahkan dan tersimpan ke database.`);
   };
 
   // Live preview percentage calculation in progress edit modal
@@ -507,11 +516,33 @@ export default function Dashboard({
                         <div style={{ fontWeight: 800, fontSize: '0.84rem', color: 'var(--text-main)' }}>
                           {item.opdNama}
                         </div>
-                        <div style={{ fontSize: '0.78rem', color: 'var(--primary-hover)', fontWeight: 600, marginTop: '2px', lineHeight: '1.3' }}>
-                          {item.namaKompromin}
+                        <div style={{
+                          fontSize: '0.78rem',
+                          color: 'var(--primary)',
+                          fontWeight: 600,
+                          marginTop: '3px',
+                          lineHeight: '1.35',
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: '5px'
+                        }}>
+                          <span style={{
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            padding: '1px 6px',
+                            borderRadius: '4px',
+                            background: 'rgba(2, 132, 199, 0.1)',
+                            color: 'var(--primary)',
+                            flexShrink: 0
+                          }}>
+                            Judul
+                          </span>
+                          <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>
+                            {item.judul || item.namaKompromin || 'Judul Kompromin belum ditentukan'}
+                          </span>
                         </div>
                         {item.catatan && (
-                          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '2px' }}>
+                          <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '3px' }}>
                             Catatan: {item.catatan}
                           </div>
                         )}
