@@ -36,7 +36,7 @@ export default function Sidebar({
     Boolean(currentPermissions?.manageRoles);
 
   const menuItems = [
-    { id: 'home', label: 'SIMPONITAS', icon: Home },
+    { id: 'home', label: 'Beranda SIMPONITAS', icon: Home },
     { id: 'dashboard', label: 'Dashboard Utama', icon: LayoutDashboard },
     { id: 'masterOpd', label: 'Daftar OPD', icon: Building },
     { id: 'permohonan', label: 'Layanan Pembinaan', icon: FilePlus, perm: 'submitPembinaan' },
@@ -75,18 +75,31 @@ export default function Sidebar({
         aria-hidden="true"
       />
       <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''} ${isCollapsed ? 'collapsed' : ''}`}>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: isCollapsed ? 'center' : 'space-between',
-          padding: isCollapsed ? '0 0 10px 0' : '0 8px 10px 8px',
-          borderBottom: '1px solid var(--border-color)',
-          marginBottom: '6px'
-        }}>
-          {!isCollapsed && (
-            <span className="sidebar-header-text" style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.3px', textAlign: 'left' }}>
-              Navigasi Sistem
-            </span>
+        <div className="sidebar-brand-header">
+          {!isCollapsed ? (
+            <div className="sidebar-brand-block">
+              <img
+                src="/logo-simponitas.png"
+                alt="Logo SIMPONITAS BPS Kabupaten Pasaman"
+                className="sidebar-brand-logo"
+                width="36"
+                height="36"
+              />
+              <div className="sidebar-brand-info">
+                <span className="sidebar-brand-title">SIMPONITAS</span>
+                <span className="sidebar-brand-subtitle">BPS KAB. PASAMAN</span>
+              </div>
+            </div>
+          ) : (
+            <div className="sidebar-brand-block-collapsed" title="SIMPONITAS - BPS Kabupaten Pasaman">
+              <img
+                src="/logo-simponitas.png"
+                alt="Logo SIMPONITAS"
+                className="sidebar-brand-logo"
+                width="30"
+                height="30"
+              />
+            </div>
           )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

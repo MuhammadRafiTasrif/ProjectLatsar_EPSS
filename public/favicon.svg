@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="fav-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+    <linearGradient id="fav-orange" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#EA580C" />
+      <stop offset="100%" stop-color="#F97316" />
+    </linearGradient>
+    <linearGradient id="fav-blue" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#1D4ED8" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+    <linearGradient id="fav-green" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+    <linearGradient id="fav-arc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#FDBA74" />
+      <stop offset="100%" stop-color="#34D399" stop-opacity="0.9" />
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle Base with Subtle Border -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#fav-bg)" stroke="#334155" stroke-width="1.5" />
+
+  <!-- Grid Guide Accent (Subtle baseline) -->
+  <line x1="12" y1="48" x2="52" y2="48" stroke="#334155" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- 3 Statistical Data Pillars (Ascending & Synergistic) -->
+  <!-- Bar 1: Foundation (OPD Produsen Data - Blue) -->
+  <rect x="14" y="32" width="8" height="16" rx="3" fill="url(#fav-blue)" />
+
+  <!-- Bar 2: Coaching & Quality Assurance (BPS Pembinaan - Pasaman Warm Orange) -->
+  <rect x="28" y="22" width="8" height="26" rx="3" fill="url(#fav-orange)" />
+
+  <!-- Bar 3: Accurate Kompromin (Output Berkualitas - Emerald Green) -->
+  <rect x="42" y="14" width="8" height="34" rx="3" fill="url(#fav-green)" />
+
+  <!-- S-Curve Synergy & Equator Arc (Pasaman Khatulistiwa) -->
+  <path d="M 12 38 C 22 42, 28 20, 52 16" fill="none" stroke="url(#fav-arc)" stroke-width="2.5" stroke-linecap="round" />
+
+  <!-- Data Point Nodes -->
+  <circle cx="18" cy="32" r="2.5" fill="#FFFFFF" />
+  <circle cx="32" cy="22" r="2.5" fill="#FFFFFF" />
+  <circle cx="46" cy="14" r="3" fill="#FDE047" stroke="#0F172A" stroke-width="1" />
+</svg>

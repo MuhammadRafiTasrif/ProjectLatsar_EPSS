@@ -124,27 +124,27 @@ export default function MasterOpd({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingBottom: '2rem' }}>
       {/* Header Banner */}
-      <section className="glass-card" style={{ padding: '1.5rem', borderRadius: 'var(--radius-lg)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <span className="badge badge-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                <Building2 size={12} /> Master OPD Kabupaten Pasaman
+      <section className="page-header-banner">
+        <div className="page-header-title">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <span className="badge badge-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <Building2 size={12} /> Master OPD Kabupaten Pasaman
+            </span>
+            {isBpsAdmin && (
+              <span className="badge badge-success" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <ShieldCheck size={12} /> Akses Pengelolaan BPS
               </span>
-              {isBpsAdmin && (
-                <span className="badge badge-success" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <ShieldCheck size={12} /> Akses Pengelolaan BPS
-                </span>
-              )}
-            </div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-main)' }}>
-              Kelola Master Organisasi Perangkat Daerah (OPD)
-            </h1>
-            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-              Daftar master instansi OPD terdaftar di Kabupaten Pasaman yang bekerja sama dengan BPS dalam penyelenggaraan statistik sektoral.
-            </p>
+            )}
           </div>
+          <h2>
+            Kelola Master Organisasi Perangkat Daerah (OPD)
+          </h2>
+          <p>
+            Daftar master instansi OPD terdaftar di Kabupaten Pasaman yang bekerja sama dengan BPS dalam penyelenggaraan statistik sektoral.
+          </p>
+        </div>
 
+        <div className="page-header-actions">
           {isBpsAdmin && (
             <button onClick={handleOpenCreateModal} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.85rem' }}>
               <Plus size={16} />

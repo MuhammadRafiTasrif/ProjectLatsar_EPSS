@@ -152,8 +152,14 @@ export default function Login({ onLogin, roles = [], userList = [], opdList = []
       <div className="login-card-wrapper glass-card">
         {/* Header Branding Section */}
         <div className="login-header">
-          <div className="login-logo-badge">
-            <ShieldCheck size={32} color="var(--primary)" />
+          <div className="login-logo-container">
+            <img
+              src="/logo-simponitas.png"
+              alt="Logo Resmi SIMPONITAS - BPS Kabupaten Pasaman"
+              className="login-brand-logo"
+              width="64"
+              height="64"
+            />
           </div>
           <h1 className="login-title">SIMPONITAS</h1>
           <p className="login-subtitle">

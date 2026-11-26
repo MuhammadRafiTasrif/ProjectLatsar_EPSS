@@ -441,30 +441,32 @@ export default function DataLineage({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
       {/* Header Banner */}
-      <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="page-header-banner">
+        <div className="page-header-title">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <GitMerge size={22} color="var(--primary)" />
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            <h2>
               {isBpsUser ? 'Manajemen Aliran Data OPD' : 'Aliran Data Saya'}
             </h2>
             <span className={`badge ${isBpsUser ? 'badge-primary' : 'badge-info'}`} style={{ fontSize: '0.72rem' }}>
               {isBpsUser ? 'Monitoring & CRUD Central BPS' : 'Tugas Pemenuhan Data OPD'}
             </span>
           </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '3px' }}>
+          <p>
             {isBpsUser
               ? 'Penetapan kebutuhan indikator data sektoral OPD (Bulanan, Triwulan, Tahunan) & pengawasan status pemenuhan.'
               : 'Daftar aliran data dan indikator yang ditugaskan oleh BPS untuk diisi dan diunggah dokumennya.'}
           </p>
         </div>
 
-        {isBpsUser && (
-          <button onClick={handleOpenCreateMasterModal} className="btn btn-primary">
-            <Plus size={16} />
-            <span>Tambah Kebutuhan Aliran Data</span>
-          </button>
-        )}
+        <div className="page-header-actions">
+          {isBpsUser && (
+            <button onClick={handleOpenCreateMasterModal} className="btn btn-primary">
+              <Plus size={16} />
+              <span>Tambah Kebutuhan Aliran Data</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Admin BPS Navigation Tabs */}
@@ -1011,7 +1013,7 @@ export default function DataLineage({
       <Modal
         isOpen={isInputModalOpen}
         onClose={() => setIsInputModalOpen(false)}
-        title={`Input Aliran Data — ${cleanPeriodeNama(targetTaskItem?.period?.periodeNama)} ${targetTaskItem?.master?.tahun}`}
+        title={`Input Aliran Data : ${cleanPeriodeNama(targetTaskItem?.period?.periodeNama)} ${targetTaskItem?.master?.tahun}`}
       >
         {targetTaskItem && (
           <form onSubmit={handleSaveOpdTaskInput}>

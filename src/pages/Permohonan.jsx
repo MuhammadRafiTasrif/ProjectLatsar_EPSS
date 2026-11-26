@@ -320,17 +320,17 @@ export default function Permohonan({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
       {/* Header Banner */}
-      <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>
+      <div className="page-header-banner">
+        <div className="page-header-title">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <h2>
               Layanan & Pengajuan Pembinaan Statistik Sektoral
             </h2>
             <span className={`badge ${isBpsUser ? 'badge-primary' : isWalidataUser ? 'badge-warning' : isPublikUser ? 'badge-secondary' : 'badge-info'}`} style={{ fontSize: '0.72rem' }}>
               Peran: {currentRole?.name}
             </span>
           </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
+          <p>
             {isBpsUser
               ? 'Mode Penelaah BPS: Verifikasi, setujui, atau atur ulang jadwal permohonan pembinaan seluruh OPD Kabupaten Pasaman.'
               : isWalidataUser
@@ -341,7 +341,7 @@ export default function Permohonan({
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <div className="page-header-actions">
           {isProdusenOpdUser && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'var(--bg-surface)', padding: '6px 12px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
               <Building2 size={15} color="var(--primary)" />

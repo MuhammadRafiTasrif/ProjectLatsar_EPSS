@@ -457,16 +457,18 @@ export default function Riwayat({
           </p>
         </div>
 
-        {isBpsUser && (
-          <button
-            onClick={() => handleOpenUploadGalleryModal()}
-            className="btn btn-primary"
-            style={{ padding: '8px 16px', fontSize: '0.84rem' }}
-          >
-            <Upload size={15} />
-            <span>Upload Album Foto Galeri</span>
-          </button>
-        )}
+        <div className="riwayat-header-actions">
+          {isBpsUser && (
+            <button
+              onClick={() => handleOpenUploadGalleryModal()}
+              className="btn btn-primary"
+              style={{ padding: '8px 16px', fontSize: '0.84rem' }}
+            >
+              <Upload size={15} />
+              <span>Upload Album Foto Galeri</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Control Bar: Segmented Tabs & Filters */}
@@ -815,7 +817,7 @@ export default function Riwayat({
               <option value="">-- Pilih Kegiatan Pembinaan dari History --</option>
               {pembinaanList.map(pem => (
                 <option key={pem.id} value={pem.id}>
-                  [{pem.id}] {pem.opdNama} — {pem.topik} ({pem.status})
+                  [{pem.id}] {pem.opdNama} - {pem.topik} ({pem.status})
                 </option>
               ))}
             </select>

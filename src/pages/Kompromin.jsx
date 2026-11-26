@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useId } from 'react';
 import Modal from '../components/Modal';
 import {
   FileText,
   Download,
   Upload,
-  ShieldCheck,
   Filter,
   CheckCircle2,
   Clock,
@@ -16,11 +15,16 @@ import {
   Image as ImageIcon,
   FileCheck,
   BookOpen,
-  Check,
-  Search
+  Search,
+  Loader2,
+  AlertCircle,
+  RotateCcw
 } from 'lucide-react';
-import { formatDateIndo, compressImageFile, formatBytes } from '../utils/helpers';
+import { compressImageFile, formatBytes } from '../utils/helpers';
+import { extractPdfFirstPageCover, isPdfFile } from '../utils/pdfCover';
 import { upsertKomprominToSupabase, deleteKomprominFromSupabase } from '../services/supabaseService';
+
+const DEFAULT_FALLBACK_COVER = 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80';
 
 export default function Kompromin({
   komprominList = [],
@@ -40,6 +44,14 @@ export default function Kompromin({
   const [editingItem, setEditingItem] = useState(null);
   const [detailItem, setDetailItem] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isExtractingCover, setIsExtractingCover] = useState(false);
+  const [coverStatus, setCoverStatus] = useState({ type: 'idle', message: '' });
+  const [pdfAutoCover, setPdfAutoCover] = useState(null);
+  const [hasCustomCover, setHasCustomCover] = useState(false);
+
+  const pdfExtractRequestRef = useRef(0);
+  const coverInputRef = useRef(null);
+  const formId = useId();
 
   const [formData, setFormData] = useState({
     judul: '',
@@ -47,25 +59,33 @@ export default function Kompromin({
     tahun: new Date().getFullYear(),
     statusVerifikasi: 'Terverifikasi',
     ringkasan: '',
-    coverUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80',
+    coverUrl: '',
     coverFileName: '',
-    fileUrl: '/docs/kompromin_publikasi.pdf',
-    fileName: 'kompromin_publikasi.pdf'
+    fileUrl: '',
+    fileName: ''
   });
 
   const resetForm = () => {
+    pdfExtractRequestRef.current += 1;
     setFormData({
       judul: '',
       opdId: opdList[0]?.id || '',
       tahun: new Date().getFullYear(),
       statusVerifikasi: 'Terverifikasi',
       ringkasan: '',
-      coverUrl: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80',
+      coverUrl: '',
       coverFileName: '',
-      fileUrl: '/docs/kompromin_publikasi.pdf',
-      fileName: 'kompromin_publikasi.pdf'
+      fileUrl: '',
+      fileName: ''
     });
     setEditingItem(null);
+    setIsExtractingCover(false);
+    setCoverStatus({ type: 'idle', message: '' });
+    setPdfAutoCover(null);
+    setHasCustomCover(false);
+    if (coverInputRef.current) {
+      coverInputRef.current.value = '';
+    }
   };
 
   const handleOpenCreateModal = () => {
@@ -74,6 +94,7 @@ export default function Kompromin({
   };
 
   const handleOpenEditModal = (item) => {
+    pdfExtractRequestRef.current += 1;
     setEditingItem(item);
     setFormData({
       judul: item.judul || '',
@@ -81,39 +102,53 @@ export default function Kompromin({
       tahun: item.tahun || 2026,
       statusVerifikasi: item.statusVerifikasi || 'Terverifikasi',
       ringkasan: item.ringkasan || '',
-      coverUrl: item.coverUrl || 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80',
+      coverUrl: item.coverUrl || DEFAULT_FALLBACK_COVER,
       coverFileName: item.coverFileName || '',
       fileUrl: item.fileUrl || '/docs/kompromin_publikasi.pdf',
       fileName: item.fileName || 'kompromin_publikasi.pdf'
     });
+    setIsExtractingCover(false);
+    setCoverStatus({ type: 'idle', message: '' });
+    setPdfAutoCover(null);
+    setHasCustomCover(false);
     setIsFormModalOpen(true);
   };
 
-  // Handler for uploading cover image file with automatic compression
+  // Handler for uploading custom cover image file with automatic compression
   const handleCoverFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     try {
-      // Scale down image to max 800x800 and 0.6 quality to ensure safe payload size for Supabase
-      const res = await compressImageFile(file, 800, 800, 0.6);
+      const res = await compressImageFile(file, 800, 800, 0.72);
       const displayUrl = res.compressedUrl || URL.createObjectURL(file);
       const displayName = res.isCompressed
         ? `${file.name} (Terkompres ${res.ratio}% - ${formatBytes(res.compressedSize)})`
         : file.name;
 
+      setHasCustomCover(true);
       setFormData(prev => ({
         ...prev,
         coverUrl: displayUrl,
         coverFileName: displayName
       }));
+      setCoverStatus({
+        type: 'info',
+        message: pdfAutoCover
+          ? 'Menggunakan gambar sampul kustom. Klik "Gunakan Halaman 1 PDF" jika ingin kembali ke sampul otomatis.'
+          : 'Menggunakan gambar sampul kustom.'
+      });
     } catch (err) {
       console.error('Error compressing cover image:', err);
+      setCoverStatus({
+        type: 'error',
+        message: 'Gagal memproses gambar sampul. Silakan pilih file JPG atau PNG lain.'
+      });
     }
   };
 
-  // Handler for uploading document file (PDF/Doc)
-  const handleDocumentFileChange = (e) => {
+  // Handler for uploading document file (PDF/Doc) and extracting page 1 as default cover
+  const handleDocumentFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -123,14 +158,91 @@ export default function Kompromin({
       fileUrl: objectUrl,
       fileName: file.name
     }));
+
+    if (!isPdfFile(file)) {
+      pdfExtractRequestRef.current += 1;
+      setIsExtractingCover(false);
+      setPdfAutoCover(null);
+      setCoverStatus({
+        type: 'info',
+        message: 'Sampul otomatis halaman awal hanya tersedia untuk dokumen PDF. Unggah gambar sampul secara manual jika diperlukan.'
+      });
+      return;
+    }
+
+    const requestId = pdfExtractRequestRef.current + 1;
+    pdfExtractRequestRef.current = requestId;
+    setIsExtractingCover(true);
+    setCoverStatus({
+      type: 'loading',
+      message: 'Membuat sampul default dari halaman awal dokumen PDF...'
+    });
+
+    try {
+      const res = await extractPdfFirstPageCover(file);
+      if (pdfExtractRequestRef.current !== requestId) return;
+
+      const autoLabel = `Halaman 1 PDF (${file.name}, ${formatBytes(res.compressedSize)})`;
+      setPdfAutoCover({ url: res.coverUrl, label: autoLabel });
+
+      if (!hasCustomCover) {
+        setFormData(prev => ({
+          ...prev,
+          coverUrl: res.coverUrl,
+          coverFileName: autoLabel
+        }));
+        setCoverStatus({
+          type: 'success',
+          message: `Sampul default otomatis diambil dari halaman awal PDF (${res.pageCount} halaman).`
+        });
+      } else {
+        setCoverStatus({
+          type: 'info',
+          message: 'Halaman awal PDF siap digunakan. Klik "Gunakan Halaman 1 PDF" jika ingin mengganti sampul kustom.'
+        });
+      }
+    } catch (err) {
+      if (pdfExtractRequestRef.current !== requestId) return;
+      console.error('Error extracting PDF first page cover:', err);
+      setPdfAutoCover(null);
+      setCoverStatus({
+        type: 'error',
+        message: err?.message || 'Gagal membaca halaman awal PDF. Anda tetap dapat mengunggah gambar sampul secara manual.'
+      });
+    } finally {
+      if (pdfExtractRequestRef.current === requestId) {
+        setIsExtractingCover(false);
+      }
+    }
+  };
+
+  const handleUsePdfFirstPageCover = () => {
+    if (!pdfAutoCover) return;
+    setHasCustomCover(false);
+    if (coverInputRef.current) {
+      coverInputRef.current.value = '';
+    }
+    setFormData(prev => ({
+      ...prev,
+      coverUrl: pdfAutoCover.url,
+      coverFileName: pdfAutoCover.label
+    }));
+    setCoverStatus({
+      type: 'success',
+      message: 'Sampul publikasi dikembalikan ke halaman awal dokumen PDF.'
+    });
   };
 
   const handleSavePublication = async (e) => {
     e.preventDefault();
-    if (isSaving) return;
+    if (isSaving || isExtractingCover) return;
 
     const opdObj = opdList.find(o => o.id === formData.opdId);
     const opdNama = opdObj ? opdObj.nama : 'Dinas Pemkab Pasaman';
+    const resolvedCoverUrl = formData.coverUrl || DEFAULT_FALLBACK_COVER;
+    const resolvedCoverFileName = formData.coverFileName || (formData.coverUrl ? 'Halaman 1 PDF' : 'Gambar Default');
+    const resolvedFileUrl = formData.fileUrl || '/docs/kompromin_publikasi.pdf';
+    const resolvedFileName = formData.fileName || 'kompromin_publikasi.pdf';
 
     setIsSaving(true);
     try {
@@ -149,10 +261,10 @@ export default function Kompromin({
           publikasiData: editingItem.publikasiData || (formData.statusVerifikasi === 'Terverifikasi' ? 'Telah Terverifikasi' : 'Belum'),
           ringkasan: formData.ringkasan,
           catatan: formData.ringkasan,
-          coverUrl: formData.coverUrl,
-          coverFileName: formData.coverFileName,
-          fileUrl: formData.fileUrl,
-          fileName: formData.fileName
+          coverUrl: resolvedCoverUrl,
+          coverFileName: resolvedCoverFileName,
+          fileUrl: resolvedFileUrl,
+          fileName: resolvedFileName
         };
 
         const res = await upsertKomprominToSupabase(updatedEntry);
@@ -183,10 +295,10 @@ export default function Kompromin({
           jumlahTabel: 16,
           ringkasan: formData.ringkasan,
           catatan: formData.ringkasan,
-          coverUrl: formData.coverUrl,
-          coverFileName: formData.coverFileName,
-          fileUrl: formData.fileUrl,
-          fileName: formData.fileName
+          coverUrl: resolvedCoverUrl,
+          coverFileName: resolvedCoverFileName,
+          fileUrl: resolvedFileUrl,
+          fileName: resolvedFileName
         };
 
         const res = await upsertKomprominToSupabase(newEntry);
@@ -258,12 +370,14 @@ export default function Kompromin({
           </p>
         </div>
 
-        {isBpsUser && (
-          <button onClick={handleOpenCreateModal} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.84rem' }}>
-            <Plus size={15} />
-            <span>Terbitkan Publikasi Baru</span>
-          </button>
-        )}
+        <div className="riwayat-header-actions">
+          {isBpsUser && (
+            <button onClick={handleOpenCreateModal} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.84rem' }}>
+              <Plus size={15} />
+              <span>Terbitkan Publikasi Baru</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Control Bar: Search & Filters */}
@@ -342,7 +456,7 @@ export default function Kompromin({
                       <div className="book-spine-effect"></div>
                       <div className="book-pages-stack"></div>
                       <img
-                        src={item.coverUrl || 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80'}
+                        src={item.coverUrl || DEFAULT_FALLBACK_COVER}
                         alt={displayTitle}
                         className="book-mockup-img"
                       />
@@ -436,7 +550,7 @@ export default function Kompromin({
         onClose={() => { setIsFormModalOpen(false); resetForm(); }}
         title={editingItem ? 'Edit Publikasi Kompromin' : 'Terbitkan Publikasi Kompromin Baru'}
       >
-        <form onSubmit={handleSavePublication}>
+        <form onSubmit={handleSavePublication} method="post">
           {/* Interactive Pratinjau Mockup Buku */}
           <div style={{
             background: 'var(--bg-surface)',
@@ -450,40 +564,66 @@ export default function Kompromin({
             flexWrap: 'wrap'
           }}>
             <div className="book-mockup-wrapper" style={{ flexShrink: 0, padding: 0 }}>
-              <div className="book-mockup-card" style={{ width: '100px', height: '140px' }}>
+              <div className="book-mockup-card" style={{ width: '100px', height: '140px', cursor: 'default' }}>
                 <div className="book-spine-effect"></div>
                 <div className="book-pages-stack"></div>
-                <img
-                  src={formData.coverUrl || 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=80'}
-                  alt="Pratinjau Sampul Buku"
-                  className="book-mockup-img"
-                />
+                {isExtractingCover ? (
+                  <div className="book-mockup-placeholder" aria-live="polite">
+                    <Loader2 size={20} className="kompromin-spin" aria-hidden="true" />
+                    <span>Memproses halaman 1 PDF...</span>
+                  </div>
+                ) : formData.coverUrl ? (
+                  <img
+                    src={formData.coverUrl}
+                    alt="Pratinjau sampul publikasi"
+                    className="book-mockup-img"
+                  />
+                ) : (
+                  <div className="book-mockup-placeholder">
+                    <FileText size={20} aria-hidden="true" />
+                    <span>Halaman 1 PDF tampil di sini</span>
+                  </div>
+                )}
                 <div className="book-badge-overlay" style={{ fontSize: '0.6rem' }}>
                   {formData.tahun || 2026}
                 </div>
               </div>
             </div>
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ flex: 1, minWidth: '180px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <BookOpen size={15} color="var(--primary)" />
+                <BookOpen size={15} color="var(--primary)" aria-hidden="true" />
                 <span style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--text-main)' }}>
                   Pratinjau Mockup Buku
                 </span>
               </div>
               <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                {formData.judul ? <strong>{formData.judul}</strong> : 'Judul buku akan tampil di sini'}
+                {formData.judul ? <strong>{formData.judul}</strong> : 'Judul publikasi akan tampil di sini'}
               </p>
-              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '4px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                <span>File Sampul: <strong style={{ color: 'var(--primary-hover)' }}>{formData.coverFileName || 'Gambar Default'}</strong></span>
-                <span>File PDF: <strong style={{ color: 'var(--primary-hover)' }}>{formData.fileName || 'dokumen_kompromin.pdf'}</strong></span>
+              <div style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', marginTop: '4px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <span>
+                  Sumber Sampul:{' '}
+                  <strong style={{ color: 'var(--text-main)' }}>
+                    {isExtractingCover
+                      ? 'Membaca halaman awal PDF...'
+                      : (formData.coverFileName || 'Otomatis dari halaman 1 PDF')}
+                  </strong>
+                </span>
+                <span>
+                  File Dokumen:{' '}
+                  <strong style={{ color: 'var(--text-main)' }}>
+                    {formData.fileName || 'Belum dipilih'}
+                  </strong>
+                </span>
               </div>
             </div>
           </div>
 
           <div className="form-group">
-            <label className="form-label">Judul Publikasi Kompromin</label>
+            <label className="form-label" htmlFor={`${formId}-judul`}>Judul Publikasi Kompromin</label>
             <input
+              id={`${formId}-judul`}
+              name="judul"
               type="text"
               className="form-input"
               placeholder="Contoh: Kompilasi Produk Administrasi Kesehatan Pasaman 2026"
@@ -493,10 +633,12 @@ export default function Kompromin({
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+          <div className="kompromin-form-grid">
             <div className="form-group">
-              <label className="form-label">Instansi OPD Penerbit</label>
+              <label className="form-label" htmlFor={`${formId}-opd`}>Instansi OPD Penerbit</label>
               <select
+                id={`${formId}-opd`}
+                name="opdId"
                 className="form-select"
                 value={formData.opdId}
                 onChange={(e) => setFormData({ ...formData, opdId: e.target.value })}
@@ -509,8 +651,10 @@ export default function Kompromin({
             </div>
 
             <div className="form-group">
-              <label className="form-label">Tahun Pelaporan</label>
+              <label className="form-label" htmlFor={`${formId}-tahun`}>Tahun Pelaporan</label>
               <input
+                id={`${formId}-tahun`}
+                name="tahun"
                 type="number"
                 className="form-input"
                 value={formData.tahun}
@@ -521,8 +665,10 @@ export default function Kompromin({
           </div>
 
           <div className="form-group">
-            <label className="form-label">Status Verifikasi BPS</label>
+            <label className="form-label" htmlFor={`${formId}-status`}>Status Verifikasi BPS</label>
             <select
+              id={`${formId}-status`}
+              name="statusVerifikasi"
               className="form-select"
               value={formData.statusVerifikasi}
               onChange={(e) => setFormData({ ...formData, statusVerifikasi: e.target.value })}
@@ -534,47 +680,102 @@ export default function Kompromin({
           </div>
 
           <div className="form-group">
-            <label className="form-label">Deskripsi / Ringkasan Publikasi</label>
+            <label className="form-label" htmlFor={`${formId}-ringkasan`}>Deskripsi / Ringkasan Publikasi</label>
             <textarea
+              id={`${formId}-ringkasan`}
+              name="ringkasan"
               className="form-input"
               rows={3}
-              placeholder="Rangkuman cakupan indikator & variabel data sektoral yang dihimpun..."
+              placeholder="Rangkuman cakupan indikator dan variabel data sektoral yang dihimpun..."
               value={formData.ringkasan}
               onChange={(e) => setFormData({ ...formData, ringkasan: e.target.value })}
               required
             />
           </div>
 
-          {/* File Upload Input: Gambar Sampul / Cover */}
+          {/* File Upload Input: File Dokumen Kompromin PDF (Halaman 1 otomatis menjadi sampul default) */}
           <div className="form-group">
-            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <ImageIcon size={16} color="var(--primary)" />
-              <span>Upload File Gambar Sampul / Cover (JPG/PNG)</span>
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              className="form-input"
-              style={{ padding: '8px' }}
-              onChange={handleCoverFileChange}
-              required={!editingItem && !formData.coverUrl}
-            />
-          </div>
-
-          {/* File Upload Input: File Dokumen Kompromin PDF */}
-          <div className="form-group">
-            <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <FileCheck size={16} color="var(--primary)" />
+            <label
+              className="form-label"
+              htmlFor={`${formId}-dokumen`}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <FileCheck size={16} color="var(--primary)" aria-hidden="true" />
               <span>Upload File Dokumen Kompromin (PDF / Word)</span>
             </label>
             <input
+              id={`${formId}-dokumen`}
+              name="dokumenPublikasi"
               type="file"
               accept=".pdf,.doc,.docx,.xlsx"
               className="form-input"
               style={{ padding: '8px' }}
+              aria-describedby={`${formId}-dokumen-hint`}
               onChange={handleDocumentFileChange}
               required={!editingItem && !formData.fileUrl}
             />
+            <span id={`${formId}-dokumen-hint`} className="form-hint">
+              Saat dokumen PDF diunggah, halaman awal publikasi otomatis dijadikan sampul default.
+            </span>
+
+            {coverStatus.type !== 'idle' && (
+              <div
+                className={`cover-status-banner is-${coverStatus.type}`}
+                role={coverStatus.type === 'error' ? 'alert' : 'status'}
+                aria-live="polite"
+              >
+                {coverStatus.type === 'loading' && (
+                  <Loader2 size={15} className="kompromin-spin" style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                )}
+                {coverStatus.type === 'success' && (
+                  <CheckCircle2 size={15} style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                )}
+                {coverStatus.type === 'error' && (
+                  <AlertCircle size={15} style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                )}
+                {coverStatus.type === 'info' && (
+                  <FileText size={15} style={{ flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
+                )}
+                <span>{coverStatus.message}</span>
+              </div>
+            )}
+          </div>
+
+          {/* File Upload Input: Gambar Sampul Kustom (Opsional) */}
+          <div className="form-group">
+            <label
+              className="form-label"
+              htmlFor={`${formId}-cover`}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <ImageIcon size={16} color="var(--primary)" aria-hidden="true" />
+              <span>Upload Gambar Sampul Kustom (Opsional, JPG/PNG)</span>
+            </label>
+            <input
+              ref={coverInputRef}
+              id={`${formId}-cover`}
+              name="coverPublikasi"
+              type="file"
+              accept="image/*"
+              className="form-input"
+              style={{ padding: '8px' }}
+              aria-describedby={`${formId}-cover-hint`}
+              onChange={handleCoverFileChange}
+            />
+            <span id={`${formId}-cover-hint`} className="form-hint">
+              Kosongkan untuk tetap memakai halaman awal PDF sebagai sampul, atau unggah gambar untuk menggantinya.
+            </span>
+
+            {pdfAutoCover && hasCustomCover && (
+              <button
+                type="button"
+                onClick={handleUsePdfFirstPageCover}
+                className="btn btn-secondary cover-reset-btn"
+              >
+                <RotateCcw size={14} aria-hidden="true" />
+                <span>Gunakan Halaman 1 PDF</span>
+              </button>
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '1.25rem' }}>
@@ -586,9 +787,13 @@ export default function Kompromin({
             >
               Batal
             </button>
-            <button type="submit" className="btn btn-primary" disabled={isSaving}>
-              <Upload size={15} />
-              <span>{isSaving ? 'Menyimpan ke Cloud...' : (editingItem ? 'Simpan Perubahan' : 'Upload & Terbitkan')}</span>
+            <button type="submit" className="btn btn-primary" disabled={isSaving || isExtractingCover}>
+              {isExtractingCover ? <Loader2 size={15} className="kompromin-spin" aria-hidden="true" /> : <Upload size={15} aria-hidden="true" />}
+              <span>
+                {isExtractingCover
+                  ? 'Membuat Sampul PDF...'
+                  : (isSaving ? 'Menyimpan ke Cloud...' : (editingItem ? 'Simpan Perubahan' : 'Upload & Terbitkan'))}
+              </span>
             </button>
           </div>
         </form>
@@ -603,7 +808,7 @@ export default function Kompromin({
                 <div className="book-spine-effect"></div>
                 <div className="book-pages-stack"></div>
                 <img
-                  src={detailItem.coverUrl}
+                  src={detailItem.coverUrl || DEFAULT_FALLBACK_COVER}
                   alt={detailItem.judul}
                   className="book-mockup-img"
                 />

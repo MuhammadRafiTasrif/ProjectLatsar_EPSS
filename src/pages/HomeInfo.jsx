@@ -58,64 +58,119 @@ export default function HomeInfo({ onNavigate }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingBottom: '1.5rem' }}>
 
-      {/* Hero */}
-      <section className="glass-card" style={{
-        padding: '2rem 1.5rem',
-        borderRadius: 'var(--radius-xl)',
-        background: 'var(--primary-light)',
-        border: '1px solid var(--primary-border)',
-        position: 'relative'
-      }}>
-        <div style={{ maxWidth: '780px', position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-            <span className="badge badge-primary" style={{ padding: '5px 12px', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-              <BarChart3 size={13} /> SIMPONITAS BPS Pasaman
+      {/* Hero Showcase with BPS Pasaman Building Background */}
+      <section className="home-hero-banner" aria-label="Beranda SIMPONITAS BPS Kabupaten Pasaman">
+        <img
+          src="/bgbps.jpg"
+          alt="Gedung Kantor Bupati Kabupaten Pasaman"
+          className="home-hero-bg"
+          loading="eager"
+        />
+        <div className="home-hero-overlay" aria-hidden="true"></div>
+
+        <div className="home-hero-content">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span className="home-hero-tag">
+              <img src="/logo-simponitas.png" alt="" width="22" height="22" aria-hidden="true" />
+              <span>SIMPONITAS BPS Kabupaten Pasaman</span>
+            </span>
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '0.76rem',
+              color: '#fdba74',
+              background: 'rgba(247, 144, 57, 0.22)',
+              border: '1px solid rgba(247, 144, 57, 0.45)',
+              borderRadius: 'var(--radius-full)',
+              padding: '5px 12px',
+              fontWeight: 600
+            }}>
+              Portal Resmi Pembinaan Statistik Sektoral
             </span>
           </div>
 
-          <h1 style={{
-            fontSize: 'clamp(1.5rem, 2vw + 1rem, 2.25rem)',
-            fontWeight: 800,
-            lineHeight: '1.25',
-            color: 'var(--text-main)',
-            marginBottom: '0.75rem'
-          }}>
+          <h1 className="home-hero-title">
             Sinergi Pembinaan Statistik Sektoral melalui Penerbitan Kompromin Akurat dan Berkualitas
           </h1>
 
-          <p style={{
-            fontSize: '0.95rem',
-            color: 'var(--text-secondary)',
-            lineHeight: '1.65',
-            marginBottom: '1.5rem'
-          }}>
+          <p className="home-hero-desc">
             Website yang dirancang untuk memfasilitasi kolaborasi, koordinasi, serta coaching pembinaan statistik bagi seluruh Organisasi Perangkat Daerah (OPD) di Kabupaten Pasaman dalam mewujudkan penerbitan Kompilasi Produk Administrasi (Kompromin) yang akurat dan berkualitas.
           </p>
 
+          {/* Quick CTA Actions */}
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '1.75rem' }}>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('kompromin')}
+              className="btn btn-primary"
+              style={{ padding: '10px 18px', fontSize: '0.86rem', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <BookOpen size={16} aria-hidden="true" />
+              <span>Lihat Publikasi Kompromin</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('dashboard')}
+              className="btn btn-secondary"
+              style={{
+                padding: '10px 18px',
+                fontSize: '0.86rem',
+                background: 'rgba(255, 255, 255, 0.12)',
+                color: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.28)',
+                backdropFilter: 'blur(4px)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              <BarChart3 size={16} aria-hidden="true" />
+              <span>Dashboard Statistik OPD</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onNavigate && onNavigate('permohonan')}
+              className="btn btn-secondary"
+              style={{
+                padding: '10px 18px',
+                fontSize: '0.86rem',
+                background: 'rgba(255, 255, 255, 0.12)',
+                color: '#ffffff',
+                borderColor: 'rgba(255, 255, 255, 0.28)',
+                backdropFilter: 'blur(4px)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              <Target size={16} aria-hidden="true" />
+              <span>Ajukan Pembinaan</span>
+            </button>
+          </div>
 
-        </div>
-
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '0.75rem',
-          marginTop: '2rem',
-          paddingTop: '1.5rem',
-          borderTop: '1px solid var(--border-color)'
-        }}>
-          {[
-            { icon: Building2, color: 'var(--primary)', title: 'Penghubung Utama OPD', desc: 'Permohonan pembinaan & coaching statistik sektoral bagi instansi daerah.' },
-            { icon: FileCheck, color: 'var(--accent-blue)', title: 'Pemantauan Kompromin', desc: 'Pantau dan evaluasi proses penyusunan Kompilasi Produk Administrasi.' },
-            { icon: Award, color: 'var(--accent-green)', title: 'Aliran Data OPD', desc: 'Data statistik sektoral terintegrasi.' }
-          ].map((card, idx) => (
-            <div key={idx} style={{ padding: '1rem', borderRadius: 'var(--radius-md)', background: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                <card.icon size={18} color={card.color} />
-                <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)' }}>{card.title}</span>
+          {/* Feature Highlights with Location Caption */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+            gap: '0.85rem',
+            borderTop: '1px solid rgba(255, 255, 255, 0.18)',
+            paddingTop: '1.25rem'
+          }}>
+            {[
+              { icon: Building2, color: '#f79039', title: 'Penghubung Utama OPD', desc: 'Permohonan pembinaan dan coaching statistik sektoral bagi instansi daerah.' },
+              { icon: FileCheck, color: '#38bdf8', title: 'Pemantauan Kompromin', desc: 'Pantau dan evaluasi proses penyusunan Kompilasi Produk Administrasi.' },
+              { icon: Award, color: '#34d399', title: 'Aliran Data OPD', desc: 'Integrasi indikator statistik sektoral daerah terverifikasi.' }
+            ].map((card, idx) => (
+              <div key={idx} className="home-hero-feature-card">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <card.icon size={18} color={card.color} aria-hidden="true" />
+                  <span style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff' }}>{card.title}</span>
+                </div>
+                <p style={{ fontSize: '0.78rem', color: '#cbd5e1', lineHeight: '1.45', margin: 0 }}>{card.desc}</p>
               </div>
-              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{card.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 

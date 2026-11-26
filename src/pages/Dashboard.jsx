@@ -16,6 +16,7 @@ import {
   Save,
   Building,
   RotateCcw,
+  BookOpen,
   X
 } from 'lucide-react';
 
@@ -300,25 +301,69 @@ export default function Dashboard({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingBottom: '2rem' }}>
-      {/* Header Banner */}
-      <div className="riwayat-header-banner">
-        <div className="riwayat-header-title">
-          <h2>Dashboard Pembinaan Kompromin</h2>
-          <p>
-            Monitoring tahapan penyusunan Kompromin per Organisasi Perangkat Daerah (OPD) Kabupaten Pasaman.
-          </p>
+      {/* Header Showcase Banner with BPS Pasaman Building Ambience */}
+      <div className="dashboard-header-banner">
+        <div className="dashboard-header-banner-bg" aria-hidden="true" />
+
+        <div className="dashboard-header-content">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span className="dashboard-chip dashboard-chip-primary">
+              <Building2 size={13} aria-hidden="true" />
+              <span>BPS Kabupaten Pasaman</span>
+            </span>
+            <span className="dashboard-chip dashboard-chip-success">
+              <CheckCircle2 size={13} aria-hidden="true" />
+              <span>Monitoring Statistik Sektoral</span>
+            </span>
+          </div>
+
+          <div>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em', lineHeight: '1.25' }}>
+              Dashboard Pembinaan Kompromin
+            </h2>
+            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: '1.55' }}>
+              Monitoring alur 4 tahapan penyusunan Kompilasi Produk Administrasi (Kompromin) per Organisasi Perangkat Daerah Kabupaten Pasaman.
+            </p>
+          </div>
+
+          {/* Quick Info Chips */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginTop: '4px' }}>
+            <span className="dashboard-chip">
+              <strong>{totalMasterOpd}</strong> OPD Terdaftar
+            </span>
+            <span className="dashboard-chip">
+              <strong>{totalKomprominCount}</strong> Kompromin Tercatat
+            </span>
+            <span className="dashboard-chip">
+              <strong>{komprominTerverifikasiCount}</strong> Terbit Resmi
+            </span>
+          </div>
         </div>
 
-        {isBpsAdmin && (
+        <div className="dashboard-header-actions">
           <button
-            onClick={handleOpenCreateKompromin}
-            className="btn btn-primary"
-            style={{ padding: '8px 16px', fontSize: '0.84rem' }}
+            type="button"
+            onClick={() => onNavigate && onNavigate('kompromin')}
+            className="btn btn-secondary"
+            style={{ padding: '8px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            title="Buka repository publikasi Kompromin"
           >
-            <Plus size={15} />
-            <span>+ Tambah Kompromin Baru</span>
+            <BookOpen size={14} aria-hidden="true" />
+            <span>Katalog Publikasi</span>
           </button>
-        )}
+
+          {isBpsAdmin && (
+            <button
+              type="button"
+              onClick={handleOpenCreateKompromin}
+              className="btn btn-primary"
+              style={{ padding: '8px 16px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Plus size={15} aria-hidden="true" />
+              <span>Tambah Kompromin</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Top Summary Metrics: Total Master OPD & Total Kompromin */}
@@ -378,6 +423,77 @@ export default function Dashboard({
           />
         </div>
       </div>
+
+      {/* Quick Visual Progress Bar per Stage */}
+      {totalKomprominCount > 0 && (
+        <div className="dashboard-overview-card">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Sliders size={16} color="var(--primary)" aria-hidden="true" />
+              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                Distribusi Status Kompromin Daerah
+              </span>
+            </div>
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+              Tingkat Kesiapan Terbit: <strong>{Math.round((komprominTerverifikasiCount / totalKomprominCount) * 100)}%</strong>
+            </span>
+          </div>
+
+          <div className="dashboard-progress-stacked" aria-label="Distribusi progres kompromin">
+            <div
+              style={{
+                width: `${(komprominTerverifikasiCount / totalKomprominCount) * 100}%`,
+                background: '#10b981',
+                transition: 'width 0.4s ease'
+              }}
+              title={`Terverifikasi: ${komprominTerverifikasiCount} dokumen`}
+            />
+            <div
+              style={{
+                width: `${(komprominPemeriksaanCount / totalKomprominCount) * 100}%`,
+                background: '#ec4899',
+                transition: 'width 0.4s ease'
+              }}
+              title={`Pemeriksaan: ${komprominPemeriksaanCount} dokumen`}
+            />
+            <div
+              style={{
+                width: `${(komprominPengumpulanCount / totalKomprominCount) * 100}%`,
+                background: '#f59e0b',
+                transition: 'width 0.4s ease'
+              }}
+              title={`Pengumpulan: ${komprominPengumpulanCount} dokumen`}
+            />
+            <div
+              style={{
+                width: `${(komprominPerencanaanCount / totalKomprominCount) * 100}%`,
+                background: '#3b82f6',
+                transition: 'width 0.4s ease'
+              }}
+              title={`Perencanaan: ${komprominPerencanaanCount} dokumen`}
+            />
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }} />
+              <span>Terverifikasi ({komprominTerverifikasiCount})</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ec4899' }} />
+              <span>Pemeriksaan ({komprominPemeriksaanCount})</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f59e0b' }} />
+              <span>Pengumpulan ({komprominPengumpulanCount})</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3b82f6' }} />
+              <span>Perencanaan ({komprominPerencanaanCount})</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Monitoring Table Section */}
       <div className="glass-card" style={{ padding: '1.25rem' }}>

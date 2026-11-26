@@ -63,16 +63,13 @@ export default function Navbar({ theme = 'light', setTheme, currentRole, setRole
         >
           <Menu size={20} />
         </button>
-        <div className="brand-badge">
-          <BarChart3 size={18} />
-          <span>SIMPONITAS</span>
-        </div>
-        <div className="brand-text" style={{ display: 'flex', flexDirection: 'column', marginLeft: '4px' }}>
-          <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-main)', letterSpacing: '-0.3px' }}>
+        <div className="brand-text">
+          <div className="brand-title-row">
+            <span className="brand-title">SIMPONITAS</span>
+            <span className="brand-tag">BPS 1309</span>
+          </div>
+          <span className="brand-subtitle">
             BPS KABUPATEN PASAMAN
-          </span>
-          <span style={{ fontSize: '0.72rem', color: 'var(--primary)', fontWeight: 600 }}>
-            Sinergi Pembinaan Statistik Sektoral
           </span>
         </div>
       </div>

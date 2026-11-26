@@ -433,25 +433,27 @@ export default function RoleManagement({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
       {/* Header Banner */}
-      <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="page-header-banner">
+        <div className="page-header-title">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <ShieldCheck size={24} color="var(--primary)" />
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            <h2>
               Manajemen Pengguna & Role (Khusus Admin BPS)
             </h2>
           </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '3px' }}>
+          <p>
             Kelola akun pengguna yang berhak login ke sistem SIMPONITAS serta atur matriks hak akses per peran.
           </p>
         </div>
 
-        {saveSuccess && (
-          <div className="badge badge-success" style={{ gap: '6px', padding: '8px 16px', fontSize: '0.84rem', animation: 'fadeIn 0.3s ease-in-out' }}>
-            <CheckCircle2 size={16} />
-            <span>{feedbackMsg || 'Perubahan berhasil disimpan'}</span>
-          </div>
-        )}
+        <div className="page-header-actions">
+          {saveSuccess && (
+            <div className="badge badge-success" style={{ gap: '6px', padding: '8px 16px', fontSize: '0.84rem', animation: 'fadeIn 0.3s ease-in-out' }}>
+              <CheckCircle2 size={16} />
+              <span>{feedbackMsg || 'Perubahan berhasil disimpan'}</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Main Tabs Navigation */}

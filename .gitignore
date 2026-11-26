@@ -28,3 +28,5 @@ dist-ssr
 ~$*.docx
 __pycache__/
 *.pyc
+scratch/video/
+

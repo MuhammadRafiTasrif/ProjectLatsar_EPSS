@@ -313,23 +313,23 @@ export default function DataSektoral({
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
 
       {/* ── Header ── */}
-      <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <div>
+      <div className="page-header-banner">
+        <div className="page-header-title">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            <h2>
               Aliran Data OPD
             </h2>
             <span className={`badge ${isBpsUser ? 'badge-primary' : 'badge-info'}`} style={{ fontSize: '0.72rem' }}>
               {isBpsUser ? 'Monitor BPS' : 'Pemenuhan OPD'}
             </span>
           </div>
-          <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginTop: '3px' }}>
+          <p>
             {isBpsUser
               ? 'Kelola permintaan data sektoral ke OPD dan pantau pemenuhan berkas per periode (Bulanan, Triwulan, Tahunan).'
               : 'Lihat permintaan data dari BPS dan unggah berkas pemenuhan per periode (Bulanan, Triwulan, Tahunan).'}
           </p>
         </div>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+        <div className="page-header-actions">
           {isBpsUser && (
             <button onClick={handleOpenAdd} className="btn btn-primary">
               <Plus size={15} /><span>Tambah Permintaan Data</span>
@@ -380,7 +380,7 @@ export default function DataSektoral({
             >
               <option value="ALL">Semua OPD ({opdList.length})</option>
               {opdList.map(opd => (
-                <option key={opd.id} value={opd.id}>{opd.kode} — {opd.nama}</option>
+                <option key={opd.id} value={opd.id}>{opd.kode} : {opd.nama}</option>
               ))}
             </select>
           )}
@@ -824,7 +824,7 @@ export default function DataSektoral({
       <Modal
         isOpen={Boolean(uploadModal)}
         onClose={() => setUploadModal(null)}
-        title={`Upload Data — ${uploadModal?.periode?.periodeNama || ''}`}
+        title={`Upload Data : ${uploadModal?.periode?.periodeNama || ''}`}
       >
         {uploadModal && (
           <form onSubmit={handleSaveUpload}>
@@ -997,7 +997,7 @@ export default function DataSektoral({
       <Modal
         isOpen={Boolean(detailModal)}
         onClose={() => setDetailModal(null)}
-        title={`Pratinjau Dokumen Aliran Data — ${cleanPeriodeNama(detailModal?.periode?.periodeNama)}`}
+        title={`Pratinjau Dokumen Aliran Data : ${cleanPeriodeNama(detailModal?.periode?.periodeNama)}`}
       >
         {detailModal && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
@@ -1029,7 +1029,7 @@ export default function DataSektoral({
                   LEMBAR DATA SEKTORAL TERPADU
                 </h4>
                 <span style={{ fontSize: '0.74rem', color: 'var(--primary)', fontWeight: 700 }}>
-                  SIMPONITAS — SISTEM INFORMASI PEMBINAAN STATISTIK SEKTORAL
+                  SIMPONITAS : SISTEM INFORMASI PEMBINAAN STATISTIK SEKTORAL
                 </span>
               </div>
 

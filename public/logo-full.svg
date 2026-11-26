@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 72" width="380" height="72" role="img" aria-label="Logo Lengkap SIMPONITAS BPS Kabupaten Pasaman">
+  <defs>
+    <!-- Background Gradient for Badge -->
+    <linearGradient id="full-badge-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E3A8A" />
+    </linearGradient>
+
+    <!-- Bar Gradients -->
+    <linearGradient id="full-bar-blue" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#1E40AF" />
+      <stop offset="100%" stop-color="#38BDF8" />
+    </linearGradient>
+    <linearGradient id="full-bar-orange" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#EA580C" />
+      <stop offset="100%" stop-color="#FB923C" />
+    </linearGradient>
+    <linearGradient id="full-bar-green" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+
+    <!-- Synergy Swoop Gradient -->
+    <linearGradient id="full-swoop-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="45%" stop-color="#FDBA74" />
+      <stop offset="100%" stop-color="#34D399" />
+    </linearGradient>
+  </defs>
+
+  <!-- Left: Emblem (60x60 centered at x=6, y=6) -->
+  <g transform="translate(6, 6)">
+    <!-- Container Squircle -->
+    <rect x="0" y="0" width="60" height="60" rx="14" fill="url(#full-badge-bg)" stroke="#334155" stroke-width="1.2" />
+
+    <!-- Grid Guide Accent -->
+    <line x1="10" y1="46" x2="50" y2="46" stroke="#334155" stroke-width="1.2" stroke-linecap="round" />
+
+    <!-- 3 Ascending Statistical Bars -->
+    <rect x="12" y="30" width="8" height="16" rx="2.5" fill="url(#full-bar-blue)" />
+    <rect x="26" y="20" width="8" height="26" rx="2.5" fill="url(#full-bar-orange)" />
+    <rect x="40" y="12" width="8" height="34" rx="2.5" fill="url(#full-bar-green)" />
+
+    <!-- Dynamic Sinergi Curve -->
+    <path d="M 10 37 C 20 41, 24 19, 50 14" fill="none" stroke="url(#full-swoop-grad)" stroke-width="2.2" stroke-linecap="round" />
+
+    <!-- Nodes -->
+    <circle cx="16" cy="30" r="2.2" fill="#FFFFFF" />
+    <circle cx="30" cy="20" r="2.2" fill="#FFFFFF" />
+    <circle cx="44" cy="12" r="3" fill="#FDE047" stroke="#0F172A" stroke-width="0.8" />
+  </g>
+
+  <!-- Right: Typography -->
+  <g transform="translate(78, 0)">
+    <!-- Main Title: SIMPONITAS -->
+    <text x="0" y="30" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="22" font-weight="800" fill="#0F172A" letter-spacing="-0.3">
+      SIMPONITAS
+    </text>
+
+    <!-- Regional Tag Pill (1309) -->
+    <rect x="156" y="14" width="48" height="18" rx="4" fill="#F97316" fill-opacity="0.12" stroke="#EA580C" stroke-width="0.8" />
+    <text x="180" y="27" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#EA580C" text-anchor="middle">
+      BPS 1309
+    </text>
+
+    <!-- Subtitle: BPS KABUPATEN PASAMAN -->
+    <text x="0" y="47" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="11.5" font-weight="700" fill="#1E40AF" letter-spacing="0.5">
+      BPS KABUPATEN PASAMAN
+    </text>
+
+    <!-- Tagline: Sinergi Pembinaan Statistik Sektoral -->
+    <text x="0" y="62" font-family="'Plus Jakarta Sans', system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="500" fill="#64748B">
+      Sinergi Pembinaan Statistik Sektoral &amp; Kompromin
+    </text>
+  </g>
+</svg>

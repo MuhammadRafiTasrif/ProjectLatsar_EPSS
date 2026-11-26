@@ -164,28 +164,30 @@ export default function KnowledgeBase({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
       {/* Header Banner Section */}
-      <div className="glass-card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div className="page-header-banner">
+        <div className="page-header-title">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <BookOpen size={22} color="var(--primary)" />
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-main)' }}>
+            <h2>
               Knowledgebase
             </h2>
             <span className={`badge ${canManage ? 'badge-primary' : 'badge-info'}`} style={{ fontSize: '0.72rem' }}>
               {canManage ? 'Akses Pengelolaan (CRUD)' : 'Katalog Pembaca'}
             </span>
           </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '3px' }}>
+          <p>
             Repository panduan pembinaan statistik sektoral, template Kompromin, modul metadata, dan regulasi Satu Data Indonesia.
           </p>
         </div>
 
-        {canManage && (
-          <button onClick={handleOpenCreateModal} className="btn btn-primary">
-            <Plus size={16} />
-            <span>Tambah Dokumen Baru</span>
-          </button>
-        )}
+        <div className="page-header-actions">
+          {canManage && (
+            <button onClick={handleOpenCreateModal} className="btn btn-primary">
+              <Plus size={16} />
+              <span>Tambah Dokumen Baru</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter Bar */}
